@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Real World CE | Bringing the Real World into Clinical Education</title>
+  <meta name="description" content="Real World CE is a technology-focused continuing education company building case-based, interactive clinical education that improves patient care and outcomes." />
+  <meta name="theme-color" content="#0b1b3a" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="realworldce_logo_transparent.png" />
+
+  <!-- Fonts + Tailwind -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root { color-scheme: light; }
+    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    .glass { background: rgba(255,255,255,0.85); border: 1px solid rgba(15,23,42,0.08); }
+    .ring-soft { box-shadow: inset 0 0 0 1px rgba(255,255,255,.10); }
+    .soft-shadow { box-shadow: 0 16px 60px rgba(0,0,0,.45); }
+    .btn-primary { background: linear-gradient(135deg, rgba(56,189,248,.95), rgba(99,102,241,.95)); }
+    .btn-primary:hover { filter: brightness(1.05); transform: translateY(-1px); }
+    .btn-secondary:hover { transform: translateY(-1px); }
+    .anchor { scroll-margin-top: 88px; }
+
+    /* Hero background (uses your AdobeStock file if present) */
+    .hero-bg{
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background:
+        
+        radial-gradient(900px 350px at 80% 20%, rgba(99,102,241,.16), transparent 55%),
+        linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+    }
+    .hero-bg:before{
+      content:"";
+      position:absolute; inset:0;
+      background-image: url("AdobeStock_566596170.jpeg");
+      background-size: cover;
+      background-position: center;
+      opacity: .10;
+      filter: saturate(1.1) contrast(1.05);
+      pointer-events:none;
+    }
+    /* Subtle pattern overlay (uses booking-pattern-2.png if present) */
+    .pattern:after{
+      content:"";
+      position:absolute; inset:0;
+      background-image:url("booking-pattern-2.png");
+      background-repeat: repeat;
+      background-size: 420px;
+      opacity:.06;
+      pointer-events:none;
+      mix-blend-mode: overlay;
+    }
+
+    /* fallback image helper */
+    img.fallbackable { background: rgba(255,255,255,.04); }
+  
+    .bg-medical-blue { background-color: #002147; }
+    .text-medical-blue { color: #002147; }
+    .glass-cmv { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(226, 232, 240, 1); }
+
+
+    /* --- Premium site polish --- */
+    .glass { background: rgba(255,255,255,0.88); border: 1px solid rgba(15,23,42,0.08); backdrop-filter: blur(12px); }
+    .soft-shadow { box-shadow: 0 18px 70px rgba(15,23,42,.12); }
+    .btn-primary { background: linear-gradient(135deg, rgba(37,99,235,.96), rgba(56,189,248,.96)); }
+    .btn-primary:hover { filter: brightness(1.05); transform: translateY(-1px); }
+    .btn-secondary { background: rgba(255,255,255,0.7); border: 1px solid rgba(15,23,42,0.08); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.92); }
+    .section-bg {
+      background:
+        radial-gradient(900px 350px at 12% 20%, rgba(37,99,235,.08), transparent 55%),
+        radial-gradient(700px 280px at 88% 10%, rgba(56,189,248,.08), transparent 55%);
+    }
+    .kicker {
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(15,23,42,0.08);
+      color: rgba(15,23,42,0.70);
+    }
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(15,23,42,0.12), transparent);
+    }
+    .card-hover { transition: transform .18s ease, box-shadow .18s ease; }
+    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 18px 60px rgba(15,23,42,.14); }
+
+
+    /* --- Standout add-ons (signature + motion) --- */
+    .accent-line {
+      height: 3px;
+      background: linear-gradient(90deg, rgba(37,99,235,0), rgba(37,99,235,.9), rgba(56,189,248,.9), rgba(37,99,235,0));
+      background-size: 200% 100%;
+      animation: accentMove 6s linear infinite;
+    }
+    @keyframes accentMove { 0%{background-position:0% 50%} 100%{background-position:200% 50%} }
+
+    .particles {
+      position: absolute; inset: 0; pointer-events: none; opacity: .55;
+      background-image:
+        radial-gradient(circle at 12% 18%, rgba(56,189,248,.35) 0 2px, transparent 3px),
+        radial-gradient(circle at 35% 32%, rgba(37,99,235,.30) 0 2px, transparent 3px),
+        radial-gradient(circle at 72% 26%, rgba(56,189,248,.28) 0 2px, transparent 3px),
+        radial-gradient(circle at 86% 58%, rgba(37,99,235,.22) 0 2px, transparent 3px),
+        radial-gradient(circle at 18% 74%, rgba(56,189,248,.18) 0 2px, transparent 3px),
+        radial-gradient(circle at 58% 78%, rgba(37,99,235,.18) 0 2px, transparent 3px);
+      filter: blur(.2px);
+      animation: floatDots 10s ease-in-out infinite alternate;
+    }
+    @keyframes floatDots { from{transform: translateY(0px)} to{transform: translateY(-18px)} }
+
+    .reveal { opacity: 0; transform: translateY(10px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    .pill { border: 1px solid rgba(15,23,42,.10); background: rgba(255,255,255,.78); }
+    .metric { border: 1px solid rgba(15,23,42,.08); background: rgba(255,255,255,.86); }
+    .device {
+      border-radius: 28px;
+      border: 1px solid rgba(15,23,42,.10);
+      background: rgba(255,255,255,.78);
+      box-shadow: 0 22px 90px rgba(15,23,42,.18);
+      backdrop-filter: blur(10px);
+    }
+    .screen {
+      border-radius: 18px;
+      background: radial-gradient(900px 350px at 12% 20%, rgba(37,99,235,.14), transparent 55%),
+                  radial-gradient(700px 280px at 88% 10%, rgba(56,189,248,.14), transparent 55%),
+                  linear-gradient(180deg, rgba(2,6,23,.06), rgba(2,6,23,.00));
+      border: 1px solid rgba(15,23,42,.10);
+    }
+    .pulse {
+      box-shadow: 0 0 0 0 rgba(37,99,235,.25);
+      animation: pulse 2.6s infinite;
+    }
+    @keyframes pulse {
+      0%{ box-shadow: 0 0 0 0 rgba(37,99,235,.25) }
+      70%{ box-shadow: 0 0 0 18px rgba(37,99,235,0) }
+      100%{ box-shadow: 0 0 0 0 rgba(37,99,235,0) }
+    }
+
+</style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" />
+
+
+  <script>
+    // Simple missing-image fallback so the page still looks good if an asset isn't uploaded yet.
+    window.__missingImgSvg = (label) => {
+      const safe = (label || "Missing image").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1">
+              <stop offset="0" stop-color="#0b1220"/>
+              <stop offset="1" stop-color="#111b34"/>
+            </linearGradient>
+          </defs>
+          <rect width="1200" height="675" fill="url(#g)"/>
+          <rect x="36" y="36" width="1128" height="603" rx="28" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.10)"/>
+          <text x="600" y="330" fill="rgba(255,255,255,0.85)" font-family="Inter, Arial" font-size="34" text-anchor="middle">${safe}</text>
+          <text x="600" y="380" fill="rgba(255,255,255,0.55)" font-family="Inter, Arial" font-size="18" text-anchor="middle">Upload this file next to index.html</text>
+        </svg>`;
+      return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+    };
+  </script>
+</head>
+
+<body class="min-h-screen text-slate-800 bg-slate-50">
+  
+  <!-- Header (CMV Style) -->
+  <header class="sticky top-0 z-50 glass-cmv">
+    <div class="w-full px-5 py-3 flex items-center justify-between">
+      <a href="#home" class="flex items-center gap-3 group">
+        <!-- Icon -->
+        <img src="logo-transparent.png"
+             alt="Real World CE"
+             class="h-14 w-auto object-contain drop-shadow-lg"
+             onerror="this.onerror=null; this.src='realworldce_logo_transparent.png';" />
+        <!-- Text -->
+        <div class="leading-tight">
+          <div class="text-base sm:text-lg font-extrabold tracking-tight uppercase whitespace-nowrap">
+            REAL WORLD <span class="text-sky-600">CE</span>
+          </div>
+          
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-700">
+        <a class="hover:text-sky-600 transition" href="#home">HOME</a>
+        <a class="hover:text-sky-600 transition" href="#about">ABOUT US</a>
+        <a class="hover:text-sky-600 transition" href="#contact">CONTACT US</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="https://brianhicks211.github.io/realworldce/" target="_blank" rel="noopener noreferrer"
+           class="hidden sm:inline-flex px-4 py-2 rounded-xl text-sm font-semibold transition btn-secondary glass">Try Demo</a>
+        <a href="#contact" class="inline-flex btn-primary px-4 py-2 rounded-xl text-sm font-semibold transition">
+          Request a demo
+        </a>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- HERO / HOME -->
+  <section id="home" class="anchor hero-bg pattern section-bg">
+    <div class="max-w-7xl mx-auto px-5 pt-14 pb-16 relative">
+      <div class="grid lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-7">
+          <div class="inline-flex items-center gap-2 text-xs font-semibold tracking-wide uppercase kicker px-3 py-1.5 rounded-full">
+            <span class="inline-block h-2 w-2 rounded-full bg-sky-300"></span>
+            Bringing the Real World Into Clinical Education
+          </div>
+
+          <h1 class="mt-5 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">
+            Technology-focused CE built for <span class="text-sky-300">real</span> clinical practice.
+          </h1>
+
+          <p class="mt-5 text-base sm:text-lg text-slate-700 max-w-2xl">
+            Real World CE designs and delivers continuing education programs that blend real-world clinical scenarios,
+            cutting-edge science, and premium educational design to improve patient care and outcomes.
+          </p>
+
+          <div class="mt-7 flex flex-col sm:flex-row gap-3">
+            <a href="#about" class="inline-flex justify-center btn-primary px-5 py-3 rounded-2xl font-semibold transition soft-shadow">
+              Learn more
+            </a>
+            <a href="#contact" class="inline-flex justify-center glass px-5 py-3 rounded-2xl font-semibold transition btn-secondary">
+              Contact us
+            </a>
+          </div>
+
+          <div class="mt-10 grid sm:grid-cols-3 gap-4">
+            <div class="glass rounded-2xl p-4 card-hover">
+              <div class="text-sm font-semibold">Case-based</div>
+              <div class="text-sm text-slate-500 mt-1">Scenarios that mirror real practice.</div>
+            </div>
+            <div class="glass rounded-2xl p-4 card-hover">
+              <div class="text-sm font-semibold">Interactive</div>
+              <div class="text-sm text-slate-500 mt-1">Decision points, labs, and assessments.</div>
+            </div>
+            <div class="glass rounded-2xl p-4 card-hover">
+              <div class="text-sm font-semibold">High-production</div>
+              <div class="text-sm text-slate-500 mt-1">A modern healthcare-tech aesthetic.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5">
+          <div class="glass rounded-3xl p-5 soft-shadow">
+            <div class="text-sm font-semibold text-slate-700 uppercase tracking-wider">About Us</div>
+            <p class="mt-2 text-sm text-slate-700">
+              We create continuing education programs from start to finish focusing on cutting-edge science,
+              high-quality content and superior educational design.
+            </p>
+
+            <div class="mt-4 rounded-2xl overflow-hidden ring-soft bg-white">
+              <!-- Learning Experience Preview Video -->
+              <video class="w-full h-56 object-contain" style="image-rendering:auto; image-rendering:high-quality;"
+                     autoplay muted loop playsinline preload="metadata"
+                     poster="Untitled-1.png"
+                     onerror="this.onerror=null;">
+                <source src="Kidney_Recipient_s_Viral_Load_Concern.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+
+            <div class="mt-4 grid grid-cols-3 gap-3 text-center">
+              <div class="glass rounded-2xl p-3">
+                <div class="text-xs text-slate-500">PRINCIPLE</div>
+                <div class="mt-1 text-sm font-semibold">Real World</div>
+              </div>
+              <div class="glass rounded-2xl p-3">
+                <div class="text-xs text-slate-500">PRINCIPLE</div>
+                <div class="mt-1 text-sm font-semibold">Science</div>
+              </div>
+              <div class="glass rounded-2xl p-3">
+                <div class="text-xs text-slate-500">PRINCIPLE</div>
+                <div class="mt-1 text-sm font-semibold">Technology</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+
+  <!-- PRODUCT MOMENT -->
+  <section class="section-bg">
+    <div class="max-w-7xl mx-auto px-5 py-14 relative">
+      <div class="particles"></div>
+      <div class="grid lg:grid-cols-2 gap-10 items-center relative">
+        <div class="reveal">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full kicker">
+            <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+            Platform Preview
+          </div>
+          <h2 class="mt-5 text-4xl md:text-5xl font-extrabold tracking-tight">
+            A clinical simulation platform — not a slide deck.
+          </h2>
+          <p class="mt-4 text-slate-600 text-lg max-w-xl">
+            Interactive patient stories, decision points, mastery checks, and lab-like experiences designed to mirror real clinical workflow.
+          </p>
+
+          <div class="mt-6 flex flex-wrap gap-2">
+            <span class="pill px-3 py-1.5 rounded-full text-sm text-slate-700">Case-based Decision Points</span>
+            <span class="pill px-3 py-1.5 rounded-full text-sm text-slate-700">Embedded Mastery</span>
+            <span class="pill px-3 py-1.5 rounded-full text-sm text-slate-700">Workflow-Ready Design</span>
+            <span class="pill px-3 py-1.5 rounded-full text-sm text-slate-700">Assessment-Ready Outputs</span>
+          </div>
+
+          <div class="mt-8 flex gap-3">
+            <a href="#contact" class="btn-primary px-6 py-3 rounded-2xl font-semibold transition soft-shadow">Request a demo</a>
+            <a href="#modules" class="btn-secondary px-6 py-3 rounded-2xl font-semibold transition">Explore modules</a>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <div class="device p-5 md:p-6">
+            <div class="screen p-4 md:p-5">
+              <div class="flex items-center justify-between">
+                <div class="text-xs font-bold text-slate-600 uppercase tracking-wider">Live Module Preview</div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-yellow-400/80"></span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span>
+                </div>
+              </div>
+
+              <div class="mt-4 grid grid-cols-12 gap-4 items-stretch">
+                <div class="col-span-5 rounded-2xl bg-white/85 border border-slate-200 p-4">
+                  <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center">
+                      <span class="text-sm font-extrabold text-slate-700">RP</span>
+                    </div>
+                    <div>
+                      <div class="text-sm font-bold text-slate-900">Patient Consult</div>
+                      <div class="text-xs text-slate-500">Symptoms • context • goals</div>
+                    </div>
+                  </div>
+
+                  <div class="mt-4 space-y-2 text-sm text-slate-700">
+                    <div class="rounded-xl bg-slate-50 border border-slate-200 p-3">
+                      “I’m worried the treatment isn’t working… what’s next?”
+                    </div>
+                    <div class="rounded-xl bg-blue-50 border border-blue-200 p-3">
+                      Decision Point: choose next step
+                    </div>
+                  </div>
+
+                  <div class="mt-4 flex items-center gap-2">
+                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Mastery</span>
+                    <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+                      <div class="h-full bg-blue-600 w-2/3 transition-all duration-500"></div>
+                    </div>
+                    <span class="text-xs font-bold text-blue-700">66%</span>
+                  </div>
+                </div>
+
+                <div class="col-span-7 rounded-2xl bg-white/85 border border-slate-200 p-4 relative overflow-hidden">
+                  <div class="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-blue-500/10 blur-2xl"></div>
+                  <div class="flex items-center justify-between">
+                    <div class="text-sm font-bold text-slate-900">Clinical Decision</div>
+                    <span class="text-xs font-semibold text-slate-500">Rationale included</span>
+                  </div>
+
+                  <div class="mt-3 space-y-3">
+                    <div class="rounded-2xl border border-slate-200 bg-white/90 p-4">
+                      <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Prompt</div>
+                      <div class="mt-1 text-sm text-slate-700">
+                        Select the best next action based on patient status and evidence.
+                      </div>
+                    </div>
+
+                    <button class="w-full text-left rounded-2xl border border-slate-200 bg-white/90 hover:bg-blue-50 hover:border-blue-300 transition p-4">
+                      <div class="text-sm font-semibold text-slate-900">Option A</div>
+                      <div class="text-xs text-slate-600 mt-1">Continue current approach</div>
+                    </button>
+
+                    <button class="w-full text-left rounded-2xl border border-blue-300 bg-blue-50 transition p-4 pulse">
+                      <div class="text-sm font-semibold text-slate-900">Option B (Recommended)</div>
+                      <div class="text-xs text-slate-700 mt-1">Evidence-guided adjustment + monitoring</div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 grid grid-cols-3 gap-3">
+                <div class="metric rounded-2xl p-3">
+                  <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Engagement</div>
+                  <div class="text-lg font-extrabold text-slate-900 mt-1">High</div>
+                </div>
+                <div class="metric rounded-2xl p-3">
+                  <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Retention</div>
+                  <div class="text-lg font-extrabold text-slate-900 mt-1">Stronger</div>
+                </div>
+                <div class="metric rounded-2xl p-3">
+                  <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Confidence</div>
+                  <div class="text-lg font-extrabold text-slate-900 mt-1">Improved</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SOCIAL PROOF -->
+  <section id="modules" class="section-bg">
+    <div class="max-w-7xl mx-auto px-5 py-14">
+      <div class="grid md:grid-cols-3 gap-6 reveal">
+        <div class="glass rounded-3xl p-6 soft-shadow card-hover">
+          <div class="text-sm font-semibold text-slate-700 uppercase tracking-wider">Built by educators</div>
+          <div class="mt-2 text-2xl font-extrabold text-slate-900">20+ years experience</div>
+          <p class="mt-3 text-slate-600">Designed by continuing education professionals with deep clinical education expertise.</p>
+        </div>
+        <div class="glass rounded-3xl p-6 soft-shadow card-hover">
+          <div class="text-sm font-semibold text-slate-700 uppercase tracking-wider">Designed for practice</div>
+          <div class="mt-2 text-2xl font-extrabold text-slate-900">Workflow-first</div>
+          <p class="mt-3 text-slate-600">Case flows mirror real clinical decisions so learners build confidence, not just recall.</p>
+        </div>
+        <div class="glass rounded-3xl p-6 soft-shadow card-hover">
+          <div class="text-sm font-semibold text-slate-700 uppercase tracking-wider">Assessment-ready</div>
+          <div class="mt-2 text-2xl font-extrabold text-slate-900">Measurable mastery</div>
+          <p class="mt-3 text-slate-600">Decision rationale + knowledge checks support mastery-based outcomes.</p>
+        </div>
+      </div>
+
+      <div class="mt-10 glass rounded-3xl p-8 soft-shadow reveal">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div>
+            <h3 class="text-2xl md:text-3xl font-extrabold tracking-tight">Featured modules</h3>
+            <p class="mt-2 text-slate-600">Examples of how Real World CE brings real cases into clinical education.</p>
+          </div>
+          <div class="flex gap-3">
+            <a href="CMV_Clinical_Module_REAL_CASE_BRANDED.html" class="btn-secondary px-5 py-2.5 rounded-2xl font-semibold transition">CMV Rescue</a>
+            <a href="LAI_NEW_LOGO_REAL_SIM2026_HEADER_LEFT_SHIFT.html" class="btn-secondary px-5 py-2.5 rounded-2xl font-semibold transition">LAI Injection Lab</a>
+            <a href="psoriasis_MODULE_PREMIUM.html" class="btn-secondary px-5 py-2.5 rounded-2xl font-semibold transition">Real Patient: Psoriasis</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- DIFFERENTIATION: Traditional vs Real World CE -->
+  <section class="section-bg">
+    <div class="max-w-7xl mx-auto px-5 py-14">
+      <div class="reveal">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full kicker">
+          <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+          Why we’re different
+        </div>
+        <h3 class="mt-5 text-3xl md:text-4xl font-extrabold tracking-tight">Traditional CE vs. Real World CE</h3>
+        <p class="mt-3 text-slate-600 max-w-3xl">
+          Learners don’t need more slides — they need practice-ready decisions with measurable mastery.
+        </p>
+      </div>
+
+      <div class="mt-8 grid lg:grid-cols-2 gap-6 reveal">
+        <div class="glass rounded-3xl overflow-hidden soft-shadow">
+          <div class="p-5 border-b border-slate-200/60">
+            <div class="text-sm font-semibold text-slate-700 uppercase tracking-wider">Traditional CE</div>
+          </div>
+          <div class="p-6 space-y-4 text-slate-700">
+            <div class="rw-row flex gap-3"><span class="mt-1 w-2 h-2 rounded-full bg-slate-400"></span><span>Static slide-based learning</span></div>
+            <div class="rw-row flex gap-3"><span class="mt-1 w-2 h-2 rounded-full bg-slate-400"></span><span>Passive, linear content</span></div>
+            <div class="rw-row flex gap-3"><span class="mt-1 w-2 h-2 rounded-full bg-slate-400"></span><span>Quiz at the end</span></div>
+            <div class="rw-row flex gap-3"><span class="mt-1 w-2 h-2 rounded-full bg-slate-400"></span><span>Limited clinical context</span></div>
+          </div>
+        </div>
+
+        <div class="glass rounded-3xl overflow-hidden soft-shadow card-hover">
+          <div class="p-5 border-b border-blue-200/60 bg-blue-50/60">
+            <div class="text-sm font-semibold text-slate-800 uppercase tracking-wider">Real World CE</div>
+          </div>
+          <div class="p-6 space-y-4 text-slate-700">
+            <div class="rw-row flex gap-3"><span class="mt-1 w-2 h-2 rounded-full bg-blue-600"></span><span><b>Interactive patient decisions</b> with rationale</span></div>
+            <div class="rw-row flex gap-3"><span class="mt-1 w-2 h-2 rounded-full bg-blue-600"></span><span><b>Simulation-based engagement</b></span></div>
+            <div class="rw-row flex gap-3"><span class="mt-1 w-2 h-2 rounded-full bg-blue-600"></span><span><b>Embedded mastery checks</b> throughout</span></div>
+            <div class="rw-row flex gap-3"><span class="mt-1 w-2 h-2 rounded-full bg-blue-600"></span><span><b>Clinical workflow alignment</b> for confidence</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-10 grid md:grid-cols-3 gap-6 reveal">
+        <div class="glass rounded-3xl p-6 card-hover">
+          <div class="text-sm font-semibold text-slate-700 uppercase tracking-wider">Outcome</div>
+          <div class="mt-2 text-2xl font-extrabold">Higher retention</div>
+          <p class="mt-2 text-slate-600">Practice-based learning strengthens recall and application.</p>
+        </div>
+        <div class="glass rounded-3xl p-6 card-hover">
+          <div class="text-sm font-semibold text-slate-700 uppercase tracking-wider">Outcome</div>
+          <div class="mt-2 text-2xl font-extrabold">Decision confidence</div>
+          <p class="mt-2 text-slate-600">Rationale builds clinical reasoning, not memorization.</p>
+        </div>
+        <div class="glass rounded-3xl p-6 card-hover">
+          <div class="text-sm font-semibold text-slate-700 uppercase tracking-wider">Outcome</div>
+          <div class="mt-2 text-2xl font-extrabold">Measurable mastery</div>
+          <p class="mt-2 text-slate-600">Progress indicators + checks support reporting.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+  <!-- ABOUT US -->
+  <section id="about" class="anchor max-w-7xl mx-auto px-5 py-16 reveal">
+    <div class="glass rounded-3xl p-7 md:p-10">
+      <div class="grid md:grid-cols-12 gap-8 items-start">
+        <div class="md:col-span-5">
+          <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">About Real World CE</h2>
+          <p class="mt-3 text-slate-700">
+            We are a technology-focused continuing education company that believes real-world experiences and scenarios
+            should be incorporated into clinical education to improve not only patient care but also patient outcomes.
+          </p>
+          <p class="mt-3 text-slate-500 text-sm">
+            We are talented continuing education professionals with over 20 years of experience. Our team will design and
+            deliver the highest level of clinical education.
+          </p>
+
+          <div class="mt-6 rounded-2xl overflow-hidden ring-soft bg-white">
+            
+<video class="w-full h-64 object-contain rounded-xl shadow-md" style="image-rendering:auto; image-rendering:high-quality;"
+       autoplay muted loop playsinline preload="metadata">
+    <source src="Continuing_Education_Video_Creation.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
+
+          </div>
+        </div>
+
+        <div class="md:col-span-7">
+          <div class="text-sm font-semibold text-slate-700 uppercase tracking-wider">Our Goal</div>
+          <p class="mt-2 text-sm text-slate-700">
+            Our goal is to provide high-quality online programs and live meetings that incorporate our three primary principles —
+            Real World, Science and Technology.
+          </p>
+
+          <div class="mt-6 glass rounded-2xl p-6">
+            <div class="text-sm font-semibold">How we work</div>
+            <p class="mt-2 text-sm text-slate-500">
+              Real World CE employs educational experts with experience in developing and implementing a myriad of programs that are
+              innovative, case-based, interactive and patient-centric in nature. We focus on applying adult learning theory and our
+              core principles to every program. Even more importantly, we understand the nuances of our target audiences and design
+              continuing education programs with a grounded understanding of how to educate both specialty audiences and general practitioners.
+            </p>
+          </div>
+
+          <div class="mt-6 grid sm:grid-cols-2 gap-4">
+            <div class="glass rounded-2xl p-5">
+              <div class="text-sm font-semibold">End-to-end programs</div>
+              <p class="mt-2 text-sm text-slate-500">From planning and design to delivery and outcomes support.</p>
+            </div>
+            <div class="glass rounded-2xl p-5">
+              <div class="text-sm font-semibold">Superior educational design</div>
+              <p class="mt-2 text-sm text-slate-500">Interactive, high-quality, and built for adult learners.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRINCIPLES -->
+  <section class="anchor max-w-7xl mx-auto px-5 pb-16" aria-labelledby="principlesTitle">
+    <div class="flex items-end justify-between gap-4">
+      <div>
+        <h2 id="principlesTitle" class="text-2xl md:text-3xl font-extrabold tracking-tight">Our Principles</h2>
+        <p class="mt-2 text-slate-500">Real World • Science • Technology</p>
+      </div>
+    </div>
+
+    <div class="mt-6 grid md:grid-cols-3 gap-4">
+      <div class="glass rounded-3xl overflow-hidden card-hover">
+        <img class="w-full h-44 object-contain fallbackable" style="image-rendering:auto; image-rendering:high-quality;" src="LAI_second_page.png" alt="Real World"
+             onerror="this.onerror=null; this.src=window.__missingImgSvg('Missing: LAI_second_page.png');" />
+        <div class="p-6">
+          <div class="text-xl font-bold">Real World</div>
+          <p class="mt-2 text-sm text-slate-500">Grounded, practical scenarios and decision-making that reflect real clinical workflows.</p>
+        </div>
+      </div>
+
+      <div class="glass rounded-3xl overflow-hidden card-hover">
+        <img class="w-full h-44 object-contain fallbackable" style="image-rendering:auto; image-rendering:high-quality;" src="TDMAIN_Page.png" alt="Science"
+             onerror="this.onerror=null; this.src=window.__missingImgSvg('Missing: TDMAIN_Page.png');" />
+        <div class="p-6">
+          <div class="text-xl font-bold">Science</div>
+          <p class="mt-2 text-sm text-slate-500">Evidence-first content focused on the latest guidance, literature, and outcomes.</p>
+        </div>
+      </div>
+
+      <div class="glass rounded-3xl overflow-hidden card-hover">
+        <img class="w-full h-44 object-contain fallbackable" style="image-rendering:auto; image-rendering:high-quality;" src="LAI_lab.png" alt="Technology"
+             onerror="this.onerror=null; this.src=window.__missingImgSvg('Missing: LAI_lab.png');" />
+        <div class="p-6">
+          <div class="text-xl font-bold">Technology</div>
+          <p class="mt-2 text-sm text-slate-500">Interactive simulations and modern UX that makes learning stick.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- CTA BAND -->
+  <section class="section-bg">
+    <div class="max-w-7xl mx-auto px-5 py-12">
+      <div class="glass rounded-3xl p-8 md:p-10 soft-shadow flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div>
+          <h3 class="text-2xl md:text-3xl font-extrabold tracking-tight">Build a premium, interactive CE experience.</h3>
+          <p class="mt-2 text-slate-600 max-w-2xl">Tell us your audience and goals—we’ll propose a learning flow with case-based scenarios, interactive labs, and assessment-ready design.</p>
+        </div>
+        <div class="flex gap-3">
+          <a href="#contact" class="btn-primary px-6 py-3 rounded-2xl font-semibold transition soft-shadow">Request a demo</a>
+          <a href="#about" class="btn-secondary px-6 py-3 rounded-2xl font-semibold transition">See how it works</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CONTACT US -->
+  <section id="contact" class="anchor max-w-7xl mx-auto px-5 pb-20 reveal">
+    <div class="glass rounded-3xl p-7 md:p-10">
+      <div class="grid md:grid-cols-12 gap-8 items-start">
+        <div class="md:col-span-6">
+          <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Contact Us</h2>
+          <p class="mt-3 text-slate-700">
+            Tell us what you’re building—audience, topic area, timeline, and the learning experience you want to deliver.
+          </p>
+
+          <div class="mt-6 space-y-3 text-sm text-slate-700">
+            <div class="glass rounded-2xl p-4 card-hover">
+              <div class="text-xs text-slate-500">WEBSITE</div>
+              <a class="font-semibold hover:underline" href="https://brianhicks211.github.io/realworldce/" target="_blank" rel="noopener noreferrer">www.realworldce.org</a>
+            </div>
+            <div class="glass rounded-2xl p-4 card-hover">
+              <div class="text-xs text-slate-500">EMAIL</div>
+              <a class="font-semibold hover:underline" href="mailto:Michelle@realworldce.org">Michelle@realworldce.org</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="md:col-span-6">
+          <form class="glass rounded-3xl p-6 ring-soft" onsubmit="return handleSubmit(event)">
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="text-xs text-slate-500">Name</label>
+                <input required name="name" class="mt-1 w-full bg-white border border-white/10 rounded-xl px-3 py-2 outline-none focus:border-sky-400/70" placeholder="Your name" />
+              </div>
+              <div>
+                <label class="text-xs text-slate-500">Email</label>
+                <input required type="email" name="email" class="mt-1 w-full bg-white border border-white/10 rounded-xl px-3 py-2 outline-none focus:border-sky-400/70" placeholder="you@company.com" />
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <label class="text-xs text-slate-500">Message</label>
+              <textarea required name="message" rows="5" class="mt-1 w-full bg-white border border-white/10 rounded-xl px-3 py-2 outline-none focus:border-sky-400/70"
+                placeholder="Program topic, audience, desired interactions, timeline…"></textarea>
+            </div>
+
+            <div class="mt-5 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+              <button type="submit" class="btn-primary px-5 py-3 rounded-2xl font-semibold transition soft-shadow">Send message</button>
+              <p id="formStatus" class="text-xs text-slate-500"></p>
+            </div>
+
+            </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <div class=\"divider\"></div>
+
+
+  <!-- CLOSING VISION -->
+  <section class="section-bg">
+    <div class="max-w-7xl mx-auto px-5 py-14">
+      <div class="glass rounded-3xl p-10 soft-shadow reveal">
+        <div class="grid lg:grid-cols-2 gap-10 items-center">
+          <div>
+            <h3 class="text-3xl md:text-4xl font-extrabold tracking-tight">The future of clinical education is immersive.</h3>
+            <p class="mt-3 text-slate-600 text-lg">
+              Real cases. Real decisions. Real mastery. Built to elevate clinician confidence and improve patient outcomes.
+            </p>
+            <div class="mt-7 flex gap-3">
+              <a href="#contact" class="btn-primary px-6 py-3 rounded-2xl font-semibold transition soft-shadow">Talk to our team</a>
+              <a href="#about" class="btn-secondary px-6 py-3 rounded-2xl font-semibold transition">Learn more</a>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="metric rounded-3xl p-6">
+              <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Designed for</div>
+              <div class="mt-2 text-xl font-extrabold text-slate-900">Clinicians</div>
+              <p class="mt-2 text-slate-600 text-sm">Nurses, pharmacists, NPs, PAs, physicians</p>
+            </div>
+            <div class="metric rounded-3xl p-6">
+              <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Built for</div>
+              <div class="mt-2 text-xl font-extrabold text-slate-900">Accredited CE</div>
+              <p class="mt-2 text-slate-600 text-sm">Clean flows + assessment-ready outputs</p>
+            </div>
+            <div class="metric rounded-3xl p-6">
+              <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Powered by</div>
+              <div class="mt-2 text-xl font-extrabold text-slate-900">Technology</div>
+              <p class="mt-2 text-slate-600 text-sm">Interactive labs + data-driven learning</p>
+            </div>
+            <div class="metric rounded-3xl p-6">
+              <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Focus</div>
+              <div class="mt-2 text-xl font-extrabold text-slate-900">Outcomes</div>
+              <p class="mt-2 text-slate-600 text-sm">Confidence, mastery, patient impact</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<footer class="border-t border-white/10 bg-white">
+    <div class="max-w-7xl mx-auto px-5 py-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <img src="logo-transparent.png" alt="Real World CE" class="h-20 w-20 object-contain rounded-xl ring-soft bg-white/5 p-1" />
+        <div>
+          <div class="text-sm font-semibold">Real World CE</div>
+          <div class="text-xs text-slate-400">Bringing the Real World Into Clinical Education</div>
+        </div>
+      </div>
+      <div class="text-xs text-slate-400">© <span id="year"></span> Real World CE. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    function handleSubmit(e){
+      e.preventDefault();
+      const form = e.target;
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const message = form.message.value.trim();
+
+      const subject = encodeURIComponent("Real World CE — Website Inquiry");
+      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}\n`);
+      window.location.href = `mailto:Michelle@realworldce.org?subject=${subject}&body=${body}`;
+
+      const status = document.getElementById("formStatus");
+      status.textContent = "Opening your email client…";
+      setTimeout(() => status.textContent = "", 3500);
+      return false;
+    }
+  </script>
+
+<script>
+  // Reveal-on-scroll (subtle motion)
+  (function(){
+    const els = document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window) || !els.length) return els.forEach(e=>e.classList.add('in'));
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{
+        if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(e=>io.observe(e));
+  })();
+</script>
+
+</body>
+</html>
