@@ -160,144 +160,180 @@
     }
   
     .locked-glass-bar {
-      position: fixed;
-      inset-inline: 0;
-      top: 0;
-      z-index: 50;
+      background: rgba(255,255,255,0.38);
+      backdrop-filter: blur(20px) saturate(1.25);
+      -webkit-backdrop-filter: blur(20px) saturate(1.25);
+      border-bottom: 1px solid rgba(255,255,255,0.34);
+      box-shadow: 0 10px 30px rgba(15,23,42,0.06);
+    }
+    .principle-card {
+      position: relative;
       overflow: hidden;
-      border-bottom: 1px solid rgba(255,255,255,0.10);
-      box-shadow: 0 18px 40px rgba(2,6,23,0.24), 0 1px 0 rgba(255,255,255,0.08) inset;
+    }
+    .principle-media-wrap {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(500px 180px at 20% 10%, rgba(59,130,246,.10), transparent 55%),
+        radial-gradient(420px 160px at 80% 0%, rgba(14,165,233,.10), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.98), rgba(239,246,255,.92));
+    }
+    .principle-media-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,.34) 50%, transparent 80%);
+      transform: translateX(-120%);
+      animation: principleShine 7s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .principle-media {
+      width: 100%;
+      height: 11rem;
+      object-fit: contain;
+      will-change: transform;
+      transform: translate3d(0,0,0) scale(1.02);
+      animation: principleFloat 8s ease-in-out infinite;
+      transition: transform .7s ease, filter .4s ease;
+    }
+    .principles-grid .principle-card:nth-child(2) .principle-media,
+    .principles-grid .principle-card:nth-child(2) .principle-media-wrap::after {
+      animation-delay: -2.2s;
+    }
+    .principles-grid .principle-card:nth-child(3) .principle-media,
+    .principles-grid .principle-card:nth-child(3) .principle-media-wrap::after {
+      animation-delay: -4.4s;
+    }
+    .principle-card:hover .principle-media {
+      transform: translate3d(0,-6px,0) scale(1.06);
+      filter: saturate(1.06);
+    }
+    @keyframes principleFloat {
+      0%, 100% { transform: translate3d(0, 0, 0) scale(1.02); }
+      25% { transform: translate3d(0, -8px, 0) scale(1.035); }
+      50% { transform: translate3d(0, 4px, 0) scale(1.02); }
+      75% { transform: translate3d(0, -4px, 0) scale(1.03); }
+    }
+    @keyframes principleShine {
+      0%, 10% { transform: translateX(-120%); }
+      45%, 100% { transform: translateX(120%); }
     }
     .locked-glass-bar::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg,#020617 0%,#082f49 18%,#0f3f73 38%,#0c4a6e 58%,#0369a1 82%,#38bdf8 100%);
-      opacity: .98;
+      background: linear-gradient(180deg, rgba(255,255,255,0.20), rgba(255,255,255,0.08));
       pointer-events: none;
-    }
-    .locked-glass-bar::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 12% 20%, rgba(56,189,248,0.22), transparent 28%),
-        radial-gradient(circle at 80% 18%, rgba(96,165,250,0.20), transparent 26%),
-        radial-gradient(circle at 50% 120%, rgba(14,165,233,0.16), transparent 40%);
-      pointer-events: none;
-    }
-    .header-inner {
-      position: relative;
-      max-width: 84rem;
-      margin: 0 auto;
-    }
-    .topbar-grid {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-    .topbar-badge {
-      display: inline-flex;
-      align-items: center;
-      padding: .34rem .82rem;
-      border-radius: 999px;
-      border: 1px solid rgba(103,232,249,0.22);
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(12px);
-      color: rgb(103 232 249);
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: .28em;
-      text-transform: uppercase;
-      box-shadow: 0 8px 24px rgba(34,211,238,0.12);
-    }
-    .topbar-title {
-      background: linear-gradient(180deg,rgba(255,255,255,1) 0%,rgba(224,242,254,0.98) 45%,rgba(186,230,253,0.92) 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      filter: drop-shadow(0 2px 16px rgba(56,189,248,0.18));
-    }
-    .topbar-tagline {
-      color: rgba(255,255,255,0.72);
-      text-transform: uppercase;
-      letter-spacing: .16em;
-      font-weight: 600;
-      font-size: 11px;
-    }
-    .topbar-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 42px;
-      padding: .65rem 1rem;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.10);
-      backdrop-filter: blur(14px);
-      color: rgba(255,255,255,0.88);
-      font-size: .9rem;
-      font-weight: 700;
-      transition: all .18s ease;
-      box-shadow: 0 14px 34px rgba(2,6,23,0.20);
-    }
-    .topbar-link:hover {
-      background: rgba(255,255,255,0.16);
-      color: white;
-      border-color: rgba(186,230,253,0.35);
-      transform: translateY(-1px);
-    }
-    .topbar-cta {
-      background: linear-gradient(135deg, rgba(34,211,238,0.94), rgba(37,99,235,0.96));
-      border-color: rgba(186,230,253,0.24);
-      color: white;
-      box-shadow: 0 16px 36px rgba(37,99,235,0.28);
-    }
-    .topbar-cta:hover {
-      background: linear-gradient(135deg, rgba(56,189,248,0.98), rgba(29,78,216,0.98));
-      border-color: rgba(186,230,253,0.40);
-    }
-    .topbar-menu-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 46px;
-      height: 46px;
-      border-radius: 1rem;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(255,255,255,0.10);
-      backdrop-filter: blur(16px);
-      color: white;
-      box-shadow: 0 10px 25px rgba(2,6,23,0.25);
-    }
-    .topbar-menu-wrap {
-      border-top: 1px solid rgba(255,255,255,0.12);
-      background: rgba(2,6,23,0.34);
-      backdrop-filter: blur(18px);
-      box-shadow: 0 12px 30px rgba(2,6,23,0.12);
-    }
-    .topbar-menu-item {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 46px;
-      padding: .95rem 1rem;
-      border-radius: 1rem;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.08);
-      color: rgba(255,255,255,0.92);
-      font-weight: 700;
-      backdrop-filter: blur(12px);
-    }
-    .topbar-menu-item.topbar-cta {
-      background: linear-gradient(135deg, rgba(34,211,238,0.94), rgba(37,99,235,0.96));
-      color: white;
     }
     @media (max-width: 768px) {
-      body { padding-top: 104px !important; }
-      .topbar-tagline { font-size: 10px; letter-spacing: .12em; }
+      body { padding-top: 84px !important; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .principle-media,
+      .principle-media-wrap::after {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+      }
+    }
+
+
+    .principle-media-wrap {
+      cursor: zoom-in;
+    }
+    .principle-media-wrap:focus-visible {
+      outline: 3px solid rgba(37,99,235,.35);
+      outline-offset: 4px;
+    }
+    .principle-lightbox {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      background: rgba(2,6,23,.60);
+      backdrop-filter: blur(14px) saturate(1.1);
+      -webkit-backdrop-filter: blur(14px) saturate(1.1);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .28s ease, visibility .28s ease;
+      z-index: 120;
+    }
+    .principle-lightbox.is-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .principle-lightbox-panel {
+      position: relative;
+      width: min(1100px, 100%);
+      border-radius: 1.75rem;
+      overflow: hidden;
+      background:
+        radial-gradient(700px 240px at 10% 0%, rgba(37,99,235,.14), transparent 55%),
+        radial-gradient(700px 240px at 90% 0%, rgba(14,165,233,.12), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.98), rgba(241,245,249,.96));
+      border: 1px solid rgba(255,255,255,.28);
+      box-shadow: 0 30px 100px rgba(15,23,42,.35);
+      transform: scale(.94) translateY(8px);
+      transition: transform .28s ease;
+    }
+    .principle-lightbox.is-open .principle-lightbox-panel {
+      transform: scale(1) translateY(0);
+    }
+    .principle-lightbox-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(15,23,42,.10);
+      background: rgba(255,255,255,.84);
+      color: #0f172a;
+      box-shadow: 0 10px 25px rgba(15,23,42,.15);
+      transition: transform .18s ease, background .18s ease;
+    }
+    .principle-lightbox-close:hover {
+      transform: scale(1.04);
+      background: rgba(255,255,255,.98);
+    }
+    .principle-lightbox-media {
+      width: 100%;
+      max-height: min(78vh, 820px);
+      object-fit: contain;
+      display: block;
+      padding: 2.5rem;
+    }
+    .principle-lightbox-caption {
+      padding: 0 2rem 1.5rem;
+      text-align: center;
+    }
+    .principle-lightbox-caption-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .principle-lightbox-caption-copy {
+      margin-top: .4rem;
+      color: #475569;
+      font-size: .95rem;
+    }
+    @media (max-width: 768px) {
+      .principle-lightbox-media {
+        padding: 1.25rem 1.25rem .75rem;
+        max-height: 70vh;
+      }
+      .principle-lightbox-caption {
+        padding: 0 1.1rem 1.1rem;
+      }
     }
 
 </style>
@@ -321,38 +357,32 @@
     };
   </script>
 </head>
-<body class="min-h-screen pt-28 md:pt-32 text-slate-800 bg-slate-50">
+<body class="min-h-screen pt-24 text-slate-800 bg-slate-50">
 
-  <header class="locked-glass-bar">
-    <div class="absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,.22)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.22)_1px,transparent_1px)] [background-size:32px_32px]"></div>
-    <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-200/70 to-transparent"></div>
-    <div class="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-sky-300/60 to-transparent"></div>
+  <header class="locked-glass-bar fixed inset-x-0 top-0 z-50">
+    <div class="header-inner max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
+      <a href="#home" class="flex items-center gap-4 min-w-0">
+        <div class="min-w-0">
+          <div class="font-black tracking-tight text-xl text-medicalBlue uppercase">Real World <span class="text-blue-600">CE</span></div>
+          <div class="text-xs sm:text-sm text-slate-500 font-medium">Bringing the Real World Into Clinical Education</div>
+        </div>
+      </a>
 
-    <div class="header-inner px-4 sm:px-6 py-4 md:py-5">
-      <div class="topbar-grid">
-        <a href="#home" class="min-w-0 flex items-center">
-          <div class="leading-none min-w-0">
-                        <div class="font-black text-[1.35rem] md:text-[1.8rem] uppercase tracking-[-0.03em] topbar-title">Real World CE</div>
-            <div class="mt-2 topbar-tagline">Bringing the Real World Into Clinical Education</div>
-          </div>
-        </a>
+      <nav class="desktop-nav hidden lg:flex items-center gap-3 text-sm">
+        <a href="#home" class="px-4 py-2 rounded-full border border-slate-200 text-slate-600 font-semibold hover:border-blue-300 hover:text-blue-700 transition">Home</a>
+        <a href="#about" class="px-4 py-2 rounded-full border border-slate-200 text-slate-600 font-semibold hover:border-blue-300 hover:text-blue-700 transition">About Us</a>
+                <a href="#contact" class="px-4 py-2 rounded-full bg-blue-600 text-white font-semibold shadow-glow hover:bg-blue-700 transition">Contact Us</a>
+      </nav>
 
-        <nav class="desktop-nav hidden lg:flex items-center gap-3 text-sm shrink-0">
-          <a href="#home" class="topbar-link">Home</a>
-          <a href="#about" class="topbar-link">About Us</a>
-          <a href="#contact" class="topbar-link topbar-cta">Request a Demo</a>
-        </nav>
-
-        <button type="button" class="lg:hidden topbar-menu-btn" onclick="toggleMobileMenu()" aria-label="Open menu">
-          <span class="material-symbols-outlined">menu</span>
-        </button>
-      </div>
+      <button type="button" class="lg:hidden inline-flex items-center justify-center rounded-xl border border-white/40 bg-white/35 px-3 py-2 text-slate-700 shadow-sm backdrop-blur-md" onclick="toggleMobileMenu()" aria-label="Open menu">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
     </div>
-    <div id="mobileMenu" class="hidden lg:hidden topbar-menu-wrap">
-      <div class="header-inner px-4 py-3 flex flex-col gap-2">
-        <a href="#home" class="topbar-menu-item" onclick="toggleMobileMenu(false)">Home</a>
-        <a href="#about" class="topbar-menu-item" onclick="toggleMobileMenu(false)">About Us</a>
-        <a href="#contact" class="topbar-menu-item topbar-cta" onclick="toggleMobileMenu(false)">Request a Demo</a>
+    <div id="mobileMenu" class="hidden lg:hidden border-t border-white/40 bg-white/40 backdrop-blur-2xl shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-2">
+        <a href="#home" class="px-4 py-3 rounded-2xl border border-white/45 bg-white/35 text-slate-700 font-semibold backdrop-blur-md" onclick="toggleMobileMenu(false)">Home</a>
+        <a href="#about" class="px-4 py-3 rounded-2xl border border-white/45 bg-white/35 text-slate-700 font-semibold backdrop-blur-md" onclick="toggleMobileMenu(false)">About Us</a>
+                <a href="#contact" class="px-4 py-3 rounded-2xl bg-blue-600/90 text-white text-center font-semibold backdrop-blur-md" onclick="toggleMobileMenu(false)">Contact Us</a>
       </div>
     </div>
   </header>
@@ -361,7 +391,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-5 pt-8 sm:pt-14 pb-10 sm:pb-16 relative">
       <div class="grid lg:grid-cols-12 gap-6 sm:gap-8 items-center">
         <div class="lg:col-span-7">
-          <h1 class="mt-1 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight">
+          <h1 class="mt-5 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight">
             Technology-focused CE built for <span class="text-blue-800">real</span> clinical practice and <span class="text-blue-800">real</span> patients.
           </h1>
 
@@ -571,9 +601,9 @@
   <section class="anchor max-w-7xl mx-auto px-5 pb-16" aria-labelledby="principlesTitle">
     <div class="flex items-end justify-between gap-4"><div><h2 id="principlesTitle" class="text-2xl md:text-3xl font-extrabold tracking-tight section-accent">Our Principles</h2><p class="mt-2 text-slate-500">Real World • Science • Technology</p></div></div>
     <div class="mt-6 grid md:grid-cols-3 gap-4 principles-grid">
-      <div class="glass rounded-3xl overflow-hidden card-hover"><img class="w-full h-44 object-contain fallbackable" src="LAI_second_page.png" alt="Real World" onerror="this.onerror=null; this.src=window.__missingImgSvg('Missing: LAI_second_page.png');" /><div class="p-6"><div class="text-xl font-bold">Real World</div><p class="mt-2 text-sm text-slate-500">Grounded, practical scenarios and decision-making that reflect real clinical workflows.</p></div></div>
-      <div class="glass rounded-3xl overflow-hidden card-hover"><img class="w-full h-44 object-contain fallbackable" src="TDMAIN_Page.png" alt="Science" onerror="this.onerror=null; this.src=window.__missingImgSvg('Missing: TDMAIN_Page.png');" /><div class="p-6"><div class="text-xl font-bold">Science</div><p class="mt-2 text-sm text-slate-500">Evidence-first content focused on the latest guidance, literature, and outcomes.</p></div></div>
-      <div class="glass rounded-3xl overflow-hidden card-hover"><img class="w-full h-44 object-contain fallbackable" src="LAI_lab.png" alt="Technology" onerror="this.onerror=null; this.src=window.__missingImgSvg('Missing: LAI_lab.png');" /><div class="p-6"><div class="text-xl font-bold">Technology</div><p class="mt-2 text-sm text-slate-500">Interactive simulations and modern User Interface and User Experience design that make learning stick.</p></div></div>
+      <div class="glass rounded-3xl card-hover principle-card"><div class="principle-media-wrap" role="button" tabindex="0" aria-label="Open Real World image" data-principle-title="Real World" data-principle-copy="Grounded, practical scenarios and decision-making that reflect real clinical workflows."><img class="fallbackable principle-media" src="LAI_second_page.png" alt="Real World" onerror="this.onerror=null; this.src=window.__missingImgSvg('Missing: LAI_second_page.png');" /></div><div class="p-6"><div class="text-xl font-bold">Real World</div><p class="mt-2 text-sm text-slate-500">Grounded, practical scenarios and decision-making that reflect real clinical workflows.</p></div></div>
+      <div class="glass rounded-3xl card-hover principle-card"><div class="principle-media-wrap" role="button" tabindex="0" aria-label="Open Science image" data-principle-title="Science" data-principle-copy="Evidence-first content focused on the latest guidance, literature, and outcomes."><img class="fallbackable principle-media" src="TDMAIN_Page.png" alt="Science" onerror="this.onerror=null; this.src=window.__missingImgSvg('Missing: TDMAIN_Page.png');" /></div><div class="p-6"><div class="text-xl font-bold">Science</div><p class="mt-2 text-sm text-slate-500">Evidence-first content focused on the latest guidance, literature, and outcomes.</p></div></div>
+      <div class="glass rounded-3xl card-hover principle-card"><div class="principle-media-wrap" role="button" tabindex="0" aria-label="Open Technology image" data-principle-title="Technology" data-principle-copy="Interactive simulations and modern User Interface and User Experience design that make learning stick."><img class="fallbackable principle-media" src="LAI_lab.png" alt="Technology" onerror="this.onerror=null; this.src=window.__missingImgSvg('Missing: LAI_lab.png');" /></div><div class="p-6"><div class="text-xl font-bold">Technology</div><p class="mt-2 text-sm text-slate-500">Interactive simulations and modern User Interface and User Experience design that make learning stick.</p></div></div>
     </div>
   </section>
 
@@ -619,6 +649,21 @@
       </div>
     </div>
   </section>
+
+
+
+  <div id="principleLightbox" class="principle-lightbox" aria-hidden="true">
+    <div class="principle-lightbox-panel">
+      <button type="button" class="principle-lightbox-close" aria-label="Close enlarged image" onclick="closePrincipleLightbox()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+      <img id="principleLightboxImage" class="principle-lightbox-media" src="" alt="" />
+      <div class="principle-lightbox-caption">
+        <div id="principleLightboxTitle" class="principle-lightbox-caption-title"></div>
+        <div id="principleLightboxCopy" class="principle-lightbox-caption-copy"></div>
+      </div>
+    </div>
+  </div>
 
   <footer class="border-t border-white/10 bg-white">
     <div class="max-w-7xl mx-auto px-5 py-8 flex flex-col md:flex-row md:items-center justify-between gap-6 text-center md:text-left">
@@ -667,6 +712,54 @@
       }, { threshold: 0.12 });
       els.forEach(e=>io.observe(e));
     })();
+
+    let lastPrincipleTrigger = null;
+    function openPrincipleLightbox(trigger){
+      if(!trigger) return;
+      lastPrincipleTrigger = trigger;
+      const overlay = document.getElementById('principleLightbox');
+      const image = document.getElementById('principleLightboxImage');
+      const title = document.getElementById('principleLightboxTitle');
+      const copy = document.getElementById('principleLightboxCopy');
+      const img = trigger.querySelector('img');
+      if(!overlay || !image || !img) return;
+      image.src = img.currentSrc || img.src;
+      image.alt = img.alt || trigger.dataset.principleTitle || 'Principle image';
+      title.textContent = trigger.dataset.principleTitle || img.alt || '';
+      copy.textContent = trigger.dataset.principleCopy || '';
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closePrincipleLightbox(){
+      const overlay = document.getElementById('principleLightbox');
+      if(!overlay) return;
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if(lastPrincipleTrigger){
+        lastPrincipleTrigger.focus();
+      }
+    }
+    document.querySelectorAll('.principle-media-wrap').forEach((item)=>{
+      item.addEventListener('click', ()=> openPrincipleLightbox(item));
+      item.addEventListener('keydown', (event)=>{
+        if(event.key === 'Enter' || event.key === ' '){
+          event.preventDefault();
+          openPrincipleLightbox(item);
+        }
+      });
+    });
+    document.getElementById('principleLightbox')?.addEventListener('click', (event)=>{
+      if(event.target.id === 'principleLightbox'){
+        closePrincipleLightbox();
+      }
+    });
+    document.addEventListener('keydown', (event)=>{
+      if(event.key === 'Escape' && document.getElementById('principleLightbox')?.classList.contains('is-open')){
+        closePrincipleLightbox();
+      }
+    });
   </script>
 </body>
 </html>
