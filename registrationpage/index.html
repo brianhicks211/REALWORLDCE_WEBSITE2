@@ -1,31 +1,889 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Real World CE | Tardive Dyskinesia Webinar</title>
-<style>
-:root{--blue:#145BFF;--blue-dark:#063FD1;--navy:#061336;--text:#0D1538;--muted:#42506B;--border:#CFE4FF;--line:#7CAEFF;--card:rgba(255,255,255,.92);--shadow:0 18px 45px rgba(6,19,54,.09)}
-*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:radial-gradient(circle at 91% 12%,rgba(56,189,248,.20),transparent 24%),radial-gradient(circle at 0% 82%,rgba(56,189,248,.22),transparent 28%),linear-gradient(180deg,#fff 0%,#F5FBFF 48%,#fff 100%);overflow-x:hidden} body:before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:repeating-radial-gradient(circle at 90% 43%,rgba(20,91,255,.16) 0 2px,transparent 3px 17px),linear-gradient(135deg,transparent 0 50%,rgba(56,189,248,.10) 50% 54%,transparent 54% 100%);opacity:.65} body:after{content:"";position:fixed;top:-110px;right:-80px;width:760px;height:430px;border:2px solid rgba(20,91,255,.17);border-left:0;border-bottom:0;border-radius:50%;transform:rotate(8deg);z-index:-1;box-shadow:-18px 18px 0 rgba(20,91,255,.11),-36px 36px 0 rgba(20,91,255,.08),-54px 54px 0 rgba(20,91,255,.055),-72px 72px 0 rgba(20,91,255,.04)}
-.page{width:min(1120px,100%);margin:0 auto;padding:38px 36px 28px}.logo{display:flex;align-items:center;margin-bottom:28px}.logo img{width:330px;max-width:100%;height:auto;display:block}.logo-text{font-size:38px;line-height:1;font-weight:900;letter-spacing:-.045em;color:#050914}.logo-text span{color:var(--blue)}
-.hero{display:grid;grid-template-columns:minmax(0,1fr) 365px;gap:56px;align-items:start}.pills{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:22px}.pill{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#fff;border-radius:999px;padding:12px 20px;font-weight:900;font-size:16px;line-height:1;box-shadow:0 10px 20px rgba(20,91,255,.22)}
-h1{margin:0 0 8px;max-width:690px;color:var(--navy);font-size:clamp(39px,5.2vw,56px);line-height:.98;letter-spacing:-.055em;font-weight:900}.subtitle{margin-bottom:22px;color:var(--blue);font-size:clamp(24px,3vw,32px);font-weight:900;letter-spacing:-.035em}.date-line{display:flex;align-items:center;gap:14px;color:var(--navy);font-weight:900;font-size:24px;margin-bottom:20px;flex-wrap:wrap}.calendar{width:38px;height:38px;border-radius:8px;border:3px solid var(--blue);position:relative;display:inline-block;flex:0 0 auto}.calendar:before{content:"";position:absolute;top:9px;left:4px;right:4px;height:3px;background:var(--blue);border-radius:2px}.calendar:after{content:"";position:absolute;left:8px;top:20px;width:4px;height:4px;background:var(--blue);box-shadow:9px 0 var(--blue),18px 0 var(--blue),0 9px var(--blue),9px 9px var(--blue),18px 9px var(--blue)}.intro{max-width:620px;margin:0 0 26px;color:var(--navy);font-size:16px;line-height:1.42;font-weight:700}.primary-button{display:inline-flex;align-items:center;gap:18px;border-radius:18px;background:var(--blue);color:#fff;padding:17px 30px;font-size:26px;line-height:1;font-weight:900;text-decoration:none;box-shadow:0 12px 26px rgba(20,91,255,.25);transition:.18s}.primary-button:hover{transform:translateY(-2px);background:var(--blue-dark)}.primary-button .arrow{width:43px;height:43px;border-radius:50%;border:2px solid rgba(255,255,255,.85);display:inline-grid;place-items:center;font-size:26px}
-.collab-card{min-height:430px;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:22px 28px;display:grid;align-content:center;box-shadow:var(--shadow);overflow:hidden}.collab-card h3{text-align:center;color:var(--blue);font-size:19px;font-weight:900;margin:0 0 22px}.partner-logo{width:100%;max-height:300px;object-fit:contain;display:block;margin:0 auto}.section-title{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:18px;margin:48px 0 22px;color:var(--navy);font-weight:900;font-size:28px;text-align:center;letter-spacing:-.035em}.section-title:before,.section-title:after{content:"";height:2px;background:var(--line)}
-.highlight-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.highlight{min-height:132px;background:var(--card);border:1px solid var(--border);border-radius:16px;display:grid;grid-template-columns:70px 1fr;gap:14px;align-items:center;padding:18px 15px;box-shadow:0 10px 28px rgba(6,19,54,.05)}.circle-icon{width:62px;height:62px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-size:24px;font-weight:900;letter-spacing:-.04em}.highlight p{margin:0;color:var(--navy);font-size:14px;line-height:1.22;font-weight:900}.speaker-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.speaker{min-height:245px;display:grid;grid-template-columns:150px 1fr;gap:22px;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 20px 20px 18px;box-shadow:0 10px 28px rgba(6,19,54,.05)}.avatar{width:140px;height:140px;border-radius:50%;object-fit:cover;background:#EAF7FF;border:2px solid #E1F1FF;box-shadow:0 8px 18px rgba(6,19,54,.10)}.speaker h3{margin:0 0 12px;color:var(--blue);font-size:21px;line-height:1.13;font-weight:900}.speaker p{margin:0;color:var(--navy);font-size:15px;line-height:1.42;font-weight:800}
-.objective-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:34px}.objective{position:relative;min-height:255px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:44px 20px 18px;text-align:center;box-shadow:0 10px 28px rgba(6,19,54,.05)}.objective .num{width:58px;height:58px;background:var(--blue);border-radius:50%;color:#fff;font-size:28px;font-weight:900;display:grid;place-items:center;position:absolute;left:50%;top:-28px;transform:translateX(-50%);box-shadow:0 10px 22px rgba(20,91,255,.22)}.objective p{margin:0;color:var(--navy);font-size:14px;line-height:1.35;font-weight:800}.info-grid{display:grid;grid-template-columns:1fr 1.07fr;gap:18px;margin-top:36px}.info-card{min-height:240px;background:var(--card);border:1px solid #AFCFFF;border-radius:17px;padding:28px 34px;box-shadow:0 10px 28px rgba(6,19,54,.05)}.info-card h3{margin:0 0 18px;color:var(--blue);font-size:29px;line-height:1;font-weight:900;letter-spacing:-.045em}.info-card p{margin:0 0 14px;color:var(--navy);font-size:14px;line-height:1.42;font-weight:800}.support{margin-top:18px;background:var(--card);border:1px solid var(--border);border-radius:17px;padding:18px 34px;box-shadow:0 10px 28px rgba(6,19,54,.05)}.support h3{margin:0 0 6px;color:var(--blue);font-size:28px;font-weight:900;letter-spacing:-.04em}.support p{margin:0;color:var(--navy);font-size:20px;line-height:1.2;font-weight:900}.bottom-row{display:grid;grid-template-columns:1fr 520px;align-items:end;gap:24px;margin-top:8px}.site-url{color:var(--navy);font-weight:900;font-size:18px;padding-bottom:18px}.reserve-box{display:block;background:var(--blue);color:#fff;border-radius:17px 17px 0 0;text-align:center;padding:16px 20px 15px;text-decoration:none;box-shadow:0 -10px 28px rgba(20,91,255,.18);transition:.18s}.reserve-box:hover{transform:translateY(-2px);background:var(--blue-dark)}.reserve-box strong{display:block;font-size:26px;line-height:1;margin-bottom:4px}.reserve-box span{font-size:17px;font-weight:900}
-@media(max-width:980px){.hero{grid-template-columns:1fr}.collab-card{max-width:440px}.highlight-grid,.objective-grid{grid-template-columns:repeat(2,1fr)}.speaker-grid,.info-grid,.bottom-row{grid-template-columns:1fr}.reserve-box{border-radius:17px}}@media(max-width:650px){.page,
-.highlight-grid,.objective-grid{grid-template-columns:1fr}.speaker{grid-template-columns:1fr;text-align:center}.avatar{margin:0 auto}h1{font-size:38px}.primary-button,.reserve-box{width:100%}.section-title{font-size:24px;gap:10px}.date-line{font-size:20px}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Register for the Real World CE live webinar on tardive dyskinesia in managed care." />
+  <title>Real World CE | Tardive Dyskinesia Webinar</title>
+  <style>
+    :root {
+      --navy: #07143a;
+      --navy-2: #0b1e51;
+      --blue: #1558f5;
+      --blue-dark: #0a3ed0;
+      --cyan: #00b4d8;
+      --sky: #eaf5ff;
+      --ice: #f6fbff;
+      --text: #132047;
+      --muted: #51607c;
+      --line: #cfe2ff;
+      --card: rgba(255, 255, 255, 0.92);
+      --shadow: 0 24px 70px rgba(7, 20, 58, 0.11);
+      --soft-shadow: 0 14px 38px rgba(7, 20, 58, 0.075);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 90% 4%, rgba(21, 88, 245, 0.16), transparent 26rem),
+        radial-gradient(circle at 8% 65%, rgba(0, 180, 216, 0.13), transparent 29rem),
+        linear-gradient(180deg, #ffffff 0%, #f7fbff 47%, #ffffff 100%);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; }
+    img { max-width: 100%; }
+
+    .announcement {
+      background: var(--navy);
+      color: #fff;
+      text-align: center;
+      padding: 9px 20px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(207, 226, 255, 0.8);
+    }
+
+    .header-inner {
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand img {
+      display: block;
+      width: 250px;
+      max-height: 54px;
+      object-fit: contain;
+      object-position: left center;
+    }
+
+    .header-cta,
+    .button-primary,
+    .button-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 900;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .header-cta,
+    .button-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--blue), #2b6aff);
+      box-shadow: 0 12px 28px rgba(21, 88, 245, 0.26);
+    }
+
+    .header-cta { padding: 12px 22px; }
+    .button-primary { padding: 16px 25px; font-size: 1.04rem; }
+    .button-secondary {
+      padding: 15px 23px;
+      border: 1px solid #a8c8ff;
+      color: var(--navy);
+      background: rgba(255, 255, 255, 0.82);
+    }
+
+    .header-cta:hover,
+    .button-primary:hover,
+    .button-secondary:hover {
+      transform: translateY(-2px);
+    }
+
+    .hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(310px, 0.72fr);
+      gap: 64px;
+      align-items: center;
+      padding: 72px 0 58px;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      width: 650px;
+      height: 330px;
+      right: -230px;
+      top: 10px;
+      border: 1px solid rgba(21, 88, 245, 0.18);
+      border-radius: 50%;
+      transform: rotate(12deg);
+      box-shadow:
+        -22px 18px 0 rgba(21, 88, 245, 0.07),
+        -44px 36px 0 rgba(21, 88, 245, 0.05),
+        -66px 54px 0 rgba(21, 88, 245, 0.035);
+    }
+
+    .eyebrows {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: #eaf2ff;
+      color: var(--blue-dark);
+      border: 1px solid #c8dcff;
+      font-size: 0.82rem;
+      font-weight: 900;
+      letter-spacing: 0.045em;
+      text-transform: uppercase;
+    }
+
+    .live-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 0 5px rgba(21, 88, 245, 0.12);
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(2.7rem, 5.7vw, 5.2rem);
+      line-height: 0.98;
+      letter-spacing: -0.063em;
+      font-weight: 950;
+      max-width: 790px;
+    }
+
+    h1 .title-break {
+      display: block;
+      color: var(--blue);
+      font-size: 0.61em;
+      line-height: 1.08;
+      letter-spacing: -0.045em;
+      margin-top: 12px;
+    }
+
+    .subtitle {
+      margin: 22px 0 12px;
+      color: var(--blue);
+      font-size: clamp(1.3rem, 2.1vw, 1.85rem);
+      font-weight: 900;
+      letter-spacing: -0.025em;
+    }
+
+    .intro {
+      max-width: 730px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.04rem;
+      line-height: 1.7;
+      font-weight: 650;
+    }
+
+    .event-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 28px 0;
+    }
+
+    .event-chip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 60px;
+      padding: 12px 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .event-chip svg {
+      width: 24px;
+      height: 24px;
+      color: var(--blue);
+      flex: 0 0 auto;
+    }
+
+    .event-chip small {
+      display: block;
+      color: var(--muted);
+      font-size: 0.73rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .event-chip strong {
+      display: block;
+      color: var(--navy);
+      font-size: 0.98rem;
+    }
+
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+    .collab-wrap {
+      position: relative;
+      padding: 18px;
+      border-radius: 34px;
+      background: linear-gradient(145deg, rgba(255,255,255,.96), rgba(232,244,255,.88));
+      border: 1px solid #c9ddff;
+      box-shadow: var(--shadow);
+    }
+
+    .collab-wrap::after {
+      content: "Live education. Practical impact.";
+      display: block;
+      text-align: center;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .collab-wrap img {
+      display: block;
+      width: 100%;
+      border-radius: 22px;
+    }
+
+    .quick-facts {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .fact {
+      text-align: center;
+      padding: 14px 8px;
+      border: 1px solid #d8e8ff;
+      border-radius: 14px;
+      background: rgba(255,255,255,.9);
+    }
+
+    .fact strong { display: block; color: var(--navy); font-size: 1.02rem; }
+    .fact span { color: var(--muted); font-size: .72rem; font-weight: 800; }
+
+    .section { padding: 58px 0; }
+    .section-soft {
+      background: linear-gradient(180deg, rgba(234, 245, 255, 0.66), rgba(255,255,255,0.72));
+      border-top: 1px solid rgba(207,226,255,.8);
+      border-bottom: 1px solid rgba(207,226,255,.8);
+    }
+
+    .section-heading {
+      max-width: 720px;
+      margin: 0 auto 34px;
+      text-align: center;
+    }
+
+    .section-kicker {
+      margin-bottom: 8px;
+      color: var(--blue);
+      font-size: 0.78rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+    }
+
+    .section-heading p {
+      margin: 13px auto 0;
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 650px;
+    }
+
+    .highlights {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .highlight-card {
+      min-height: 208px;
+      padding: 24px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .highlight-icon {
+      width: 58px;
+      height: 58px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: linear-gradient(145deg, var(--blue), #3477ff);
+      color: #fff;
+      font-weight: 950;
+      box-shadow: 0 12px 24px rgba(21,88,245,.22);
+      margin-bottom: 22px;
+    }
+
+    .highlight-card h3 {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-size: 1.03rem;
+      line-height: 1.25;
+    }
+
+    .highlight-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .faculty-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+
+    .faculty-card {
+      display: grid;
+      grid-template-columns: 176px 1fr;
+      gap: 24px;
+      align-items: center;
+      min-height: 294px;
+      padding: 24px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.94);
+      box-shadow: var(--soft-shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .faculty-card::after {
+      content: "";
+      position: absolute;
+      right: -70px;
+      bottom: -80px;
+      width: 210px;
+      height: 210px;
+      border-radius: 50%;
+      background: rgba(21,88,245,.06);
+    }
+
+    .faculty-photo {
+      width: 176px;
+      height: 176px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 6px solid #fff;
+      outline: 1px solid #bad4ff;
+      box-shadow: 0 16px 30px rgba(7,20,58,.16);
+      position: relative;
+      z-index: 1;
+    }
+
+    .faculty-card h3 {
+      margin: 0 0 12px;
+      color: var(--blue);
+      font-size: 1.22rem;
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+      position: relative;
+      z-index: 1;
+    }
+
+    .faculty-card p {
+      margin: 0;
+      color: var(--text);
+      font-size: 0.91rem;
+      line-height: 1.58;
+      font-weight: 650;
+      position: relative;
+      z-index: 1;
+    }
+
+    .objectives {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .objective-card {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 18px;
+      align-items: start;
+      padding: 24px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .objective-number {
+      width: 64px;
+      height: 64px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: linear-gradient(145deg, var(--blue), #2d70ff);
+      border-radius: 20px;
+      font-size: 1.55rem;
+      font-weight: 950;
+      box-shadow: 0 12px 24px rgba(21,88,245,.2);
+    }
+
+    .objective-card p {
+      margin: 2px 0 0;
+      color: var(--text);
+      line-height: 1.62;
+      font-weight: 650;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: 0.84fr 1.16fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .info-card {
+      padding: 28px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--card);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .info-card h3 {
+      margin: 0 0 14px;
+      color: var(--blue);
+      font-size: 1.45rem;
+      letter-spacing: -0.03em;
+    }
+
+    .info-card p {
+      margin: 0 0 14px;
+      color: var(--text);
+      font-size: 0.92rem;
+      line-height: 1.65;
+      font-weight: 620;
+    }
+
+    details.info-card summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      color: var(--blue);
+      font-size: 1.45rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    details.info-card summary::-webkit-details-marker { display: none; }
+    details.info-card summary::after {
+      content: "+";
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #eaf2ff;
+      color: var(--blue);
+      flex: 0 0 auto;
+    }
+
+    details[open].info-card summary::after { content: "–"; }
+    details.info-card .details-copy { margin-top: 18px; }
+
+    .support-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-top: 22px;
+      padding: 22px 28px;
+      border-radius: 20px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--navy), var(--navy-2));
+      box-shadow: var(--shadow);
+    }
+
+    .support-banner strong { display: block; font-size: 1.1rem; }
+    .support-banner span { color: #d7e5ff; font-size: .91rem; }
+
+    .final-cta {
+      padding: 70px 0;
+      text-align: center;
+    }
+
+    .cta-panel {
+      position: relative;
+      overflow: hidden;
+      padding: 44px 30px;
+      border-radius: 32px;
+      color: #fff;
+      background: linear-gradient(135deg, #0d43d5 0%, #1558f5 53%, #00a9d5 100%);
+      box-shadow: 0 30px 80px rgba(21,88,245,.26);
+    }
+
+    .cta-panel::before,
+    .cta-panel::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.22);
+    }
+
+    .cta-panel::before { width: 270px; height: 270px; left: -95px; bottom: -155px; }
+    .cta-panel::after { width: 350px; height: 350px; right: -170px; top: -235px; }
+
+    .cta-panel h2 { color: #fff; position: relative; }
+    .cta-panel p {
+      position: relative;
+      margin: 12px auto 24px;
+      max-width: 620px;
+      color: rgba(255,255,255,.9);
+      font-weight: 700;
+    }
+
+    .cta-panel .button-primary {
+      position: relative;
+      background: #fff;
+      color: var(--blue-dark);
+      box-shadow: 0 16px 34px rgba(7,20,58,.2);
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 0 94px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .mobile-register {
+      display: none;
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      z-index: 50;
+      min-height: 58px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--blue), #2c6cff);
+      color: #fff;
+      font-weight: 950;
+      text-decoration: none;
+      box-shadow: 0 18px 44px rgba(7,20,58,.28);
+    }
+
+    @media (max-width: 1040px) {
+      .hero { grid-template-columns: 1fr; gap: 36px; }
+      .collab-wrap { max-width: 500px; }
+      .highlights { grid-template-columns: repeat(2, 1fr); }
+      .faculty-grid { grid-template-columns: 1fr; }
+      .details-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .announcement { font-size: 0.76rem; }
+      .shell { width: min(100% - 26px, 1180px); }
+      .header-inner { min-height: 70px; }
+      .brand img { width: 205px; }
+      .header-cta { display: none; }
+      .hero { padding: 48px 0 36px; }
+      h1 { font-size: clamp(2.55rem, 13vw, 4rem); }
+      h1 .title-break { font-size: 0.56em; }
+      .event-details { display: grid; grid-template-columns: 1fr; }
+      .event-chip { width: 100%; }
+      .hero-actions { display: grid; grid-template-columns: 1fr; }
+      .button-primary, .button-secondary { width: 100%; }
+      .quick-facts { grid-template-columns: 1fr 1fr 1fr; }
+      .section { padding: 46px 0; }
+      .highlights, .objectives { grid-template-columns: 1fr; }
+      .faculty-card { grid-template-columns: 1fr; text-align: center; }
+      .faculty-photo { margin: 0 auto; }
+      .objective-card { grid-template-columns: 54px 1fr; padding: 20px; }
+      .objective-number { width: 54px; height: 54px; border-radius: 17px; }
+      .support-banner { align-items: flex-start; flex-direction: column; }
+      .mobile-register { display: flex; }
+      footer { padding-bottom: 98px; }
+    }
+
+    @media (max-width: 430px) {
+      .quick-facts { grid-template-columns: 1fr; }
+      .collab-wrap { padding: 12px; border-radius: 24px; }
+      .collab-wrap img { border-radius: 17px; }
+      .faculty-card { padding: 20px; }
+      .faculty-photo { width: 155px; height: 155px; }
+      .objective-card { grid-template-columns: 1fr; }
+      .cta-panel { padding: 38px 22px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
 </head>
 <body>
-<main class="page">
-<header class="logo"><img src="assets/rwce_logo.png" alt="Real World CE" onerror="this.style.display='none';this.parentElement.innerHTML='<div class=&quot;logo-text&quot;>REAL WORLD <span>CE</span></div>';"></header>
-<section class="hero"><div><div class="pills"><span class="pill">◉ LIVE ZOOM WEBINAR SERIES</span><span class="pill">1.00 CME/CE Credits</span></div><h1>Reducing Nonadherence and Rehospitalization Through Effective Tardive Dyskinesia Treatment</h1><div class="subtitle">Tardive Dyskinesia in Managed Care</div><div class="date-line"><span class="calendar" aria-hidden="true"></span><span>August 12, 2026</span><span>•</span><span>5:00 PM</span></div><p class="intro">Interactive, case-based education designed to help managed care clinicians identify, assess, and manage tardive dyskinesia using current evidence and guideline-based recommendations.</p><a class="primary-button" href="#" id="registerNowLink">Register Now <span class="arrow">→</span></a></div><aside class="collab-card"><h3>In collaboration with</h3><img class="partner-logo" src="assets/partner_logo.png" alt="National Organization for Tardive Dyskinesia and AMCP eLearning Day"></aside></section>
-<section><div class="section-title"><span>Why Attend? Program Highlights</span></div><div class="highlight-grid"><article class="highlight"><div class="circle-icon">AI</div><p>AI-generated patient scenarios based on authentic cases</p></article><article class="highlight"><div class="circle-icon">P&amp;T</div><p>Interactive mock Pharmacy &amp; Therapeutics (P&amp;T) exercise</p></article><article class="highlight"><div class="circle-icon">EB</div><p>Evidence-based treatment and formulary decision-making</p></article><article class="highlight"><div class="circle-icon">Q&amp;A</div><p>Live faculty discussion and Q&amp;A</p></article></div></section>
-<section><div class="section-title"><span>Featured Faculty</span></div><div class="speaker-grid"><article class="speaker"><img class="avatar" src="assets/citrome_photo_real.jpg" alt="Leslie L. Citrome, MD, MPH"><div><h3>Leslie L. Citrome, MD, MPH</h3><p>Clinical Professor Psychiatry &amp; Behavioral Sciences<br>New York Medical College – School of Medicine<br>Valhalla, New York</p></div></article><article class="speaker"><img class="avatar" src="assets/garofoli_photo_real.jpg" alt="Mark Garofoli, PharmD, MBA, BCGP, CPE, CTTS"><div><h3>Mark Garofoli, PharmD, MBA, BCGP, CPE, CTTS</h3><p>Clinical Associate Professor &amp; Clinical Pain/Addiction Pharmacist<br>West Virginia University &amp; West Virginia University Medicine<br>West Virginia University Schools of Pharmacy/Medicine<br>Morgantown, West Virginia</p></div></article></div></section>
-<section><div class="section-title"><span>Learning Objectives</span></div><div class="objective-grid"><article class="objective"><div class="num">1</div><p>Describe the physical, psychological, and socioeconomic impacts of TD symptoms along with the recommended monitoring guidelines for patients being treated with antipsychotics.</p></article><article class="objective"><div class="num">2</div><p>Describe the use of clinical tools for the assessment of TD across recommended patient populations.</p></article><article class="objective"><div class="num">3</div><p>Differentiate between guideline-recommended, FDA-approved first-line treatments and second-line options for TD based on the latest real-world evidence.</p></article><article class="objective"><div class="num">4</div><p>Construct population health management strategies that balance the economic impact of VMAT-2 inhibitors with long-term patient outcomes and reductions in total healthcare resource utilization.</p></article></div></section>
-<section class="info-grid"><article class="info-card"><h3>Target Audience</h3><p>This educational activity is intended for managed care pharmacists and other clinicians, and physicians, nurse practitioners, physician assistants and other clinicians who manage TD.</p></article><article class="info-card"><h3>Accreditation</h3><p>This activity has been planned and implemented in accordance with the accreditation requirements and policies of the Accreditation Council for Continuing Medical Education (ACCME) through the joint providership of PeerPoint Medical Education Institute and Real World CE. PeerPoint Medical Education Institute is accredited by the ACCME to provide continuing medical education for physicians.</p><p>PeerPoint Medical Education Institute designates the live format for this educational activity for a maximum of <em>1.00 AMA PRA Category 1 Credit™</em>.</p><p>Physicians should only claim credit commensurate with the extent of their participation in the activity.</p></article></section>
-<section class="support"><h3>Commercial Support</h3><p>Supported by an educational grant from Teva Pharmaceutical Industries Ltd.</p></section><section class="bottom-row"><div class="site-url">realworldce.org</div><a href="#" class="reserve-box" id="reserveSpotLink"><strong>Reserve Your Spot Today</strong><span>August 12, 2026&nbsp;&nbsp;•&nbsp;&nbsp;5:00 PM</span></a></section>
-</main>
-<script>const REGISTRATION_URL="#";function go(e){e.preventDefault(); if(REGISTRATION_URL==="#"){alert("Registration link coming soon.");}else{window.location.href=REGISTRATION_URL;}}document.getElementById("registerNowLink").addEventListener("click",go);document.getElementById("reserveSpotLink").addEventListener("click",go);</script>
-</body></html>
+  <div class="announcement">LIVE ZOOM WEBINAR • AUGUST 12, 2026 • 5:00 PM • 1.00 CME/CE CREDITS</div>
+
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="#top" aria-label="Real World CE home">
+        <img src="assets/rwce-logo.png" alt="Real World CE" />
+      </a>
+      <!-- Replace # with the Zoom registration URL. -->
+      <a class="header-cta register-link" href="#">Register Now <span aria-hidden="true">→</span></a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="shell hero">
+      <div>
+        <div class="eyebrows">
+          <span class="eyebrow"><span class="live-dot"></span> Live Zoom Webinar</span>
+          <span class="eyebrow">1.00 CME/CE Credits</span>
+        </div>
+
+        <h1>
+          Reducing Nonadherence and Rehospitalization
+          <span class="title-break">Through Effective Tardive Dyskinesia Treatment</span>
+        </h1>
+
+        <div class="subtitle">Tardive Dyskinesia in Managed Care</div>
+        <p class="intro">Interactive, case-based education designed to help managed care clinicians identify, assess, and manage tardive dyskinesia using current evidence and guideline-based recommendations.</p>
+
+        <div class="event-details" aria-label="Webinar details">
+          <div class="event-chip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>
+            <div><small>Date</small><strong>August 12, 2026</strong></div>
+          </div>
+          <div class="event-chip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <div><small>Time</small><strong>5:00 PM</strong></div>
+          </div>
+          <div class="event-chip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5V6.8A2.8 2.8 0 0 1 6.8 4H20v15.5H6.8A2.8 2.8 0 0 0 4 22Z"/><path d="M8 8h8M8 12h8"/></svg>
+            <div><small>Format</small><strong>Live, Interactive Webinar</strong></div>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <!-- Replace # with the Zoom registration URL. -->
+          <a class="button-primary register-link" href="#">Reserve Your Spot <span aria-hidden="true">→</span></a>
+          <a class="button-secondary" href="#faculty">Meet the Faculty</a>
+        </div>
+      </div>
+
+      <aside>
+        <div class="collab-wrap">
+          <img src="assets/collaboration-logos.jpg" alt="In collaboration with the National Organization for Tardive Dyskinesia and AMCP eLearning Day" />
+        </div>
+        <div class="quick-facts" aria-label="Quick facts">
+          <div class="fact"><strong>Live</strong><span>Faculty-led</span></div>
+          <div class="fact"><strong>1.00</strong><span>CME/CE Credits</span></div>
+          <div class="fact"><strong>Zoom</strong><span>Online format</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section section-soft">
+      <div class="shell">
+        <div class="section-heading">
+          <div class="section-kicker">Why attend</div>
+          <h2>Practical education built for managed care</h2>
+          <p>Engage with realistic cases, evidence-based decision-making, and faculty discussion focused on improving TD care.</p>
+        </div>
+
+        <div class="highlights">
+          <article class="highlight-card">
+            <div class="highlight-icon">AI</div>
+            <h3>Authentic Patient Scenarios</h3>
+            <p>AI-generated patient scenarios based on authentic cases.</p>
+          </article>
+          <article class="highlight-card">
+            <div class="highlight-icon">P&amp;T</div>
+            <h3>Interactive P&amp;T Exercise</h3>
+            <p>Participate in a mock Pharmacy &amp; Therapeutics decision-making exercise.</p>
+          </article>
+          <article class="highlight-card">
+            <div class="highlight-icon">EB</div>
+            <h3>Evidence-Based Decisions</h3>
+            <p>Explore treatment selection and formulary decision-making using current evidence.</p>
+          </article>
+          <article class="highlight-card">
+            <div class="highlight-icon">Q&amp;A</div>
+            <h3>Live Faculty Discussion</h3>
+            <p>Ask questions and engage directly with expert faculty during the live session.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faculty">
+      <div class="shell">
+        <div class="section-heading">
+          <div class="section-kicker">Featured faculty</div>
+          <h2>Learn from experienced clinical leaders</h2>
+        </div>
+
+        <div class="faculty-grid">
+          <article class="faculty-card">
+            <img class="faculty-photo" src="assets/leslie-citrome.jpg" alt="Leslie L. Citrome, MD, MPH" />
+            <div>
+              <h3>Leslie L. Citrome, MD, MPH</h3>
+              <p>Clinical Professor, Psychiatry &amp; Behavioral Sciences<br />New York Medical College – School of Medicine<br />Valhalla, New York</p>
+            </div>
+          </article>
+
+          <article class="faculty-card">
+            <img class="faculty-photo" src="assets/mark-garofoli.jpg" alt="Mark Garofoli, PharmD, MBA, BCGP, CPE, CTTS" />
+            <div>
+              <h3>Mark Garofoli, PharmD, MBA, BCGP, CPE, CTTS</h3>
+              <p>Clinical Associate Professor &amp; Clinical Pain/Addiction Pharmacist<br />West Virginia University &amp; West Virginia University Medicine<br />West Virginia University Schools of Pharmacy/Medicine<br />Morgantown, West Virginia</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft">
+      <div class="shell">
+        <div class="section-heading">
+          <div class="section-kicker">Learning objectives</div>
+          <h2>What participants will be able to do</h2>
+        </div>
+
+        <div class="objectives">
+          <article class="objective-card">
+            <div class="objective-number">1</div>
+            <p>Describe the physical, psychological, and socioeconomic impacts of TD symptoms along with the recommended monitoring guidelines for patients being treated with antipsychotics.</p>
+          </article>
+          <article class="objective-card">
+            <div class="objective-number">2</div>
+            <p>Describe the use of clinical tools for the assessment of TD across recommended patient populations.</p>
+          </article>
+          <article class="objective-card">
+            <div class="objective-number">3</div>
+            <p>Differentiate between guideline-recommended, FDA-approved first-line treatments and second-line options for TD based on the latest real-world evidence.</p>
+          </article>
+          <article class="objective-card">
+            <div class="objective-number">4</div>
+            <p>Construct population health management strategies that balance the economic impact of VMAT-2 inhibitors with long-term patient outcomes and reductions in total healthcare resource utilization.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="details-grid">
+          <article class="info-card">
+            <h3>Target Audience</h3>
+            <p>This educational activity is intended for managed care pharmacists and other clinicians, and physicians, nurse practitioners, physician assistants and other clinicians who manage TD.</p>
+          </article>
+
+          <details class="info-card" open>
+            <summary>Accreditation</summary>
+            <div class="details-copy">
+              <p>This activity has been planned and implemented in accordance with the accreditation requirements and policies of the Accreditation Council for Continuing Medical Education (ACCME) through the joint providership of PeerPoint Medical Education Institute and Real World CE. PeerPoint Medical Education Institute is accredited by the ACCME to provide continuing medical education for physicians.</p>
+              <p>PeerPoint Medical Education Institute designates the live format for this educational activity for a maximum of <em>1.00 AMA PRA Category 1 Credit™</em>.</p>
+              <p>Physicians should only claim credit commensurate with the extent of their participation in the activity.</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="support-banner">
+          <div>
+            <strong>Commercial Support</strong>
+            <span>Supported by an educational grant from Teva Pharmaceutical Industries Ltd.</span>
+          </div>
+          <div><strong>realworldce.org</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="shell final-cta">
+      <div class="cta-panel">
+        <h2>Reserve your spot today</h2>
+        <p>Join us live on August 12, 2026 at 5:00 PM for an interactive program focused on practical TD management in managed care.</p>
+        <!-- Replace # with the Zoom registration URL. -->
+        <a class="button-primary register-link" href="#">Register for the Webinar <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-inner">
+      <span>© 2026 Real World CE</span>
+      <span>Live Zoom Webinar Series</span>
+    </div>
+  </footer>
+
+  <!-- Replace # below with the Zoom registration URL once available. -->
+  <a class="mobile-register register-link" href="#">Register Now →</a>
+
+  <script>
+    // Replace # with the Zoom registration URL, then all registration buttons will use it.
+    const REGISTRATION_URL = "#";
+    document.querySelectorAll(".register-link").forEach((link) => {
+      link.href = REGISTRATION_URL;
+      if (REGISTRATION_URL === "#") {
+        link.addEventListener("click", (event) => event.preventDefault());
+      } else {
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+      }
+    });
+  </script>
+</body>
+</html>
