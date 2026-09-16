@@ -3692,6 +3692,159 @@ body.rw110-theme::before {
   }
 </style>
 
+
+<style id="rwce-live-event-styles">
+  .live-event-hero {
+    position: relative; overflow: hidden; border-radius: 2rem;
+    background: radial-gradient(620px 340px at 86% 8%, rgba(103,232,249,.34), transparent 62%),
+                radial-gradient(520px 300px at 15% 105%, rgba(123,44,191,.20), transparent 66%),
+                linear-gradient(125deg, #07111d 0%, #102b48 52%, #176b9f 100%);
+    box-shadow: 0 28px 80px rgba(2,8,23,.20);
+  }
+  .live-event-hero::after {
+    content:""; position:absolute; width:22rem; height:22rem; right:-7rem; top:-9rem; border-radius:999px;
+    border:1px solid rgba(255,255,255,.18); box-shadow:0 0 0 42px rgba(255,255,255,.035),0 0 0 82px rgba(255,255,255,.018);
+  }
+  .live-event-card {
+    overflow:hidden; border-radius:1.75rem; border:1px solid rgba(203,213,225,.86);
+    background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(246,250,255,.94));
+    box-shadow:0 22px 62px rgba(15,23,42,.11); padding:clamp(1.2rem,3vw,2rem);
+  }
+  .live-event-card__visual { display:grid; grid-template-columns:auto 1fr; gap:1rem; align-items:flex-start; }
+  .live-event-card__orb { width:4.4rem; height:4.4rem; display:grid; place-items:center; border-radius:1.35rem;
+    background:linear-gradient(135deg,#dff4ff,#eaf1ff); border:1px solid #bfdbfe; color:#1d4ed8;
+    box-shadow:0 14px 30px rgba(37,99,235,.12); }
+  .live-event-card__orb .material-symbols-outlined { font-size:2.1rem; }
+  .live-event-card__kicker { color:#2563eb; font-size:.72rem; font-weight:950; letter-spacing:.14em; text-transform:uppercase; }
+  .live-event-card h3 { margin-top:.45rem; color:#0f2438; font-size:clamp(1.45rem,3vw,2.1rem); font-weight:950; line-height:1.05; letter-spacing:-.045em; }
+  .live-event-card p { margin-top:.75rem; max-width:52rem; color:#52657a; font-size:.96rem; line-height:1.62; font-weight:600; }
+  .live-event-card__details { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.7rem; margin-top:1.35rem; }
+  .live-event-card__details>div { padding:.9rem 1rem; border-radius:1rem; background:#f8fbff; border:1px solid #e2e8f0; }
+  .live-event-card__details span { display:block; color:#64748b; font-size:.63rem; font-weight:950; letter-spacing:.12em; text-transform:uppercase; }
+  .live-event-card__details strong { display:block; margin-top:.3rem; color:#0f2f54; font-size:.88rem; font-weight:900; }
+  .live-event-card__actions { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-top:1.35rem; padding-top:1.2rem; border-top:1px solid #e2e8f0; }
+  .live-event-launch { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; min-height:3rem; padding:.78rem 1.15rem; border-radius:1rem;
+    background:linear-gradient(135deg,#2563eb,#1d4ed8 54%,#0ea5e9); color:#fff!important; font-weight:950; text-decoration:none;
+    box-shadow:0 16px 34px rgba(37,99,235,.23); }
+  .live-event-access-note { display:inline-flex; align-items:center; gap:.4rem; color:#64748b; font-size:.76rem; font-weight:850; }
+  .live-event-access-note .material-symbols-outlined { font-size:17px; color:#059669; }
+  @media(max-width:720px){
+    .live-event-hero{border-radius:1.4rem}.live-event-card__visual{grid-template-columns:1fr}.live-event-card__orb{width:3.8rem;height:3.8rem}
+    .live-event-card__details{grid-template-columns:1fr}.live-event-card__actions{align-items:stretch;flex-direction:column}.live-event-launch{width:100%}.live-event-access-note{justify-content:center}
+  }
+</style>
+
+<style id="rwce-signup-account-cards">
+.signup-account-type-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:.65rem;
+}
+.signup-account-type-card{
+  min-height:108px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  gap:.25rem;
+  padding:.85rem;
+  border-radius:1rem;
+  border:1px solid rgba(255,255,255,.22);
+  background:rgba(255,255,255,.10);
+  color:#fff;
+  text-align:left;
+  cursor:pointer;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+.signup-account-type-card:hover,
+.signup-account-type-card:focus-visible{
+  background:rgba(255,255,255,.16);
+  border-color:rgba(142,197,234,.65);
+  outline:none;
+}
+.signup-account-type-card.active{
+  background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(234,245,252,.94));
+  border-color:#8ec5ea;
+  color:#0f2f54;
+  box-shadow:0 12px 30px rgba(2,8,23,.18),0 0 0 2px rgba(142,197,234,.18);
+}
+.signup-account-type-card .material-symbols-outlined{
+  font-size:24px;
+  color:#8ec5ea;
+}
+.signup-account-type-card.active .material-symbols-outlined{color:#2563eb}
+.signup-account-type-card strong{
+  font-size:.9rem;
+  font-weight:950;
+  line-height:1.1;
+}
+.signup-account-type-card small{
+  font-size:.68rem;
+  font-weight:700;
+  line-height:1.25;
+  opacity:.78;
+}
+@media(max-width:520px){
+  .signup-account-type-grid{grid-template-columns:1fr}
+  .signup-account-type-card{min-height:78px}
+}
+</style>
+
+
+<style id="rwce-live-event-manager-report-styles">
+.live-event-report-table th,
+.live-event-report-table td{
+  white-space:nowrap;
+  vertical-align:middle;
+}
+.live-event-user-cell strong{
+  display:block;
+  color:#0f2746;
+  font-weight:950;
+}
+.live-event-user-cell span{
+  display:block;
+  margin-top:.18rem;
+  color:#64748b;
+  font-size:.68rem;
+  font-weight:750;
+}
+.live-event-account-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:.36rem .58rem;
+  border-radius:999px;
+  border:1px solid #bfdbfe;
+  background:#eff6ff;
+  color:#1d4ed8;
+  font-size:.68rem;
+  font-weight:900;
+}
+.live-event-question-count{
+  display:inline-flex;
+  align-items:center;
+  gap:.3rem;
+  color:#166534;
+  font-weight:900;
+}
+.live-event-question-count .material-symbols-outlined{font-size:16px}
+.cme-detail-section-title{
+  margin:1rem 0 .65rem;
+  color:#1d4ed8;
+  font-size:.72rem;
+  font-weight:950;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+.cme-detail-response.question-complete{
+  border-left:4px solid #3b82f6;
+}
+@media(max-width:900px){
+  .live-event-report-table{min-width:1150px}
+}
+</style>
+
 </head>
 <body class="text-slate-800 min-h-screen rwce-auth-locked rw110-theme">
 <div class="fixed inset-0 z-[100] flex items-center justify-center bg-[#07111d] transition-opacity duration-700" id="splash">
@@ -3747,13 +3900,31 @@ body.rw110-theme::before {
 <span class="mb-2 block text-xs font-black uppercase tracking-[0.18em] text-blue-100/80">Email</span>
 <input autocomplete="email" class="h-12 w-full rounded-2xl border border-white/15 bg-white/95 px-4 text-base font-bold text-medicalBlue outline-none focus:border-skyBrand focus:ring-4 focus:ring-skyBrand/20" id="signupEmail" placeholder="Email address" required="" type="email"/>
 </label>
-<label class="block">
+<div class="block">
 <span class="mb-2 block text-xs font-black uppercase tracking-[0.18em] text-blue-100/80">Account Type</span>
-<select class="h-12 w-full rounded-2xl border border-white/15 bg-white/95 px-4 text-base font-bold text-medicalBlue outline-none focus:border-skyBrand focus:ring-4 focus:ring-skyBrand/20" id="signupAccountType" required="">
-<option value="learner">Learner — assigned learning modules only</option>
-<option value="webinar">Webinar — webinar video library only</option>
+<select class="hidden" id="signupAccountType" required="">
+<option value="learner">Learner</option>
+<option value="webinar">Webinar</option>
+<option value="live_event">Live Event</option>
 </select>
-</label>
+<div class="signup-account-type-grid" role="radiogroup" aria-label="Account Type">
+  <button type="button" class="signup-account-type-card active" data-signup-account-type="learner" aria-pressed="true">
+    <span class="material-symbols-outlined">school</span>
+    <strong>Learner</strong>
+    <small>Assigned learning modules</small>
+  </button>
+  <button type="button" class="signup-account-type-card" data-signup-account-type="webinar" aria-pressed="false">
+    <span class="material-symbols-outlined">live_tv</span>
+    <strong>Webinar</strong>
+    <small>Webinar video library</small>
+  </button>
+  <button type="button" class="signup-account-type-card" data-signup-account-type="live_event" aria-pressed="false">
+    <span class="material-symbols-outlined">clinical_notes</span>
+    <strong>Live Event</strong>
+    <small>Live LAI Injection Trainer</small>
+  </button>
+</div>
+</div>
 <label class="block">
 <span class="mb-2 block text-xs font-black uppercase tracking-[0.18em] text-blue-100/80">Create Password</span>
 <input autocomplete="new-password" class="h-12 w-full rounded-2xl border border-white/15 bg-white/95 px-4 text-base font-bold text-medicalBlue outline-none focus:border-skyBrand focus:ring-4 focus:ring-skyBrand/20" id="signupPassword" minlength="8" placeholder="At least 8 characters" required="" type="password"/>
@@ -4198,6 +4369,40 @@ body.rw110-theme::before {
 </div>
 </div>
 </section>
+<section aria-hidden="true" class="rwce-account-destination hidden" id="liveEventPortalPage" style="display:none;">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 py-8 sm:py-12">
+<section class="live-event-hero px-5 py-8 sm:px-9 sm:py-10 text-white">
+<div class="relative z-10 max-w-3xl">
+<div class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em]"><span class="material-symbols-outlined text-[17px]">clinical_notes</span>Live Event Clinical Skills Lab</div>
+<h1 class="mt-4 text-3xl sm:text-5xl font-black tracking-tight leading-tight">Interactive Injection Training</h1>
+<p class="mt-4 max-w-2xl text-sm sm:text-base font-semibold leading-relaxed text-blue-100/85">Practice the full LAI workflow from medication verification and preparation through injection technique, aftercare, documentation, and CME/CE activity evaluation.</p>
+</div>
+</section>
+<div class="mt-7">
+<div class="text-xs font-black uppercase tracking-[0.16em] text-blue-700">Available Live Event</div>
+<h2 class="mt-1 text-2xl sm:text-3xl font-black tracking-tight text-medicalBlue">Clinical simulation</h2>
+</div>
+<article class="live-event-card mt-5">
+<div class="live-event-card__visual">
+<div class="live-event-card__orb"><span class="material-symbols-outlined">vaccines</span></div>
+<div>
+<div class="live-event-card__kicker">Real World CE • Live Event</div>
+<h3>Getting to the Point: LAI Preparation &amp; Administration</h3>
+<p>Interactive skills training with medication preparation, patient-chart review, route and site selection, injection technique, randomized scenarios, debrief, and CME/CE evaluation.</p>
+</div>
+</div>
+<div class="live-event-card__details">
+<div><span>Experience</span><strong>Interactive 3D Simulation</strong></div>
+<div><span>Workflow</span><strong>Prep → Inject → Debrief</strong></div>
+<div><span>Completion</span><strong>CME/CE Evaluation</strong></div>
+</div>
+<div class="live-event-card__actions">
+<a class="tracked-link live-event-launch" data-view-key="rwce-lai-injection-live-event" href="https://realworldce.github.io/Test_LAI_Trainer/"><span class="material-symbols-outlined">play_arrow</span>Live LAI Injection Trainer</a>
+<div class="live-event-access-note"><span class="material-symbols-outlined">lock_open</span>Available to Live Event accounts</div>
+</div>
+</article>
+</div>
+</section>
 <section aria-hidden="true" aria-label="Manager and administrator portal" class="rwce-admin-portal hidden min-h-screen bg-slate-50 px-3 sm:px-6 py-6 sm:py-10" id="managerPortal" style="display:none;">
 <div class="admin-dashboard-card p-5 sm:p-6">
 <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -4230,6 +4435,7 @@ body.rw110-theme::before {
 <div class="flex flex-wrap gap-2">
 <button class="admin-tab-button is-active" data-admin-tab="dashboard" type="button">Dashboard</button>
 <button class="admin-tab-button" data-admin-tab="reports" type="button">User Reports</button>
+<button class="admin-tab-button" data-admin-tab="liveevents" type="button"><span class="material-symbols-outlined text-[17px] align-middle">event_available</span> Live Event Reports</button>
 <button class="admin-tab-button" data-admin-tab="analytics" type="button">Module Analytics</button>
 <button class="admin-tab-button" data-admin-tab="users" type="button">Add Users</button>
 <button class="admin-tab-button" data-admin-tab="access" type="button">Module Access</button>
@@ -4278,6 +4484,72 @@ body.rw110-theme::before {
 <tbody id="userReportRows"><tr><td colspan="10">No users loaded yet.</td></tr></tbody>
 </table>
 </div>
+
+<div class="mt-6 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-semibold leading-relaxed text-blue-900">
+  Live Event evaluation responses are available in the dedicated <strong>Live Event Reports</strong> tab.
+</div>
+</section>
+
+<section class="admin-view-panel" id="adminViewLiveEvents">
+  <div class="cme-report-panel">
+    <div class="cme-report-head">
+      <div>
+        <div class="text-xs font-black uppercase tracking-[0.16em] text-blue-700">Manager Portal • Live Event Reporting</div>
+        <h3 class="mt-1 text-xl sm:text-2xl font-black text-medicalBlue">Live LAI Injection Trainer Reports</h3>
+        <p class="mt-2 max-w-3xl text-sm font-semibold leading-relaxed text-slate-500">
+          View the registered user's account information together with every submitted Live Event CME/CE evaluation response.
+          Open an individual report to review all completed questions, or export the current report to CSV.
+        </p>
+      </div>
+      <div class="cme-report-actions">
+        <button id="refreshCmeEvaluationReportsBtn" class="cme-report-button" type="button"><span class="material-symbols-outlined">refresh</span>Refresh</button>
+        <button id="printCmeEvaluationReportsBtn" class="cme-report-button" type="button"><span class="material-symbols-outlined">print</span>Print Report</button>
+        <button id="exportCmeEvaluationReportsBtn" class="cme-report-button primary" type="button"><span class="material-symbols-outlined">download</span>Export CSV</button>
+      </div>
+    </div>
+
+    <div class="cme-report-stats">
+      <div><span>Completed Evaluations</span><strong id="cmeReportSubmissionCount">0</strong></div>
+      <div><span>Unique Users</span><strong id="cmeReportUniqueLearners">0</strong></div>
+      <div><span>Avg. Quality</span><strong id="cmeReportAvgQuality">—</strong></div>
+      <div><span>Bias-Free</span><strong id="cmeReportBiasFree">—</strong></div>
+    </div>
+
+    <div class="cme-report-filters">
+      <label><span>Search User / Response</span><input id="cmeReportSearch" type="search" placeholder="Name, email, role, NABP ePID…"></label>
+      <label><span>Completed From</span><input id="cmeReportStartDate" type="date"></label>
+      <label><span>Completed To</span><input id="cmeReportEndDate" type="date"></label>
+      <button id="clearCmeReportFiltersBtn" class="cme-report-button" type="button">Clear Filters</button>
+    </div>
+
+    <div id="cmeReportStatus" class="admin-status-message hidden mt-4"></div>
+
+    <div class="mt-5 overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+      <table class="admin-table live-event-report-table">
+        <thead>
+          <tr>
+            <th>Completed</th>
+            <th>User</th>
+            <th>Email</th>
+            <th>Account</th>
+            <th>Role</th>
+            <th>Logins</th>
+            <th>Last Login</th>
+            <th>Questions</th>
+            <th>Quality</th>
+            <th>Minutes</th>
+            <th>Report</th>
+          </tr>
+        </thead>
+        <tbody id="cmeEvaluationReportRows"><tr><td colspan="11">No completed Live Event evaluations loaded yet.</td></tr></tbody>
+      </table>
+    </div>
+
+    <div class="mt-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold leading-relaxed text-slate-600">
+      Each individual report includes the user's profile information, completion date, pharmacist information when provided,
+      and the complete answers to Questions 1–22.
+    </div>
+  </div>
 </section>
 <section class="admin-view-panel" id="adminViewAnalytics">
 <div class="admin-table-wrap">
@@ -4583,6 +4855,7 @@ body.rw110-theme::before {
       const moduleFrame = document.getElementById('moduleFrame');
       const learnerWaitingPage = document.getElementById('learnerWaitingPage');
       const webinarPortalPage = document.getElementById('webinarPortalPage');
+      const liveEventPortalPage = document.getElementById('liveEventPortalPage');
 
       document.body.classList.add('rwce-auth-locked');
       rwceAuthenticatedProfile = null;
@@ -4596,6 +4869,7 @@ body.rw110-theme::before {
       setPanelVisibility(moduleViewer, false);
       setPanelVisibility(learnerWaitingPage, false);
       setPanelVisibility(webinarPortalPage, false);
+      setPanelVisibility(liveEventPortalPage, false);
       setPanelVisibility(portalShell, false);
       setPanelVisibility(loginScreen, true, 'flex');
     }
@@ -4760,9 +5034,9 @@ body.rw110-theme::before {
       const accountType = normalizeAccountType(localStorage.getItem('rwce_active_account_type') || rwceAuthenticatedProfile?.account_type, role);
       const contentLabel = document.getElementById('userViewedContentLabel');
       if (userNode) userNode.textContent = username;
-      if (roleNode) roleNode.textContent = accountType === 'webinar' ? 'Webinar' : role.charAt(0).toUpperCase() + role.slice(1);
-      if (countNode) countNode.textContent = accountType === 'webinar' ? rwceWebinarCount : readUserViewedModules(username).length;
-      if (contentLabel) contentLabel.textContent = accountType === 'webinar' ? 'videos available' : 'modules viewed';
+      if (roleNode) roleNode.textContent = accountType === 'webinar' ? 'Webinar' : accountType === 'live_event' ? 'Live Event' : role.charAt(0).toUpperCase() + role.slice(1);
+      if (countNode) countNode.textContent = accountType === 'webinar' ? rwceWebinarCount : accountType === 'live_event' ? 1 : readUserViewedModules(username).length;
+      if (contentLabel) contentLabel.textContent = accountType === 'webinar' ? 'videos available' : accountType === 'live_event' ? 'live event available' : 'modules viewed';
     }
 
     function refreshViewDisplays() {
@@ -4991,6 +5265,7 @@ body.rw110-theme::before {
       if (['admin', 'manager'].includes(normalizedRole)) return 'learning';
       const type = String(value || '').trim().toLowerCase().replace(/[\s_-]+/g, '');
       if (['webinar', 'webinars', 'webinaronly', 'video', 'videos'].includes(type)) return 'webinar';
+      if (['liveevent', 'liveevents', 'event', 'events', 'clinicalevent', 'skillslab'].includes(type)) return 'live_event';
       return 'learner';
     }
 
@@ -5240,8 +5515,9 @@ body.rw110-theme::before {
         full_name: metadata.full_name || metadata.name || (user?.email ? user.email.split('@')[0] : 'User'),
         email: user?.email || '',
         role: normalizePortalRole(metadata.role || 'learner'),
-        account_type: normalizeAccountType(metadata.account_type || 'learner', metadata.role || 'learner'),
-        module_access_mode: metadata.module_access_mode || (normalizeAccountType(metadata.account_type || 'learner', metadata.role || 'learner') === 'webinar' ? 'none' : 'assigned'),
+        account_type: normalizeAccountType(metadata.portal_destination || metadata.account_type || 'learner', metadata.role || 'learner'),
+        portal_destination: normalizeAccountType(metadata.portal_destination || metadata.account_type || 'learner', metadata.role || 'learner'),
+        module_access_mode: metadata.module_access_mode || (normalizeAccountType(metadata.portal_destination || metadata.account_type || 'learner', metadata.role || 'learner') === 'learner' ? 'assigned' : 'none'),
         registration_source: metadata.registration_source || 'self_signup'
       };
     }
@@ -5317,9 +5593,9 @@ body.rw110-theme::before {
         full_name: fullName,
         email: user.email || '',
         role: 'learner',
-        account_type: normalizedType,
-        module_access_mode: normalizedType === 'webinar' ? 'none' : 'assigned',
-        registration_source: 'self_signup'
+        account_type: normalizedType === 'live_event' ? 'learner' : normalizedType,
+        module_access_mode: normalizedType === 'learner' ? 'assigned' : 'none',
+        registration_source: normalizedType === 'live_event' ? 'self_signup_live_event' : 'self_signup'
       };
       const { error: insertError } = await rwceSupabase.from('profiles').insert(selfSignupProfile);
       if (insertError && insertError.code !== '23505') {
@@ -5342,9 +5618,10 @@ body.rw110-theme::before {
           data: {
             full_name: fullName,
             role: 'learner',
-            account_type: normalizedType,
-            module_access_mode: normalizedType === 'webinar' ? 'none' : 'assigned',
-            registration_source: 'self_signup'
+            account_type: normalizedType === 'live_event' ? 'learner' : normalizedType,
+            portal_destination: normalizedType,
+            module_access_mode: normalizedType === 'learner' ? 'assigned' : 'none',
+            registration_source: normalizedType === 'live_event' ? 'self_signup_live_event' : 'self_signup'
           }
         }
       });
@@ -5605,15 +5882,17 @@ body.rw110-theme::before {
       const mainPortalPage = document.getElementById('mainPortalPage');
       const learnerWaitingPage = document.getElementById('learnerWaitingPage');
       const webinarPortalPage = document.getElementById('webinarPortalPage');
+      const liveEventPortalPage = document.getElementById('liveEventPortalPage');
       const managerPortal = document.getElementById('managerPortal');
       const role = normalizePortalRole(rwceAuthenticatedProfile?.role || 'learner');
       const type = normalizeAccountType(accountType, role);
       const assignedLearnerWaiting = role === 'learner' && type === 'learner' && rwceModuleAccessMode === 'assigned' && assignmentCount === 0;
 
       setPanelVisibility(managerPortal, false);
-      setPanelVisibility(mainPortalPage, type !== 'webinar' && !assignedLearnerWaiting, 'block');
+      setPanelVisibility(mainPortalPage, !['webinar','live_event'].includes(type) && !assignedLearnerWaiting, 'block');
       setPanelVisibility(learnerWaitingPage, assignedLearnerWaiting, 'block');
       setPanelVisibility(webinarPortalPage, type === 'webinar', 'block');
+      setPanelVisibility(liveEventPortalPage, type === 'live_event', 'block');
     }
 
     async function validateDatabaseLogin(email, password) {
@@ -5666,9 +5945,9 @@ body.rw110-theme::before {
       const errorBox = document.getElementById('loginError');
       const displayName = profile?.full_name || profile?.name || profile?.email || 'User';
       const userRole = normalizePortalRole(profile?.role);
-      const accountType = normalizeAccountType(profile?.account_type, userRole);
+      const accountType = normalizeAccountType(profile?.portal_destination || profile?.account_type, userRole);
 
-      rwceAuthenticatedProfile = { ...profile, role: userRole, account_type: accountType };
+      rwceAuthenticatedProfile = { ...profile, role: userRole, account_type: accountType, portal_destination: accountType };
 
       localStorage.setItem('rwce_active_user', displayName);
       localStorage.setItem('rwce_active_user_id', profile?.id || '');
@@ -5782,17 +6061,43 @@ body.rw110-theme::before {
       });
 
       const signupAccountType = document.getElementById('signupAccountType');
+      const signupAccountTypeCards = Array.from(document.querySelectorAll('[data-signup-account-type]'));
+      const syncSignupAccountTypeCards = () => {
+        const current = signupAccountType?.value || 'learner';
+        signupAccountTypeCards.forEach(card => {
+          const selected = card.dataset.signupAccountType === current;
+          card.classList.toggle('active', selected);
+          card.setAttribute('aria-pressed', selected ? 'true' : 'false');
+        });
+      };
+      signupAccountTypeCards.forEach(card => {
+        card.addEventListener('click', () => {
+          if (!signupAccountType) return;
+          signupAccountType.value = card.dataset.signupAccountType || 'learner';
+          signupAccountType.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+      });
       const updateSignupAccountCopy = () => {
         const type = normalizeAccountType(signupAccountType?.value || 'learner', 'learner');
         const submitLabel = document.getElementById('signupSubmitLabel');
         const note = document.getElementById('signupAccountNote');
-        if (submitLabel) submitLabel.textContent = type === 'webinar' ? 'Create Webinar Account' : 'Create Learner Account';
+        if (submitLabel) submitLabel.textContent = type === 'webinar'
+          ? 'Create Webinar Account'
+          : type === 'live_event'
+            ? 'Create Live Event Account'
+            : 'Create Learner Account';
         if (note) note.textContent = type === 'webinar'
           ? 'Webinar accounts open a webinar-only video library and do not display learning modules.'
-          : 'Learner accounts start with a blank learning screen until a manager assigns modules.';
+          : type === 'live_event'
+            ? 'Live Event accounts open the interactive LAI injection training experience.'
+            : 'Learner accounts start with a blank learning screen until a manager assigns modules.';
       };
-      signupAccountType?.addEventListener('change', updateSignupAccountCopy);
+      signupAccountType?.addEventListener('change', () => {
+        updateSignupAccountCopy();
+        syncSignupAccountTypeCards();
+      });
       updateSignupAccountCopy();
+      syncSignupAccountTypeCards();
 
       const signupForm = document.getElementById('createAccountForm');
       if (signupForm) {
@@ -5845,7 +6150,7 @@ body.rw110-theme::before {
 
           signupForm.reset();
           updateSignupAccountCopy();
-          setSignupStatus(`Account created. Opening the ${accountType === 'webinar' ? 'webinar video library' : 'learner screen'}...`, 'success');
+          setSignupStatus(`Account created. Opening the ${accountType === 'webinar' ? 'webinar video library' : accountType === 'live_event' ? 'live event injection training' : 'learner screen'}...`, 'success');
           await activatePortalForProfile(result.profile);
         });
       }
@@ -5862,6 +6167,7 @@ body.rw110-theme::before {
           const mainPortalPage = document.getElementById('mainPortalPage');
           const learnerWaitingPage = document.getElementById('learnerWaitingPage');
           const webinarPortalPage = document.getElementById('webinarPortalPage');
+          const liveEventPortalPage = document.getElementById('liveEventPortalPage');
           const managerPortal = document.getElementById('managerPortal');
           const moduleViewer = document.getElementById('moduleViewer');
           const moduleFrame = document.getElementById('moduleFrame');
@@ -5881,6 +6187,7 @@ body.rw110-theme::before {
           setPanelVisibility(mainPortalPage, false);
           setPanelVisibility(learnerWaitingPage, false);
           setPanelVisibility(webinarPortalPage, false);
+          setPanelVisibility(liveEventPortalPage, false);
           setPanelVisibility(portalShell, false);
           setPanelVisibility(loginScreen, true, 'flex');
           document.body.classList.add('rwce-auth-locked');
@@ -5929,6 +6236,7 @@ body.rw110-theme::before {
       modules: [],
       sessions: [],
       completions: [],
+      evaluations: [],
       assignments: [],
       manageableUsers: [],
       manageableUsersLoaded: false
@@ -6002,6 +6310,7 @@ body.rw110-theme::before {
       const target = document.getElementById({
         dashboard: 'adminViewDashboard',
         reports: 'adminViewReports',
+        liveevents: 'adminViewLiveEvents',
         analytics: 'adminViewAnalytics',
         users: 'adminViewUsers',
         access: 'adminViewAccess',
@@ -6016,7 +6325,8 @@ body.rw110-theme::before {
         showAdminTab('dashboard');
         return;
       }
-      if (['dashboard', 'reports', 'analytics', 'users', 'access', 'upload'].includes(normalized)) {
+      if (['dashboard', 'reports', 'liveevents', 'analytics', 'users', 'access', 'upload'].includes(normalized)) {
+        if (normalized === 'liveevents' && typeof renderCMEEvaluationReports === 'function') renderCMEEvaluationReports();
         if (normalized === 'access') renderModuleAccessEditor();
         if (normalized === 'upload') {
           renderUploadedModulesList();
@@ -6131,6 +6441,8 @@ body.rw110-theme::before {
       if (analyticsRows) {
         analyticsRows.innerHTML = moduleSummary.length ? moduleSummary.map(module => `<tr><td>${safeText(module.title || 'Module')}</td><td>${safeText(module.specialty || module.area || '—')}</td><td>${safeText(module.format || module.kind || 'Module')}</td><td>${safeText(module.status || 'Live')}</td><td>${safeText(module.session_count || 0)}</td><td>${safeText(module.completion_count || 0)}</td></tr>`).join('') : '<tr><td colspan="6">No modules found.</td></tr>';
       }
+
+      if (typeof renderCMEEvaluationReports === 'function') renderCMEEvaluationReports();
     }
 
     function showModuleAccessStatus(message = '', type = '') {
@@ -6276,11 +6588,12 @@ body.rw110-theme::before {
       }
       try {
         setAdminStatus('Loading manager portal data from Supabase...', '');
-        const [profilesResult, modulesResult, sessionsResult, completionsResult, assignmentsResult] = await Promise.allSettled([
+        const [profilesResult, modulesResult, sessionsResult, completionsResult, evaluationsResult, assignmentsResult] = await Promise.allSettled([
           rwceSupabase.from('profiles').select('id, organization_id, full_name, email, role, account_type, module_access_mode, registration_source, login_count, last_login_at, created_at, updated_at').order('created_at', { ascending: false }).limit(500),
           rwceSupabase.from('modules').select('*').order('sort_order', { ascending: true }).limit(500),
           rwceSupabase.from('module_sessions').select('id, user_id, module_id, started_at, ended_at, time_spent_seconds, completed, completion_percent, last_event, created_at, updated_at').order('updated_at', { ascending: false }).limit(500),
           rwceSupabase.from('module_completions').select('id, user_id, module_id, session_id, completed_at, score, passed, credit_earned, certificate_id, created_at, updated_at').order('completed_at', { ascending: false }).limit(500),
+          rwceSupabase.from('cme_evaluations').select('*').order('completed_at', { ascending: false }).limit(5000),
           rwceSupabase.from('user_module_assignments').select('user_id, module_key, assigned_by, assigned_at').limit(5000)
         ]);
 
@@ -6297,6 +6610,7 @@ body.rw110-theme::before {
         assignResult(modulesResult, 'modules');
         assignResult(sessionsResult, 'sessions');
         assignResult(completionsResult, 'completions');
+        assignResult(evaluationsResult, 'evaluations');
         assignResult(assignmentsResult, 'assignments');
         rwceAdminPortalData.loaded = true;
         renderAdminPortal();
@@ -7121,6 +7435,39 @@ body.rw110-theme::before {
   .player{overflow:hidden;border:1px solid rgba(255,255,255,.18);border-radius:22px;background:#000;box-shadow:0 30px 90px rgba(0,0,0,.42)}
   video{display:block;width:100%;max-height:78vh;background:#000}
 </style>
+<style id="rwce-cme-report-styles">
+.cme-report-panel{border:1px solid rgba(203,213,225,.9);background:rgba(255,255,255,.92);border-radius:1.5rem;padding:1.15rem;box-shadow:0 18px 48px rgba(15,23,42,.07)}
+.cme-report-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.cme-report-actions{display:flex;gap:.55rem;flex-wrap:wrap}
+.cme-report-button{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;min-height:2.7rem;padding:.62rem .9rem;border-radius:.85rem;border:1px solid #d8e3ee;background:#fff;color:#334155;font-size:.78rem;font-weight:900;cursor:pointer}
+.cme-report-button .material-symbols-outlined{font-size:17px}
+.cme-report-button.primary{background:linear-gradient(135deg,#2563eb,#0ea5e9);border-color:transparent;color:#fff;box-shadow:0 12px 26px rgba(37,99,235,.20)}
+.cme-report-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.75rem;margin-top:1rem}
+.cme-report-stats>div{padding:.9rem;border-radius:1rem;border:1px solid #e2e8f0;background:#f8fbff}
+.cme-report-stats span{display:block;color:#64748b;font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+.cme-report-stats strong{display:block;margin-top:.3rem;color:#0f2f54;font-size:1.35rem;font-weight:950}
+.cme-report-filters{display:grid;grid-template-columns:minmax(14rem,1.5fr) repeat(2,minmax(10rem,.7fr)) auto;gap:.65rem;margin-top:1rem;align-items:end}
+.cme-report-filters label span{display:block;margin-bottom:.35rem;color:#64748b;font-size:.66rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.cme-report-filters input{width:100%;min-height:2.7rem;border:1px solid #d8e3ee;border-radius:.85rem;background:#fff;padding:.62rem .75rem;font-size:.86rem;font-weight:700;color:#0f2746;outline:none}
+.cme-report-filters input:focus{border-color:#60a5fa;box-shadow:0 0 0 3px rgba(59,130,246,.10)}
+.cme-detail-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(7,17,29,.72);backdrop-filter:blur(10px)}
+.cme-detail-modal.active{display:flex}
+.cme-detail-card{width:min(900px,96vw);max-height:92vh;overflow:auto;border-radius:1.5rem;background:#f8fbfe;border:1px solid rgba(255,255,255,.72);box-shadow:0 32px 100px rgba(2,8,23,.38)}
+.cme-detail-head{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;gap:1rem;padding:1.1rem 1.2rem;background:rgba(255,255,255,.96);border-bottom:1px solid #e2e8f0;backdrop-filter:blur(12px)}
+.cme-detail-head h2{margin:.25rem 0 0;color:#0f2f54;font-size:1.45rem;font-weight:950}
+.cme-detail-head p{margin:.25rem 0 0;color:#64748b;font-size:.8rem;font-weight:700}
+.cme-detail-close{width:2.7rem;height:2.7rem;border-radius:.85rem;border:1px solid #d8e3ee;background:#fff;color:#334155;display:grid;place-items:center;cursor:pointer}
+.cme-detail-body{padding:1rem 1.2rem 1.4rem}
+.cme-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem;margin-bottom:1rem}
+.cme-detail-summary,.cme-detail-response{border:1px solid #e2e8f0;background:#fff;border-radius:1rem;padding:.85rem}
+.cme-detail-summary span,.cme-detail-response span{display:block;color:#64748b;font-size:.64rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.cme-detail-summary strong{display:block;margin-top:.25rem;color:#0f2746;font-size:.9rem;font-weight:900;overflow-wrap:anywhere}
+.cme-detail-response{margin-bottom:.55rem}
+.cme-detail-response strong{display:block;margin-top:.35rem;color:#0f2746;font-size:.86rem;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
+.cme-view-response-btn{display:inline-flex;align-items:center;gap:.3rem;padding:.45rem .65rem;border-radius:.7rem;border:1px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;font-size:.72rem;font-weight:900;cursor:pointer}
+@media(max-width:820px){.cme-report-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.cme-report-filters{grid-template-columns:1fr 1fr}.cme-report-filters label:first-child,.cme-report-filters .cme-report-button{grid-column:1/-1}.cme-detail-grid{grid-template-columns:1fr}}
+@media(max-width:520px){.cme-report-stats{grid-template-columns:1fr}.cme-report-filters{grid-template-columns:1fr}.cme-report-filters>*{grid-column:auto!important}}
+</style>
 </head>
 <body>
 <main>
@@ -7487,5 +7834,440 @@ body.rw110-theme::before {
     document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
   }else document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'));
 })();
-</script></body>
+</script><div id="cmeEvaluationDetailModal" class="cme-detail-modal" aria-hidden="true">
+  <div class="cme-detail-card" role="dialog" aria-modal="true" aria-labelledby="cmeDetailTitle">
+    <div class="cme-detail-head">
+      <div>
+        <div class="text-xs font-black uppercase tracking-[0.16em] text-blue-700">CME/CE Evaluation Detail</div>
+        <h2 id="cmeDetailTitle">Learner Response</h2>
+        <p id="cmeDetailSubtitle"></p>
+      </div>
+      <button id="closeCmeEvaluationDetailBtn" class="cme-detail-close" type="button" aria-label="Close evaluation detail"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div id="cmeEvaluationDetailBody" class="cme-detail-body"></div>
+  </div>
+</div>
+<script id="rwce-live-event-cme-reports">
+(() => {
+  const CME_ACTIVITY_ID = 'lai-injection-live-event';
+  const CME_ACTIVITY_TITLE = 'Getting to the Point: LAI Preparation & Administration';
+  const CME_ALLOWED_ORIGINS = new Set([window.location.origin, 'https://realworldce.github.io']);
+
+  const CME_QUESTION_LABELS = {
+    learner_first_name: 'First Name',
+    learner_last_name: 'Last Name',
+    learner_email: 'Email Address',
+    q1: '1. How relevant was the content of this activity to your professional practice?',
+    q2: '2. How effective were the organization, format, and presentation of the activity in supporting your learning?',
+    q3: '3. How effective was the faculty member or presenter in teaching the content?',
+    q4: '4. How well did this activity meet your expectations and learning needs?',
+    q5: '5. How well did this activity help you achieve the stated learning objectives?',
+    q6: '6. How well did this activity support your professional growth by enhancing your knowledge, strengthening your competence, and improving your ability to apply what you learned in practice?',
+    q7: '7. How would you rate your confidence in applying what you learned from this activity to your professional practice?',
+    q8: '8. How useful were the skills and concepts presented in this activity to your professional practice or work responsibilities?',
+    q9: '9. How useful were the ideas, tools, resources, or strategies provided in this activity?',
+    q10: '10. What barriers may affect your ability to apply what you learned from this activity?',
+    q11: '11. Overall quality of this educational activity (1–5)',
+    q12: '12. Participation time in minutes',
+    q13: '13. Changes you will make in practice within the next 30 days',
+    q14: '14. Expected patient outcome improvement',
+    q15: '15. Was this activity free of commercial bias?',
+    q16: '16. Description of perceived bias',
+    q17: '17. Most important thing learned',
+    q18: '18. NABP e-Profile ID (pharmacists only)',
+    q19: '19. Date of birth MM/DD (pharmacists only)',
+    q20: '20. Current knowledge rating',
+    q21: '21. How did you hear about this event?',
+    q22: '22. Certificate / CPE Monitor acknowledgement'
+  };
+
+  function cmeStatus(message = '', type = '') {
+    const node = document.getElementById('cmeReportStatus');
+    if (!node) return;
+    node.textContent = message;
+    node.classList.remove('hidden', 'error', 'success');
+    if (!message) { node.classList.add('hidden'); return; }
+    if (type) node.classList.add(type);
+  }
+
+  function evaluationRecordFromMessage(payload = {}) {
+    const responses = payload.responses && typeof payload.responses === 'object' ? payload.responses : {};
+    const firstName = String(payload.learner_first_name || responses.learner_first_name || '').trim();
+    const lastName = String(payload.learner_last_name || responses.learner_last_name || '').trim();
+    const email = String(payload.learner_email || responses.learner_email || rwceAuthenticatedProfile?.email || '').trim().toLowerCase();
+    const q10 = responses.q10;
+    const barriers = Array.isArray(q10) ? q10 : (q10 ? [q10] : []);
+    const quality = Number.parseInt(responses.q11, 10);
+    const minutes = Number.parseInt(responses.q12, 10);
+    const bias = String(responses.q15 || '').toLowerCase();
+
+    return {
+      submission_id: String(payload.submission_id || crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`),
+      user_id: rwceAuthenticatedProfile?.id || localStorage.getItem('rwce_active_user_id') || null,
+      organization_id: rwceAuthenticatedProfile?.organization_id || localStorage.getItem('rwce_active_organization_id') || null,
+      activity_id: payload.activity_id || CME_ACTIVITY_ID,
+      activity_title: payload.activity_title || CME_ACTIVITY_TITLE,
+      account_type: 'live_event',
+      learner_first_name: firstName,
+      learner_last_name: lastName,
+      learner_email: email,
+      responses,
+      barriers,
+      overall_quality: Number.isFinite(quality) ? quality : null,
+      participation_minutes: Number.isFinite(minutes) ? minutes : null,
+      commercial_bias_free: bias === 'yes' ? true : bias === 'no' ? false : null,
+      nabp_epid: String(responses.q18 || '').trim() || null,
+      pharmacist_dob_mmdd: String(responses.q19 || '').trim() || null,
+      current_knowledge: String(responses.q20 || '').trim() || null,
+      simulation: payload.simulation && typeof payload.simulation === 'object' ? payload.simulation : {},
+      source_url: String(payload.source_url || 'https://realworldce.github.io/Test_LAI_Trainer/'),
+      completed_at: payload.completed_at || responses.completedAt || new Date().toISOString()
+    };
+  }
+
+  async function saveLiveEventEvaluation(payload, sourceWindow, sourceOrigin) {
+    if (!rwceSupabaseReady || !rwceSupabase || !rwceAuthenticatedProfile?.id) {
+      sourceWindow?.postMessage({ type: 'rwce-live-event-evaluation-saved', ok: false, message: 'The LMS database session is not available. The evaluation remains saved in this browser.' }, sourceOrigin || '*');
+      return;
+    }
+
+    const record = evaluationRecordFromMessage(payload);
+    try {
+      const { data, error } = await rwceSupabase
+        .from('cme_evaluations')
+        .upsert(record, { onConflict: 'submission_id' })
+        .select('id, submission_id, completed_at')
+        .single();
+
+      if (error) throw error;
+
+      rwceAdminPortalData.evaluations = [
+        data ? { ...record, ...data } : record,
+        ...(rwceAdminPortalData.evaluations || []).filter(item => item.submission_id !== record.submission_id)
+      ];
+      sourceWindow?.postMessage({ type: 'rwce-live-event-evaluation-saved', ok: true, id: data?.id || null, message: 'Evaluation saved to Real World CE.' }, sourceOrigin || '*');
+    } catch (error) {
+      console.error('Unable to save Live Event CME evaluation:', error);
+      sourceWindow?.postMessage({ type: 'rwce-live-event-evaluation-saved', ok: false, message: `The evaluation is saved locally, but the database save failed: ${error?.message || error}` }, sourceOrigin || '*');
+    }
+  }
+
+  window.addEventListener('message', event => {
+    const data = event?.data;
+    if (!data || data.type !== 'rwce-live-event-evaluation') return;
+    if (event.origin && event.origin !== 'null' && !CME_ALLOWED_ORIGINS.has(event.origin)) return;
+    saveLiveEventEvaluation(data.payload || {}, event.source, event.origin && event.origin !== 'null' ? event.origin : '*');
+  });
+
+  function profileForEvaluation(item) {
+    const users = rwceAdminPortalData.users || [];
+    const itemUserId = String(item?.user_id || '');
+    const itemEmail = String(item?.learner_email || '').trim().toLowerCase();
+    return users.find(user => itemUserId && String(user.id || user.user_id || '') === itemUserId)
+      || users.find(user => itemEmail && String(user.email || '').trim().toLowerCase() === itemEmail)
+      || null;
+  }
+
+  function responseIsCompleted(value) {
+    if (Array.isArray(value)) return value.length > 0;
+    return value !== undefined && value !== null && String(value).trim() !== '';
+  }
+
+  function completedQuestionCount(item) {
+    const responses = item?.responses || {};
+    return Array.from({length:22}, (_,i)=>`q${i+1}`).filter(key => responseIsCompleted(responses[key])).length;
+  }
+
+  function filteredCMEEvaluations() {
+    const all = [...(rwceAdminPortalData.evaluations || [])];
+    const search = String(document.getElementById('cmeReportSearch')?.value || '').trim().toLowerCase();
+    const start = document.getElementById('cmeReportStartDate')?.value || '';
+    const end = document.getElementById('cmeReportEndDate')?.value || '';
+
+    return all.filter(item => {
+      const completed = new Date(item.completed_at || item.created_at || 0);
+      if (start && completed < new Date(`${start}T00:00:00`)) return false;
+      if (end && completed > new Date(`${end}T23:59:59.999`)) return false;
+      if (!search) return true;
+
+      const profile = profileForEvaluation(item) || {};
+      const responseText = Object.values(item.responses || {}).flat().join(' ');
+      const haystack = [
+        profile.full_name, profile.email, profile.role, profile.account_type,
+        profile.registration_source, profile.id,
+        item.learner_first_name, item.learner_last_name, item.learner_email,
+        item.nabp_epid, item.activity_title, item.current_knowledge,
+        responseText
+      ].join(' ').toLowerCase();
+      return haystack.includes(search);
+    }).sort((a,b) => new Date(b.completed_at || b.created_at || 0) - new Date(a.completed_at || a.created_at || 0));
+  }
+
+  window.renderCMEEvaluationReports = function renderCMEEvaluationReports() {
+    const rows = document.getElementById('cmeEvaluationReportRows');
+    if (!rows) return;
+    const data = filteredCMEEvaluations();
+
+    const unique = new Set(data.map(item => String(item.user_id || item.learner_email || '').toLowerCase()).filter(Boolean));
+    const qualities = data.map(item => Number(item.overall_quality)).filter(Number.isFinite);
+    const biasAnswered = data.filter(item => item.commercial_bias_free === true || item.commercial_bias_free === false);
+    const biasFree = biasAnswered.filter(item => item.commercial_bias_free === true).length;
+
+    const setText = (id, value) => { const node = document.getElementById(id); if (node) node.textContent = value; };
+    setText('cmeReportSubmissionCount', data.length.toLocaleString());
+    setText('cmeReportUniqueLearners', unique.size.toLocaleString());
+    setText('cmeReportAvgQuality', qualities.length ? `${(qualities.reduce((a,b)=>a+b,0)/qualities.length).toFixed(1)} / 5` : '—');
+    setText('cmeReportBiasFree', biasAnswered.length ? `${Math.round((biasFree / biasAnswered.length) * 100)}%` : '—');
+
+    rows.innerHTML = data.length ? data.map(item => {
+      const profile = profileForEvaluation(item) || {};
+      const formName = [item.learner_first_name, item.learner_last_name].filter(Boolean).join(' ');
+      const name = profile.full_name || formName || 'Unnamed user';
+      const email = profile.email || item.learner_email || '—';
+      const accountType = normalizeAccountType(profile.account_type || item.account_type || 'live_event', profile.role || 'learner');
+      const accountLabel = accountType === 'live_event' ? 'Live Event' : accountType === 'webinar' ? 'Webinar' : 'Learner';
+      const role = normalizePortalRole(profile.role || 'learner');
+      const questions = completedQuestionCount(item);
+      return `<tr>
+        <td>${safeText(formatAdminDate(item.completed_at || item.created_at))}</td>
+        <td class="live-event-user-cell"><strong>${safeText(name)}</strong><span>${safeText(profile.registration_source || 'Registered user')}</span></td>
+        <td>${safeText(email)}</td>
+        <td><span class="live-event-account-pill">${safeText(accountLabel)}</span></td>
+        <td>${safeText(role.charAt(0).toUpperCase() + role.slice(1))}</td>
+        <td>${safeText(profile.login_count ?? '—')}</td>
+        <td>${safeText(formatAdminDate(profile.last_login_at))}</td>
+        <td><span class="live-event-question-count"><span class="material-symbols-outlined">task_alt</span>${safeText(`${questions}/22`)}</span></td>
+        <td>${safeText(item.overall_quality ?? '—')}</td>
+        <td>${safeText(item.participation_minutes ?? '—')}</td>
+        <td><button type="button" class="cme-view-response-btn" data-cme-evaluation-id="${safeText(item.id || item.submission_id || '')}"><span class="material-symbols-outlined text-[15px]">description</span>View Full Report</button></td>
+      </tr>`;
+    }).join('') : '<tr><td colspan="11">No completed Live Event evaluations match the current filters.</td></tr>';
+
+    rows.querySelectorAll('[data-cme-evaluation-id]').forEach(button => {
+      button.addEventListener('click', () => openCMEEvaluationDetail(button.dataset.cmeEvaluationId));
+    });
+  };
+
+  function findCMEEvaluation(id) {
+    return (rwceAdminPortalData.evaluations || []).find(item => String(item.id || item.submission_id || '') === String(id || ''));
+  }
+
+  window.openCMEEvaluationDetail = function openCMEEvaluationDetail(id) {
+    const item = findCMEEvaluation(id);
+    if (!item) return;
+    const responses = item.responses || {};
+    const profile = profileForEvaluation(item) || {};
+    const formName = [item.learner_first_name, item.learner_last_name].filter(Boolean).join(' ');
+    const name = profile.full_name || formName || 'Unnamed user';
+    const email = profile.email || item.learner_email || 'No email';
+    const accountType = normalizeAccountType(profile.account_type || item.account_type || 'live_event', profile.role || 'learner');
+    const accountLabel = accountType === 'live_event' ? 'Live Event' : accountType === 'webinar' ? 'Webinar' : 'Learner';
+    const role = normalizePortalRole(profile.role || 'learner');
+
+    const modal = document.getElementById('cmeEvaluationDetailModal');
+    const title = document.getElementById('cmeDetailTitle');
+    const subtitle = document.getElementById('cmeDetailSubtitle');
+    const body = document.getElementById('cmeEvaluationDetailBody');
+    if (!modal || !body) return;
+
+    if (title) title.textContent = `${name} — Live Event Report`;
+    if (subtitle) subtitle.textContent = `${email} • Completed ${formatAdminDate(item.completed_at || item.created_at)}`;
+
+    const userSummary = [
+      ['Registered User', name],
+      ['Email', email],
+      ['Account Type', accountLabel],
+      ['Role', role.charAt(0).toUpperCase() + role.slice(1)],
+      ['Registration Source', profile.registration_source || '—'],
+      ['Login Count', profile.login_count ?? '—'],
+      ['Last Login', formatAdminDate(profile.last_login_at)],
+      ['User ID', profile.id || item.user_id || '—']
+    ];
+
+    const completionSummary = [
+      ['Activity', item.activity_title || CME_ACTIVITY_TITLE],
+      ['Completed', formatAdminDate(item.completed_at || item.created_at)],
+      ['Questions With Responses', `${completedQuestionCount(item)} / 22`],
+      ['Overall Quality', item.overall_quality ? `${item.overall_quality} / 5` : '—'],
+      ['Participation', item.participation_minutes != null ? `${item.participation_minutes} minutes` : '—'],
+      ['Commercial Bias Free', item.commercial_bias_free === true ? 'Yes' : item.commercial_bias_free === false ? 'No' : '—'],
+      ['NABP ePID', item.nabp_epid || '—'],
+      ['Pharmacist DOB (MM/DD)', item.pharmacist_dob_mmdd || '—'],
+      ['Current Knowledge', item.current_knowledge || '—'],
+      ['Submission ID', item.submission_id || '—']
+    ];
+
+    const responseHtml = Array.from({length:22}, (_,i)=>`q${i+1}`).map(key => {
+      let value = responses[key];
+      if (Array.isArray(value)) value = value.join('; ');
+      if (value == null || String(value).trim() === '') value = '—';
+      return `<div class="cme-detail-response question-complete"><span>${safeText(CME_QUESTION_LABELS[key] || key)}</span><strong>${safeText(value)}</strong></div>`;
+    }).join('');
+
+    const simulation = item.simulation && typeof item.simulation === 'object' ? item.simulation : {};
+    const simulationRows = Object.keys(simulation).length
+      ? Object.entries(simulation).map(([key,value]) => `<div class="cme-detail-summary"><span>${safeText(key.replaceAll('_',' '))}</span><strong>${safeText(value)}</strong></div>`).join('')
+      : '<div class="cme-detail-summary"><span>Simulation</span><strong>No simulation summary recorded.</strong></div>';
+
+    body.innerHTML = `
+      <div class="cme-detail-section-title">User Information</div>
+      <div class="cme-detail-grid">${userSummary.map(([label,value]) => `<div class="cme-detail-summary"><span>${safeText(label)}</span><strong>${safeText(value)}</strong></div>`).join('')}</div>
+      <div class="cme-detail-section-title">Live Event Completion</div>
+      <div class="cme-detail-grid">${completionSummary.map(([label,value]) => `<div class="cme-detail-summary"><span>${safeText(label)}</span><strong>${safeText(value)}</strong></div>`).join('')}</div>
+      <div class="cme-detail-section-title">Completed CME/CE Questions</div>
+      ${responseHtml}
+      <div class="cme-detail-section-title">Injection Trainer Summary</div>
+      <div class="cme-detail-grid">${simulationRows}</div>
+    `;
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  };
+
+  function closeCMEEvaluationDetail() {
+    const modal = document.getElementById('cmeEvaluationDetailModal');
+    if (!modal) return;
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  function csvCell(value) {
+    let text = Array.isArray(value) ? value.join('; ') : String(value ?? '');
+    if (/^[=+\-@]/.test(text)) text = `'${text}`;
+    return `"${text.replaceAll('"','""')}"`;
+  }
+
+  window.exportCMEEvaluationReports = function exportCMEEvaluationReports() {
+    const data = filteredCMEEvaluations();
+    if (!data.length) {
+      cmeStatus('There are no Live Event evaluation rows to export for the current filters.', 'error');
+      return;
+    }
+    const responseKeys = Array.from({length:22}, (_,i)=>`q${i+1}`);
+    const headers = [
+      'Completed At','User ID','Registered Full Name','First Name','Last Name','Email',
+      'Account Type','Role','Registration Source','Login Count','Last Login',
+      'Activity','Questions With Responses','Overall Quality','Participation Minutes',
+      'Commercial Bias Free','NABP ePID','Pharmacist DOB MM/DD','Current Knowledge','Submission ID',
+      ...responseKeys.map(key => CME_QUESTION_LABELS[key] || key)
+    ];
+    const lines = [headers.map(csvCell).join(',')];
+    data.forEach(item => {
+      const profile = profileForEvaluation(item) || {};
+      const r = item.responses || {};
+      const registeredName = profile.full_name || [item.learner_first_name,item.learner_last_name].filter(Boolean).join(' ');
+      const values = [
+        item.completed_at || item.created_at || '',
+        profile.id || item.user_id || '',
+        registeredName,
+        item.learner_first_name || '',
+        item.learner_last_name || '',
+        profile.email || item.learner_email || '',
+        normalizeAccountType(profile.account_type || item.account_type || 'live_event', profile.role || 'learner'),
+        normalizePortalRole(profile.role || 'learner'),
+        profile.registration_source || '',
+        profile.login_count ?? '',
+        profile.last_login_at || '',
+        item.activity_title || '',
+        completedQuestionCount(item),
+        item.overall_quality ?? '',
+        item.participation_minutes ?? '',
+        item.commercial_bias_free === true ? 'Yes' : item.commercial_bias_free === false ? 'No' : '',
+        item.nabp_epid || '',
+        item.pharmacist_dob_mmdd || '',
+        item.current_knowledge || '',
+        item.submission_id || '',
+        ...responseKeys.map(key => r[key] ?? '')
+      ];
+      lines.push(values.map(csvCell).join(','));
+    });
+    const blob = new Blob(["\ufeff" + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `RWCE_Live_Event_User_Question_Report_${new Date().toISOString().slice(0,10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    cmeStatus(`Exported ${data.length} completed Live Event report${data.length === 1 ? '' : 's'}.`, 'success');
+  };
+
+  window.printCMEEvaluationReports = function printCMEEvaluationReports() {
+    const data = filteredCMEEvaluations();
+    if (!data.length) {
+      cmeStatus('There are no Live Event evaluation rows to print for the current filters.', 'error');
+      return;
+    }
+    const win = window.open('', '_blank', 'noopener,noreferrer');
+    if (!win) {
+      cmeStatus('The print window was blocked by the browser. Allow pop-ups and try again.', 'error');
+      return;
+    }
+
+    const reports = data.map(item => {
+      const profile = profileForEvaluation(item) || {};
+      const r = item.responses || {};
+      const name = profile.full_name || [item.learner_first_name,item.learner_last_name].filter(Boolean).join(' ') || 'Unnamed user';
+      const userInfo = `
+        <table class="summary">
+          <tr><th>User</th><td>${safeText(name)}</td><th>Email</th><td>${safeText(profile.email || item.learner_email || '—')}</td></tr>
+          <tr><th>Account</th><td>${safeText(normalizeAccountType(profile.account_type || item.account_type || 'live_event', profile.role || 'learner'))}</td><th>Role</th><td>${safeText(normalizePortalRole(profile.role || 'learner'))}</td></tr>
+          <tr><th>Completed</th><td>${safeText(formatAdminDate(item.completed_at || item.created_at))}</td><th>Questions</th><td>${safeText(`${completedQuestionCount(item)} / 22`)}</td></tr>
+        </table>`;
+      const questions = Array.from({length:22}, (_,i)=>`q${i+1}`).map(key => {
+        let value = r[key];
+        if (Array.isArray(value)) value = value.join('; ');
+        if (value == null || String(value).trim() === '') value = '—';
+        return `<div class="q"><strong>${safeText(CME_QUESTION_LABELS[key] || key)}</strong><p>${safeText(value)}</p></div>`;
+      }).join('');
+      return `<section><h2>${safeText(name)}</h2>${userInfo}${questions}</section>`;
+    }).join('');
+
+    win.document.write(`<!doctype html><html><head><title>Real World CE Live Event Report</title><style>
+      body{font-family:Arial,sans-serif;color:#172033;margin:28px}h1{color:#0b2f67}h2{margin-top:28px;color:#176dcc}
+      .summary{width:100%;border-collapse:collapse;margin:12px 0 18px}.summary th,.summary td{border:1px solid #dbe4ee;padding:8px;text-align:left;font-size:12px}
+      .summary th{background:#eff6ff}.q{page-break-inside:avoid;border:1px solid #dbe4ee;border-radius:8px;padding:10px;margin:8px 0}.q strong{font-size:12px;color:#0b2f67}.q p{margin:6px 0 0;font-size:12px;line-height:1.45}
+      section{page-break-after:always}
+    </style></head><body><h1>Real World CE — Live Event User & CME/CE Question Report</h1>${reports}</body></html>`);
+    win.document.close();
+    setTimeout(() => win.print(), 250);
+  };
+
+  async function refreshCMEReports() {
+    if (!rwceSupabaseReady || !rwceSupabase) {
+      cmeStatus('Supabase is not configured in this LMS file.', 'error');
+      return;
+    }
+    cmeStatus('Refreshing CME/CE evaluation reports…');
+    try {
+      const { data, error } = await rwceSupabase.from('cme_evaluations').select('*').order('completed_at', { ascending: false }).limit(5000);
+      if (error) throw error;
+      rwceAdminPortalData.evaluations = data || [];
+      renderCMEEvaluationReports();
+      cmeStatus(`Loaded ${(data || []).length} CME/CE evaluation record${(data || []).length === 1 ? '' : 's'}.`, 'success');
+    } catch (error) {
+      cmeStatus(`CME/CE reports could not be loaded: ${error?.message || error}. Run the included Supabase setup SQL and verify the RLS policies.`, 'error');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    ['cmeReportSearch','cmeReportStartDate','cmeReportEndDate'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', renderCMEEvaluationReports);
+      document.getElementById(id)?.addEventListener('change', renderCMEEvaluationReports);
+    });
+    document.getElementById('clearCmeReportFiltersBtn')?.addEventListener('click', () => {
+      ['cmeReportSearch','cmeReportStartDate','cmeReportEndDate'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+      renderCMEEvaluationReports();
+    });
+    document.getElementById('refreshCmeEvaluationReportsBtn')?.addEventListener('click', refreshCMEReports);
+    document.getElementById('exportCmeEvaluationReportsBtn')?.addEventListener('click', exportCMEEvaluationReports);
+    document.getElementById('printCmeEvaluationReportsBtn')?.addEventListener('click', printCMEEvaluationReports);
+    document.getElementById('closeCmeEvaluationDetailBtn')?.addEventListener('click', closeCMEEvaluationDetail);
+    document.getElementById('cmeEvaluationDetailModal')?.addEventListener('click', event => { if (event.target?.id === 'cmeEvaluationDetailModal') closeCMEEvaluationDetail(); });
+  });
+})();
+</script>
+</body>
 </html>
