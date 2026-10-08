@@ -4487,11 +4487,16 @@ body.rw110-theme::before {
 
 <section id="rwceAssessmentReports" class="cme-report-panel mt-6" aria-label="Assessment reporting">
  <div class="cme-report-head"><div><div class="text-xs font-black uppercase tracking-widest text-blue-700">Learning Outcomes</div><h3 class="mt-1 text-xl font-black text-medicalBlue">Individual Test &amp; Quiz Results</h3><p class="text-sm text-slate-500">Pre-tests, post-tests, and knowledge checks by learner. Includes score change and individual answer-level detail.</p></div>
- <div class="cme-report-actions"><button type="button" class="cme-report-button" id="assessmentRefresh">Refresh Results</button><button type="button" class="cme-report-button primary" id="assessmentExport">Export CSV</button></div></div>
+ <div class="cme-report-actions"><button type="button" class="cme-report-button" id="assessmentRefresh">Refresh Results</button><button type="button" class="cme-report-button primary" id="assessmentExport">Export All Questions CSV</button></div></div>
  <div class="cme-report-filters"><label><span>Search learner or email</span><input id="assessmentSearch" type="search" placeholder="Name, email, or assessment"></label><label><span>Start date</span><input id="assessmentStart" type="date"></label><label><span>End date</span><input id="assessmentEnd" type="date"></label><button type="button" class="cme-report-button" id="assessmentClear">Clear</button></div>
  <div id="assessmentReportStatus" class="text-xs font-semibold text-slate-600 mt-3" role="status">Select Refresh Results to load assessment data.</div>
  <div class="admin-table-wrap mt-4"><table class="admin-table"><thead><tr><th>Learner</th><th>Course / Type</th><th>Pre-test</th><th>Post-test</th><th>Gain (pp)</th><th>Other quiz</th><th>Completed</th><th>Actions</th></tr></thead><tbody id="assessmentReportRows"><tr><td colspan="8">No assessment records loaded.</td></tr></tbody></table></div>
  <div id="assessmentDetail" class="mt-4 hidden rounded-xl border border-blue-100 bg-slate-50 p-4 text-sm"></div>
+<div id="rwceCompleteReport" class="mt-6 border-t border-slate-200 pt-5">
+ <div class="flex flex-wrap gap-3 items-center justify-between"><div><h3 class="font-black text-lg text-medicalBlue">Complete Learner Outcomes &amp; Injection Report</h3><p class="text-sm text-slate-600">Every pre-test, post-test, knowledge-check attempt and saved injection simulation; includes all recorded responses.</p></div><div class="flex flex-wrap gap-2"><button type="button" class="cme-report-button" id="completeReportRefresh">Load Complete Report</button><button type="button" class="cme-report-button primary" id="completeReportCSV">Export All Questions + Injection CSV</button><button type="button" class="cme-report-button" id="completeReportPrint">Print Selected Learner</button></div></div>
+ <div class="mt-3 flex flex-wrap gap-3 items-end"><label class="text-sm font-semibold">Learner <select id="completeReportLearner" class="block mt-1 border rounded-lg p-2 bg-white"><option value="">All learners</option></select></label><label class="text-sm font-semibold">Search <input id="completeReportSearch" class="block mt-1 border rounded-lg p-2" placeholder="Name or email"></label></div>
+ <div id="completeReportStatus" role="status" class="text-sm text-slate-600 mt-3">Select Load Complete Report.</div><div id="completeReportList" class="mt-4 space-y-4"></div>
+</div>
 </section>
 <div class="mt-6 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-semibold leading-relaxed text-blue-900">
   Live Event evaluation responses are available in the dedicated <strong>Live Event Reports</strong> tab.
@@ -4512,7 +4517,7 @@ body.rw110-theme::before {
       <div class="cme-report-actions">
         <button id="refreshCmeEvaluationReportsBtn" class="cme-report-button" type="button"><span class="material-symbols-outlined">refresh</span>Refresh</button>
         <button id="printCmeEvaluationReportsBtn" class="cme-report-button" type="button"><span class="material-symbols-outlined">print</span>Print Report</button>
-        <button id="exportCmeEvaluationReportsBtn" class="cme-report-button primary" type="button"><span class="material-symbols-outlined">download</span>Export CSV</button>
+        <button id="exportCmeEvaluationReportsBtn" class="cme-report-button primary" type="button"><span class="material-symbols-outlined">download</span>Export All Questions CSV</button>
       </div>
     </div>
 
@@ -8055,9 +8060,7 @@ body:not([data-rwce-role="admin"]):not([data-rwce-role="manager"]) .cme-detail-m
       </tr>`;
     }).join('') : '<tr><td colspan="11">No completed Live Event evaluations match the current filters.</td></tr>';
 
-    rows.querySelectorAll('[data-cme-evaluation-id]').forEach(button => {
-      button.addEventListener('click', () => openCMEEvaluationDetail(button.dataset.cmeEvaluationId));
-    });
+    // Delegated handler below survives all report table re-renders.
   };
 
   function findCMEEvaluation(id) {
@@ -8083,10 +8086,16 @@ body:not([data-rwce-role="admin"]):not([data-rwce-role="manager"]) .cme-detail-m
   }
 
   window.openCMEEvaluationDetail = function openCMEEvaluationDetail(id) {
-    const viewerRole = document.body.dataset.rwceRole;
-    if (viewerRole !== "admin" && viewerRole !== "manager") return;
+    const viewerRole = String(document.body.dataset.rwceRole || '').toLowerCase();
+    if (!['admin', 'manager'].includes(viewerRole)) {
+      cmeStatus('Full reports are available only to a signed-in administrator or manager. Your current role is ' + (viewerRole || 'not loaded') + '.', 'error');
+      return;
+    }
     const item = findCMEEvaluation(id);
-    if (!item) return;
+    if (!item) {
+      cmeStatus('The selected report was not found. Click Refresh Reports and try again.', 'error');
+      return;
+    }
     const responses = item.responses || {};
     const profile = profileForEvaluation(item) || {};
     const formName = [item.learner_first_name, item.learner_last_name].filter(Boolean).join(' ');
@@ -8100,7 +8109,10 @@ body:not([data-rwce-role="admin"]):not([data-rwce-role="manager"]) .cme-detail-m
     const title = document.getElementById('cmeDetailTitle');
     const subtitle = document.getElementById('cmeDetailSubtitle');
     const body = document.getElementById('cmeEvaluationDetailBody');
-    if (!modal || !body) return;
+    if (!modal || !body) {
+      cmeStatus('The report detail window could not be created. Refresh the LMS page and try again.', 'error');
+      return;
+    }
 
     if (title) title.textContent = `${name} — Live Event Report`;
     if (subtitle) subtitle.textContent = `${email} • Completed ${formatAdminDate(item.completed_at || item.created_at)}`;
@@ -8150,11 +8162,63 @@ body:not([data-rwce-role="admin"]):not([data-rwce-role="manager"]) .cme-detail-m
       ${responseHtml}
       <div class="cme-detail-section-title">Injection Trainer Summary</div>
       <div class="cme-detail-grid">${simulationRows}</div>
+      <div class="cme-detail-section-title">Pre-Test, Post-Test &amp; Knowledge Check Results</div>
+      <div id="cmeLinkedAssessmentResults" aria-live="polite"><p>Loading recorded test questions from Supabase…</p></div>
     `;
     modal.hidden = false;
     modal.classList.add('active');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    // Assessment attempts are stored separately from CME evaluations. Query them
+    // using the authenticated LMS client; never expose an admin service key.
+    (async () => {
+      const target = document.getElementById('cmeLinkedAssessmentResults');
+      if (!target) return;
+      const learnerId = item.user_id || profile.id;
+      if (!learnerId) {
+        target.textContent = 'No learner ID is linked to this evaluation. Assessment records cannot be matched.';
+        return;
+      }
+      const client = window.rwceSupabase;
+      if (!client) {
+        target.textContent = 'Supabase client unavailable. Sign in to the LMS and reload the report.';
+        return;
+      }
+      try {
+        const result = await client.from('assessment_attempts')
+          .select('id,assessment_type,assessment_title,correct_count,question_count,score_percent,answers,question_correct,question_details,created_at')
+          .eq('user_id', learnerId).order('created_at', {ascending:false}).limit(200);
+        if (result.error) throw result.error;
+        if (!target.isConnected) return;
+        const items = result.data || [];
+        if (!items.length) {
+          target.textContent = 'No pre-test, post-test, or knowledge-check submissions are linked to this learner ID.';
+          return;
+        }
+        const types = ['pre','post','knowledge_check'];
+        target.innerHTML = types.map(type => {
+          const group = items.filter(a => a.assessment_type === type);
+          const heading = {pre:'Pre-Test',post:'Post-Test',knowledge_check:'Knowledge Check'}[type];
+          if (!group.length) return `<div class="cme-detail-response"><strong>${heading}</strong><span>No saved attempts</span></div>`;
+          return `<h3 style="font-weight:800;margin:18px 0 8px">${heading} (${group.length} attempt${group.length===1?'':'s'})</h3>` + group.map((a,n) => {
+            const questions = Array.isArray(a.question_details) ? a.question_details : [];
+            const total = Math.max(questions.length, Number(a.question_count)||0);
+            const rows = Array.from({length:total},(_,i) => {
+              const q=questions[i]||{},opts=Array.isArray(q.options)?q.options:[];
+              const matching=value=>opts.find(o=>String(o.value)===String(value))?.text;
+              const raw=a.answers?.[i];
+              const answer=q.selected_text??matching(raw)??raw??'Not answered';
+              const correct=q.correct_text??matching(q.correct_value)??q.correct_value??'Not recorded';
+              const correctFlag=typeof q.is_correct==='boolean'?q.is_correct:a.question_correct?.[i];
+              return `<div class="cme-detail-response question-complete" style="display:block;margin-top:9px;padding:11px;border:1px solid #e2e8f0;border-radius:10px"><div><strong>Question ${i+1}: ${safeText(q.question||'Question text not saved')}</strong></div><div>Selected: ${safeText(answer)}</div><div>Correct answer: ${safeText(correct)}</div><div style="font-weight:700;color:${correctFlag===true?'#047857':correctFlag===false?'#b91c1c':'#64748b'}">${correctFlag===true?'Correct':correctFlag===false?'Incorrect':'Not graded'}</div></div>`;
+            }).join('');
+            return `<details ${n===0?'open':''} style="border:1px solid #cbd5e1;border-radius:12px;padding:12px;margin-bottom:10px"><summary style="cursor:pointer;font-weight:700">${safeText(heading)} · ${safeText(a.score_percent)}% · ${safeText(a.correct_count)}/${safeText(a.question_count)} · ${safeText(new Date(a.created_at).toLocaleString())}</summary>${rows}</details>`;
+          }).join('');
+        }).join('');
+      } catch(error) {
+        target.textContent = 'Could not load assessment questions: ' + (error?.message || String(error));
+      }
+    })();
   };
 
   function closeCMEEvaluationDetail() {
@@ -8295,8 +8359,17 @@ body:not([data-rwce-role="admin"]):not([data-rwce-role="manager"]) .cme-detail-m
       ['cmeReportSearch','cmeReportStartDate','cmeReportEndDate'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
       renderCMEEvaluationReports();
     });
+    // One listener on the persistent table wrapper prevents lost button clicks
+    // when reports are refreshed, sorted, or filtered.
+    document.getElementById('cmeEvaluationReportRows')?.addEventListener('click', event => {
+      const button = event.target.closest('[data-cme-evaluation-id]');
+      if (!button) return;
+      event.preventDefault();
+      try { window.openCMEEvaluationDetail(button.dataset.cmeEvaluationId); }
+      catch (error) { console.error('CME report opening failed:', error); cmeStatus('Could not open the report: ' + (error?.message || 'unexpected error'), 'error'); }
+    });
     document.getElementById('refreshCmeEvaluationReportsBtn')?.addEventListener('click', refreshCMEReports);
-    document.getElementById('exportCmeEvaluationReportsBtn')?.addEventListener('click', exportCMEEvaluationReports);
+    document.getElementById('exportCmeEvaluationReportsBtn')?.addEventListener('click', () => window.rwceExportEveryQuestionCSV());
     document.getElementById('printCmeEvaluationReportsBtn')?.addEventListener('click', printCMEEvaluationReports);
   });
 })();
@@ -8321,7 +8394,7 @@ body:not([data-rwce-role="admin"]):not([data-rwce-role="manager"]) .cme-detail-m
    }catch{return false}
  }
  async function persist(e){
-   if(!trustedModuleEvent(e)){console.warn('LAI assessment ignored: submission did not come from the currently embedded LMS module. Open the LAI trainer from within the LMS module viewer, not a separate tab.');return;}
+   if(!trustedModuleEvent(e))return;
    const m=e.data,p=m.payload||{},phase=m.phase;
    if(!['pre','post','knowledge_check','quiz'].includes(phase))return;
    const fail=message=>{console.error('LAI assessment: '+message);try{e.source?.postMessage({type:'rwce-assessment-storage',ok:false,phase,message},e.origin)}catch{}};
@@ -8336,15 +8409,9 @@ body:not([data-rwce-role="admin"]):not([data-rwce-role="manager"]) .cme-detail-m
    if(responses.length!==total||correctness.length!==total||!Array.isArray(p.question_details)||p.question_details.length!==total){fail('Assessment response detail incomplete');return;}
    // The user_id comes ONLY from Supabase auth, not the embedded trainer message.
    const rec={user_id:user.id,course_key:COURSE,assessment_type:phase,assessment_title:String(p.assessment||'LAI injection trainer').slice(0,180),correct_count:correct,question_count:total,score_percent:score,passed:typeof p.passed==='boolean'?p.passed:(phase==='post'?score>=80:null),answers:responses,question_correct:correctness,question_details:Array.isArray(p.question_details)?p.question_details.slice(0,total):[],client_submitted_at:p.submitted_at||new Date().toISOString()};
-   const {data:inserted,error}=await client().from('assessment_attempts').insert(rec).select('id,assessment_type').single();
-   if(error){
-     let explanation=error.message||'Unknown database error';
-     if(error.code==='PGRST204'||/question_details|schema cache/i.test(explanation)) explanation+=' — Check whether the question_details JSONB column was added in Supabase.';
-     if(error.code==='42501'||/row.level.security|permission denied/i.test(explanation)) explanation+=' — Check the signed-in user session and the assessment_attempts INSERT policy.';
-     fail('Database save failed: '+explanation);return
-   }
-   if(!inserted?.id){fail('Database did not return a confirmed assessment record');return}
-   try{e.source?.postMessage({type:'rwce-assessment-storage',ok:true,phase,record_id:inserted.id,message:'Saved to LMS database'},e.origin)}catch{}
+   const {error}=await client().from('assessment_attempts').insert(rec);
+   if(error){fail('Database save failed: '+error.message);return}
+   try{e.source?.postMessage({type:'rwce-assessment-storage',ok:true,phase,message:'Saved to LMS database'},e.origin)}catch{}
  }
  window.addEventListener('message',e=>{if(e.data?.type==='rwce-lai-assessment')persist(e)});
  async function load(){
@@ -8355,7 +8422,7 @@ body:not([data-rwce-role="admin"]):not([data-rwce-role="manager"]) .cme-detail-m
   if(!['admin','manager'].includes(String(myProfile?.role||'').toLowerCase())){status('Reports are restricted to admins and managers.',true);return}
   const [a,u]=await Promise.all([supa.from('assessment_attempts').select('*').order('created_at',{ascending:false}).limit(5000),supa.from('profiles').select('id,full_name,email').limit(1000)]);
   if(a.error){status('Cannot load assessments: '+a.error.message+'. Apply the assessment SQL migration and verify row-level security.',true);return}
-  records=a.data||[];profiles=u.data||[];status(records.length ? `${records.length} assessment attempts loaded. Use filters or export results.` : 'No assessment records are stored yet. Open the trainer inside this LMS, submit a NEW pre-test, verify its green database-save confirmation, then refresh. Missing question_details column or RLS errors will appear in the trainer status.');render();
+  records=a.data||[];profiles=u.data||[];status(records.length ? `${records.length} assessment attempts loaded. Use filters or export results.` : 'No saved assessment records were returned by Supabase. Confirm that the updated trainer is opened inside this LMS, both migrations are applied, and a new test was submitted after deployment.');render();
  }
  function viewRows(){const q=($('assessmentSearch')?.value||'').trim().toLowerCase(),a=$('assessmentStart')?.value||'',b=$('assessmentEnd')?.value||'';
   return records.filter(r=>{const p=profiles.find(u=>u.id===r.user_id)||{};const hay=[p.full_name,p.email,r.assessment_type,r.assessment_title,r.course_key].join(' ').toLowerCase();const d=(r.created_at||'').slice(0,10);return (!q||hay.includes(q))&&(!a||d>=a)&&(!b||d<=b)})}
@@ -8370,9 +8437,207 @@ body:not([data-rwce-role="admin"]):not([data-rwce-role="manager"]) .cme-detail-m
  function csv(){const header=['Name','Email','User ID','Course','Assessment','Attempt ID','Correct','Questions','Score %','Passed','Recorded At','Question Number','Question Text','Selected Answer','Correct Answer','Correct?'];const lines=[header];for(const r of viewRows()){const p=profiles.find(x=>x.id===r.user_id)||{};for(let i=0;i<r.question_count;i++){const d=r.question_details?.[i]||{};lines.push([p.full_name||'',p.email||'',r.user_id,r.course_key,r.assessment_type,r.id,r.correct_count,r.question_count,r.score_percent,r.passed??'',r.created_at,i+1,d.question||'',(d.selected_text ?? r.answers?.[i] ?? ''),d.correct_text??'',r.question_correct?.[i]??''])}}
  const body=lines.map(row=>row.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\r\n');const url=URL.createObjectURL(new Blob([body],{type:'text/csv;charset=utf-8;'}));const a=document.createElement('a');a.href=url;a.download='RWCE_Full_Question_Results_'+new Date().toISOString().slice(0,10)+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 
- document.addEventListener('DOMContentLoaded',()=>{$('assessmentRefresh')?.addEventListener('click',load);$('assessmentExport')?.addEventListener('click',csv);['assessmentSearch','assessmentStart','assessmentEnd'].forEach(id=>{$(id)?.addEventListener('input',render);$(id)?.addEventListener('change',render)});$('assessmentClear')?.addEventListener('click',()=>{['assessmentSearch','assessmentStart','assessmentEnd'].forEach(id=>{if($(id))$(id).value=''});render()})});
+ document.addEventListener('DOMContentLoaded',()=>{$('assessmentRefresh')?.addEventListener('click',load);$('assessmentExport')?.addEventListener('click',()=>window.rwceExportEveryQuestionCSV());['assessmentSearch','assessmentStart','assessmentEnd'].forEach(id=>{$(id)?.addEventListener('input',render);$(id)?.addEventListener('change',render)});$('assessmentClear')?.addEventListener('click',()=>{['assessmentSearch','assessmentStart','assessmentEnd'].forEach(id=>{if($(id))$(id).value=''});render()})});
 })();
 </script>
 
+<script id="rwce-complete-learner-outcomes-report">
+(()=>{'use strict';
+let attempts=[],evaluations=[],profiles=[],selectedId='';
+const el=id=>document.getElementById(id), esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dt=x=>x?new Date(x).toLocaleString():'Not recorded';
+const status=(s,err=false)=>{const n=el('completeReportStatus');if(n){n.textContent=s;n.style.color=err?'#b91c1c':'#475569'}};
+const profile=id=>profiles.find(p=>p.id===id)||{};
+const newest=(list,t)=>list.find(r=>r.assessment_type===t);
+const score=r=>r?esc(r.score_percent)+'%':'Not submitted';
+function learners(){const m=new Map();for(const a of attempts){if(!m.has(a.user_id))m.set(a.user_id,{id:a.user_id,assessments:[],simulation:[]});m.get(a.user_id).assessments.push(a)}for(const e of evaluations){if(!e.user_id)continue;if(!m.has(e.user_id))m.set(e.user_id,{id:e.user_id,assessments:[],simulation:[]});m.get(e.user_id).simulation.push(e)}return [...m.values()].sort((a,b)=>String(profile(a.id).full_name||a.id).localeCompare(String(profile(b.id).full_name||b.id)))}
+function detail(r){const rows=Array.isArray(r.question_details)?r.question_details:[];return `<details ${["pre","post"].includes(r.assessment_type)?"open":""} class="mt-2 border rounded-xl p-3 bg-white"><summary class="cursor-pointer font-bold">${esc(r.assessment_type.replaceAll('_',' ').toUpperCase())} · ${score(r)} · ${esc(r.correct_count)}/${esc(r.question_count)} · ${dt(r.created_at)}</summary><div class="text-xs text-slate-500 mt-1">Attempt ID: ${esc(r.id)}</div>${rows.map((q,i)=>{const raw=r.answers?.[i],selected=q.selected_text??q.options?.find(o=>String(o.value)===String(raw))?.text??(raw??'Not answered');const right=q.correct_text??q.options?.find(o=>String(o.value)===String(q.correct_value))?.text??'Not stored';const correct=typeof q.is_correct==='boolean'?q.is_correct:r.question_correct?.[i];return `<div class="mt-3 p-3 rounded-xl border bg-slate-50"><div class="font-bold">${i+1}. ${esc(q.question||'Question text unavailable')}</div><div class="text-sm mt-1">Learner answer: <strong>${esc(selected)}</strong></div><div class="text-sm">Correct answer: <strong>${esc(right)}</strong></div><div class="text-sm font-bold" style="color:${correct===true?'#047857':correct===false?'#b91c1c':'#64748b'}">${correct===true?'Correct':correct===false?'Incorrect':'Unverified'}</div></div>`}).join('')||'<p class="text-sm mt-2">Question details were not stored for this attempt.</p>'}</details>`}
+function sim(e){const fields=e.simulation&&typeof e.simulation==='object'?Object.entries(e.simulation):[];return `<details class="mt-2 border rounded-xl p-3 bg-white"><summary class="font-bold cursor-pointer">Injection simulation · ${dt(e.completed_at||e.created_at)}</summary><div class="text-xs text-slate-500 mt-1">Evaluation submission: ${esc(e.submission_id||e.id||'—')}</div>${fields.length?`<div class="grid gap-2 sm:grid-cols-2 mt-3">${fields.map(([k,v])=>`<div class="p-2 rounded border bg-slate-50"><span class="text-xs text-slate-600">${esc(k.replaceAll('_',' '))}</span><div class="font-semibold">${esc(typeof v==='object'?JSON.stringify(v):v)}</div></div>`).join('')}</div>`:'<p class="text-sm mt-2">No injection simulation fields saved with this evaluation.</p>'}</details>`}
+function card(l){const p=profile(l.id),as=l.assessments,ev=l.simulation,pre=newest(as,'pre'),post=newest(as,'post'),k=newest(as,'knowledge_check'),gain=pre&&post?(Number(post.score_percent)-Number(pre.score_percent)).toFixed(1):null;return `<article class="border border-slate-200 bg-white rounded-2xl p-4" data-complete-user="${esc(l.id)}"><header class="flex flex-wrap justify-between gap-2"><div><h4 class="font-black text-lg">${esc(p.full_name||ev[0]?.learner_first_name+' '+ev[0]?.learner_last_name||'Learner')}</h4><div class="text-sm text-slate-600">${esc(p.email||ev[0]?.learner_email||l.id)}</div></div><div class="text-xs text-slate-500">${as.length} assessment attempts · ${ev.length} evaluation records</div></header><div class="grid gap-2 sm:grid-cols-4 mt-3">${[['Pre-test',score(pre)],['Post-test',score(post)],['Knowledge check (latest)',score(k)],['Knowledge gain',gain===null?'—':gain+' percentage points']].map(x=>`<div class="bg-blue-50 rounded-xl p-3"><div class="text-xs text-slate-600">${x[0]}</div><div class="font-black">${x[1]}</div></div>`).join('')}</div><div class="mt-4"><h5 class="font-black">All Question &amp; Answer Attempts</h5>${as.length?as.map(detail).join(''):'<p class="text-sm">No assessment data recorded.</p>'}</div><div class="mt-4"><h5 class="font-black">Injection Simulation Results</h5>${ev.length?ev.map(sim).join(''):'<p class="text-sm">No linked simulation/evaluation record found.</p>'}</div></article>`}
+function render(){const id=el('completeReportLearner')?.value||'',q=(el('completeReportSearch')?.value||'').toLowerCase();const shown=learners().filter(l=>(!id||l.id===id)&&[profile(l.id).full_name,profile(l.id).email,l.id,l.simulation[0]?.learner_email].join(' ').toLowerCase().includes(q));el('completeReportList').innerHTML=shown.length?shown.map(card).join(''):'<p class="text-sm">No matching learner reports.</p>';status(`${shown.length} learner report(s) displayed · ${attempts.length} assessment attempts · ${evaluations.length} CE evaluation records loaded.`)}
+async function load(){const c=window.rwceSupabase;if(!c){status('Supabase connection is unavailable.',true);return}const {data:auth,error:ae}=await c.auth.getUser();if(ae||!auth?.user){status('Sign in to the LMS.',true);return}const {data:p,error:pe}=await c.from('profiles').select('role').eq('id',auth.user.id).single();if(pe||!['admin','manager'].includes(String(p?.role||'').toLowerCase())){status('Administrator or manager permission required.',true);return}status('Loading records from Supabase…');const [a,e,u]=await Promise.all([c.from('assessment_attempts').select('*').order('created_at',{ascending:false}).limit(5000),c.from('cme_evaluations').select('id,user_id,learner_email,learner_first_name,learner_last_name,simulation,completed_at,created_at,submission_id').order('completed_at',{ascending:false}).limit(5000),c.from('profiles').select('id,full_name,email').limit(5000)]);if(a.error){status('Assessment read failed: '+a.error.message,true);return}attempts=a.data||[];evaluations=e.data||[];profiles=u.data||[];let warnings=[e.error?'Simulation report access: '+e.error.message:'',u.error?'Profile access: '+u.error.message:''].filter(Boolean);const picker=el('completeReportLearner'),prev=picker.value;picker.innerHTML='<option value="">All learners</option>'+learners().map(l=>`<option value="${esc(l.id)}">${esc(profile(l.id).full_name||profile(l.id).email||l.id)}</option>`).join('');picker.value=prev;if(!picker.value)picker.value='';render();if(warnings.length)status(warnings.join(' · '),true)}
+function exportCSV(){
+  if(!attempts.length&&!evaluations.length){status('Load the report first.',true);return;}
+  const id=el('completeReportLearner')?.value||'';
+  const search=(el('completeReportSearch')?.value||'').toLowerCase();
+  const list=learners().filter(l=>(!id||l.id===id)&&[profile(l.id).full_name,profile(l.id).email,l.id,l.simulation[0]?.learner_email].join(' ').toLowerCase().includes(search));
+  if(!list.length){status('No learners match the current filter.',true);return;}
+  const cols=['Name','Email','User ID','Record Type','Course','Assessment','Assessment Title','Attempt ID','Submitted','Score %','Correct Count','Question Count','Passed','Pre-Test % (latest)','Post-Test % (latest)','Knowledge Check % (latest)','Improvement (percentage points)','Question Number','Question Text','Answer Options','Learner Answer','Correct Answer','Correct?','Simulation Field','Simulation Value','Evaluation Submission ID','Evaluation Completed At'];
+  const rows=[cols];
+  const readable=v=>v===null||v===undefined?'':typeof v==='object'?JSON.stringify(v):v;
+  const resolveAnswer=(d,value)=>{const match=(d.options||[]).find(o=>String(o.value)===String(value));return match?.text??value??'';};
+  for(const l of list){
+    const p=profile(l.id);
+    const name=p.full_name||[l.simulation[0]?.learner_first_name,l.simulation[0]?.learner_last_name].filter(Boolean).join(' ');
+    const email=p.email||l.simulation[0]?.learner_email||'';
+    const pre=newest(l.assessments,'pre'),post=newest(l.assessments,'post'),knowledge=newest(l.assessments,'knowledge_check');
+    const gain=pre&&post?(Number(post.score_percent)-Number(pre.score_percent)).toFixed(1):'';
+    const base=[name,email,l.id];
+    const summary=[pre?.score_percent??'',post?.score_percent??'',knowledge?.score_percent??'',gain];
+    // The summary row makes it easy to filter one learner and compare outcomes in Excel.
+    const common=(type,course,assessment,title,attempt,submitted,score,correct,count,passed)=>[
+      ...base,type,course||'',assessment||'',title||'',attempt||'',submitted||'',score??'',correct??'',count??'',passed??'',...summary
+    ];
+    rows.push([...common('Learner Summary','','','','','','','','',''),'','','','','','','','']);
+    for(const a of l.assessments){
+      const ds=Array.isArray(a.question_details)?a.question_details:[];
+      const total=Math.max(ds.length,Number(a.question_count)||0);
+      const prefix=common('Assessment',a.course_key,a.assessment_type,a.assessment_title,a.id,a.created_at,a.score_percent,a.correct_count,a.question_count,a.passed);
+      if(!total){rows.push([...prefix,'','','','','','','','','','']);continue;}
+      for(let i=0;i<total;i++){
+        const d=ds[i]||{},raw=a.answers?.[i];
+        const chosen=d.selected_text??resolveAnswer(d,raw);
+        const correct=d.correct_text??resolveAnswer(d,d.correct_value);
+        const options=Array.isArray(d.options)?d.options.map(o=>String(o.value??'')+': '+String(o.text??'')).join(' | '):'';
+        const correctness=d.is_correct??a.question_correct?.[i]??'';
+        rows.push([...prefix,d.number??(i+1),d.question??'',options,chosen,correct,correctness,'','','','']);
+      }
+    }
+    for(const e of l.simulation){
+      const submitted=e.completed_at||e.created_at||'';
+      const prefix=common('Injection Simulation','','','',e.submission_id||e.id,submitted,'','','','');
+      const values=e.simulation&&typeof e.simulation==='object'?Object.entries(e.simulation):[];
+      if(!values.length){rows.push([...prefix,'','','','','','','No simulation data','',e.submission_id||e.id,submitted]);continue;}
+      for(const [key,value] of values){rows.push([...prefix,'','','','','','',key,readable(value),e.submission_id||e.id,submitted]);}
+    }
+  }
+  // Prevent spreadsheet apps from interpreting learner-entered text as a formula.
+  const safeCell=value=>{
+    let str=String(value??'');
+    if(/^[\s\u0000-\u001f]*[=+@\-]/.test(str))str="'"+str;
+    return '"'+str.replaceAll('"','""')+'"';
+  };
+  const data=rows.map(row=>row.map(safeCell).join(',')).join('\r\n');
+  const url=URL.createObjectURL(new Blob(['\ufeff',data],{type:'text/csv;charset=utf-8'}));
+  const link=document.createElement('a');
+  link.href=url;link.download='RWCE_Complete_Learner_Assessment_Injection_Report_'+new Date().toISOString().slice(0,10)+'.csv';
+  document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+  status(`Exported ${rows.length-1} report rows for ${list.length} learner(s).`);
+}
+document.addEventListener('DOMContentLoaded',()=>{el('completeReportRefresh')?.addEventListener('click',load);el('completeReportLearner')?.addEventListener('change',render);el('completeReportSearch')?.addEventListener('input',render);el('completeReportCSV')?.addEventListener('click',()=>window.rwceExportEveryQuestionCSV());el('completeReportPrint')?.addEventListener('click',()=>{if(!el('completeReportLearner')?.value){status('Select one learner to print their report.',true);return}window.print()})});
+})();
+</script>
+<style id="rwce-complete-report-print">@media print{body *{visibility:hidden!important}#rwceCompleteReport,#rwceCompleteReport *{visibility:visible!important}#rwceCompleteReport{position:absolute!important;left:0!important;top:0!important;width:100%!important}#rwceCompleteReport button,#rwceCompleteReport select,#rwceCompleteReport input{display:none!important}#completeReportList details{display:block!important}#completeReportList details>*{display:block!important}}</style>
+<script id="rwce-unified-comprehensive-csv-export">
+(()=>{'use strict';
+const get=id=>document.getElementById(id);
+const status=(message,isError=false)=>{
+  for(const id of ['completeReportStatus','assessmentReportStatus','cmeReportStatus']){
+    const node=get(id);if(node){node.textContent=message;node.style.color=isError?'#b91c1c':'#475569';}
+  }
+};
+const RWCE_CME_QUESTION_LABELS = {
+    learner_first_name: 'First Name',
+    learner_last_name: 'Last Name',
+    learner_email: 'Email Address',
+    q1: '1. How relevant was the content on schizophrenia and long-acting injectable (LAI) antipsychotic therapy to your professional practice?',
+    q2: '2. How effective were the organization, format, and presentation of the activity in supporting your learning?',
+    q3: '3. How effective was the faculty member or presenter in teaching the content?',
+    q4: '4. How well did this schizophrenia and LAI injection training activity meet your expectations and learning needs?',
+    q5: '5. How well did this activity help you achieve the stated learning objectives related to schizophrenia and LAI preparation and administration?',
+    q6: '6. How well did this activity strengthen your knowledge and competence in caring for patients with schizophrenia who receive LAI antipsychotic therapy?',
+    q7: '7. How would you rate your confidence in applying what you learned about LAI antipsychotic preparation and administration for patients with schizophrenia?',
+    q8: '8. How useful were the schizophrenia and LAI injection skills and concepts presented in this activity to your professional practice or work responsibilities?',
+    q9: '9. How useful were the ideas, tools, resources, or strategies provided for supporting LAI antipsychotic treatment in schizophrenia?',
+    q10: '10. What barriers may affect your ability to apply what you learned about schizophrenia and LAI antipsychotic therapy?',
+    q11: '11. Overall quality of this educational activity (1–5)',
+    q12: '12. How long did you participate in this live event activity? Please enter your answer in minutes.',
+    q13: '13. Changes you will make in the care of patients with schizophrenia receiving LAI antipsychotic therapy within the next 30 days',
+    q14: '14. Expected outcome improvement for patients with schizophrenia',
+    q15: '15. Was this activity free of commercial bias?',
+    q16: '16. Description of perceived bias',
+    q17: '17. Most important thing learned about schizophrenia and LAI antipsychotic preparation or administration',
+    q18: '18. NABP e-Profile ID (pharmacists only)',
+    q19: '19. Date of birth MM/DD (pharmacists only)',
+    q20: '20. Please rate your current knowledge of schizophrenia and the use of LAI antipsychotic therapy',
+    q21: '21. How did you hear about this event?',
+    q22: '22. Certificate / CPE Monitor acknowledgement'
+  };
+const nameOf=p=>p?.full_name||[p?.first_name,p?.last_name].filter(Boolean).join(' ')||'';
+const safeText=value=>{let s=String(value??'');if(/^[\s\u0000-\u001f]*[=+@\-]/.test(s))s="'"+s;return '"'+s.replaceAll('"','""')+'"';};
+const labelOf=(item,value)=>{
+  const options=Array.isArray(item?.options)?item.options:[];
+  const matched=options.find(o=>String(o.value??o.id??'')===String(value??''));
+  return matched?.text??matched?.label??value??'';
+};
+const flatValue=v=>typeof v==='object'&&v!==null?JSON.stringify(v):v??'';
+async function download(){
+  const client=window.rwceSupabase;
+  if(!client){status('Supabase is not configured.',true);return}
+  const {data:auth,error:authError}=await client.auth.getUser();
+  if(authError||!auth?.user){status('Sign into the LMS before exporting.',true);return}
+  const {data:me,error:roleError}=await client.from('profiles').select('role').eq('id',auth.user.id).single();
+  if(roleError||!['admin','manager'].includes(String(me?.role||'').toLowerCase())){status('Administrator or manager access is required to export learner details.',true);return}
+  status('Loading complete questions and injection records from Supabase…');
+  try{
+    const [a,e,p]=await Promise.all([
+      client.from('assessment_attempts').select('*').order('created_at',{ascending:false}).limit(5000),
+      client.from('cme_evaluations').select('*').order('completed_at',{ascending:false}).limit(5000),
+      client.from('profiles').select('id,full_name,email').limit(5000)
+    ]);
+    if(a.error)throw new Error('Assessment query failed: '+a.error.message);
+    if(e.error)throw new Error('CME/CE evaluation query failed: '+e.error.message);
+    if(p.error)throw new Error('Profile query failed: '+p.error.message);
+    const assessments=a.data||[], evaluations=e.data||[], profiles=new Map((p.data||[]).map(x=>[x.id,x]));
+    const selected=get('completeReportLearner')?.value||'';
+    const textFilter=(get('completeReportSearch')?.value||'').trim().toLowerCase();
+    const userIds=new Set([...assessments.map(x=>x.user_id),...evaluations.map(x=>x.user_id)].filter(Boolean));
+    const recordsByUser=new Map();
+    for(const uid of userIds){const r={id:uid,assessments:[],evaluations:[]};recordsByUser.set(uid,r)}
+    for(const x of assessments)recordsByUser.get(x.user_id)?.assessments.push(x);
+    for(const x of evaluations)recordsByUser.get(x.user_id)?.evaluations.push(x);
+    const allowed=[...recordsByUser.values()].filter(u=>{
+      const pr=profiles.get(u.id)||{};const ev=u.evaluations[0]||{};
+      const n=nameOf(pr)||[ev.learner_first_name,ev.learner_last_name].filter(Boolean).join(' ');
+      const email=pr.email||ev.learner_email||'';
+      return (!selected||u.id===selected)&&(!textFilter||[n,email,u.id].join(' ').toLowerCase().includes(textFilter));
+    });
+    if(!allowed.length){status('No learner results match your selection.',true);return}
+    const header=['Learner Name','Email','User ID','Record Type','Course','Assessment','Attempt ID','Completed At','Score %','Correct Count','Question Count','Pre-Test %','Post-Test %','Knowledge Check %','Knowledge Gain (pp)','Question Number','Question Text','All Options','Learner Answer','Correct Answer','Correct?','Injection Field','Injection Value','Evaluation Submission ID'];
+    const rows=[header];
+    for(const u of allowed){
+      const pr=profiles.get(u.id)||{},ev=u.evaluations[0]||{};
+      const name=nameOf(pr)||[ev.learner_first_name,ev.learner_last_name].filter(Boolean).join(' '),email=pr.email||ev.learner_email||'';
+      const latest=t=>u.assessments.find(a=>a.assessment_type===t);
+      const pre=latest('pre'),post=latest('post'),knowledge=latest('knowledge_check')||latest('quiz');
+      const gain=pre&&post?Number(post.score_percent)-Number(pre.score_percent):'';
+      const metrics=[pre?.score_percent??'',post?.score_percent??'',knowledge?.score_percent??'',gain];
+      const common=(kind,course,type,id,date,score,count,total)=>[name,email,u.id,kind,course??'',type??'',id??'',date??'',score??'',count??'',total??'',...metrics];
+      rows.push([...common('Learner Summary','','','','','',''),...Array(9).fill('')]);
+      for(const a of u.assessments){
+        const details=Array.isArray(a.question_details)?a.question_details:[];
+        const count=Math.max(details.length,Number(a.question_count)||0);
+        const prefix=common('Assessment',a.course_key,a.assessment_type,a.id,a.created_at,a.score_percent,a.correct_count,a.question_count);
+        for(let i=0;i<count;i++){
+          const d=details[i]||{},sel=d.selected_text??labelOf(d,d.selected_value??a.answers?.[i]),correct=d.correct_text??labelOf(d,d.correct_value);
+          const options=(Array.isArray(d.options)?d.options:[]).map(o=>`${o.value??o.id??''}: ${o.text??o.label??''}`).join(' | ');
+          rows.push([...prefix,d.number??i+1,d.question??'',options,sel,correct,d.is_correct??a.question_correct?.[i]??'','','','']);
+        }
+      }
+      for(const e of u.evaluations){
+        const prefix=common('CME/CE Evaluation','','cme_ce',e.submission_id||e.id,e.completed_at||e.created_at,'','','');
+        const responses=e.responses&&typeof e.responses==='object'?e.responses:{};
+        const labels=RWCE_CME_QUESTION_LABELS;
+        for(let i=1;i<=22;i++){
+          const k='q'+i,answer=flatValue(responses[k]);
+          rows.push([...prefix,i,labels[k]||('CME/CE evaluation question '+i),'',answer,'','','','',e.submission_id||e.id]);
+        }
+        const sim=e.simulation&&typeof e.simulation==='object'?e.simulation:{};
+        for(const [key,value] of Object.entries(sim)){
+          rows.push([...common('Injection Simulation','','simulation',e.submission_id||e.id,e.completed_at||e.created_at,'','',''),'','','','','','',key,flatValue(value),e.submission_id||e.id]);
+        }
+      }
+    }
+    // Ensure the same number of cells as the CSV header on every row.
+    const formatted=rows.map(row=>{if(row.length!==header.length){console.warn('CSV row length adjustment',row.length,header.length);return row.slice(0,header.length).concat(Array(Math.max(0,header.length-row.length)).fill(''))}return row});
+    const blob=new Blob(['\ufeff',formatted.map(row=>row.map(safeText).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});
+    const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;
+    link.download='RWCE_All_Learner_Questions_Assessments_Injection_'+new Date().toISOString().slice(0,10)+'.csv';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);
+    status(`Exported ${formatted.length-1} rows for ${allowed.length} learner(s): pre/post-tests, knowledge checks, CME/CE questions, and injection simulation. ${assessments.length>=5000||evaluations.length>=5000?'WARNING: 5000-record query limit reached; export may be incomplete.':''}`);
+  }catch(err){console.error('Complete CSV export failed',err);status('CSV export failed: '+(err?.message||String(err)),true)}
+}
+window.rwceExportEveryQuestionCSV=download;
+})();
+</script>
 </body>
 </html>
