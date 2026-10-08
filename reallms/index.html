@@ -4485,6 +4485,14 @@ body.rw110-theme::before {
 </table>
 </div>
 
+<section id="rwceAssessmentReports" class="cme-report-panel mt-6" aria-label="Assessment reporting">
+ <div class="cme-report-head"><div><div class="text-xs font-black uppercase tracking-widest text-blue-700">Learning Outcomes</div><h3 class="mt-1 text-xl font-black text-medicalBlue">Individual Test &amp; Quiz Results</h3><p class="text-sm text-slate-500">Pre-tests, post-tests, and knowledge checks by learner. Includes score change and individual answer-level detail.</p></div>
+ <div class="cme-report-actions"><button type="button" class="cme-report-button" id="assessmentRefresh">Refresh Results</button><button type="button" class="cme-report-button primary" id="assessmentExport">Export CSV</button></div></div>
+ <div class="cme-report-filters"><label><span>Search learner or email</span><input id="assessmentSearch" type="search" placeholder="Name, email, or assessment"></label><label><span>Start date</span><input id="assessmentStart" type="date"></label><label><span>End date</span><input id="assessmentEnd" type="date"></label><button type="button" class="cme-report-button" id="assessmentClear">Clear</button></div>
+ <div id="assessmentReportStatus" class="text-xs font-semibold text-slate-600 mt-3" role="status">Select Refresh Results to load assessment data.</div>
+ <div class="admin-table-wrap mt-4"><table class="admin-table"><thead><tr><th>Learner</th><th>Course / Type</th><th>Pre-test</th><th>Post-test</th><th>Gain (pp)</th><th>Other quiz</th><th>Completed</th><th>Actions</th></tr></thead><tbody id="assessmentReportRows"><tr><td colspan="8">No assessment records loaded.</td></tr></tbody></table></div>
+ <div id="assessmentDetail" class="mt-4 hidden rounded-xl border border-blue-100 bg-slate-50 p-4 text-sm"></div>
+</section>
 <div class="mt-6 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-semibold leading-relaxed text-blue-900">
   Live Event evaluation responses are available in the dedicated <strong>Live Event Reports</strong> tab.
 </div>
@@ -7451,6 +7459,8 @@ body.rw110-theme::before {
 .cme-report-filters input{width:100%;min-height:2.7rem;border:1px solid #d8e3ee;border-radius:.85rem;background:#fff;padding:.62rem .75rem;font-size:.86rem;font-weight:700;color:#0f2746;outline:none}
 .cme-report-filters input:focus{border-color:#60a5fa;box-shadow:0 0 0 3px rgba(59,130,246,.10)}
 .cme-detail-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(7,17,29,.72);backdrop-filter:blur(10px)}
+.cme-detail-modal[hidden],.cme-detail-modal:not(.active){display:none !important}
+body:not([data-rwce-role="admin"]):not([data-rwce-role="manager"]) .cme-detail-modal{display:none !important}
 .cme-detail-modal.active{display:flex}
 .cme-detail-card{width:min(900px,96vw);max-height:92vh;overflow:auto;border-radius:1.5rem;background:#f8fbfe;border:1px solid rgba(255,255,255,.72);box-shadow:0 32px 100px rgba(2,8,23,.38)}
 .cme-detail-head{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;gap:1rem;padding:1.1rem 1.2rem;background:rgba(255,255,255,.96);border-bottom:1px solid #e2e8f0;backdrop-filter:blur(12px)}
@@ -7476,7 +7486,7 @@ body.rw110-theme::before {
   <p>${safeDescription}</p>
   <div class="player"><video controls controlsList="nodownload" playsinline preload="metadata"${posterAttribute}><source src="${safeVideoUrl}"/>Your browser does not support this video.</video></div>
 </main>
-</body>
+
 </html>`;
     }
 
@@ -7834,7 +7844,8 @@ body.rw110-theme::before {
     document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
   }else document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'));
 })();
-</script><div id="cmeEvaluationDetailModal" class="cme-detail-modal" aria-hidden="true">
+</script><template id="cmeEvaluationDetailTemplate">
+<div id="cmeEvaluationDetailModal" class="cme-detail-modal" aria-hidden="true" hidden data-min-role="manager">
   <div class="cme-detail-card" role="dialog" aria-modal="true" aria-labelledby="cmeDetailTitle">
     <div class="cme-detail-head">
       <div>
@@ -7847,6 +7858,7 @@ body.rw110-theme::before {
     <div id="cmeEvaluationDetailBody" class="cme-detail-body"></div>
   </div>
 </div>
+</template>
 <script id="rwce-live-event-cme-reports">
 (() => {
   const CME_ACTIVITY_ID = 'lai-injection-live-event';
@@ -7857,26 +7869,26 @@ body.rw110-theme::before {
     learner_first_name: 'First Name',
     learner_last_name: 'Last Name',
     learner_email: 'Email Address',
-    q1: '1. How relevant was the content of this activity to your professional practice?',
+    q1: '1. How relevant was the content on schizophrenia and long-acting injectable (LAI) antipsychotic therapy to your professional practice?',
     q2: '2. How effective were the organization, format, and presentation of the activity in supporting your learning?',
     q3: '3. How effective was the faculty member or presenter in teaching the content?',
-    q4: '4. How well did this activity meet your expectations and learning needs?',
-    q5: '5. How well did this activity help you achieve the stated learning objectives?',
-    q6: '6. How well did this activity support your professional growth by enhancing your knowledge, strengthening your competence, and improving your ability to apply what you learned in practice?',
-    q7: '7. How would you rate your confidence in applying what you learned from this activity to your professional practice?',
-    q8: '8. How useful were the skills and concepts presented in this activity to your professional practice or work responsibilities?',
-    q9: '9. How useful were the ideas, tools, resources, or strategies provided in this activity?',
-    q10: '10. What barriers may affect your ability to apply what you learned from this activity?',
+    q4: '4. How well did this schizophrenia and LAI injection training activity meet your expectations and learning needs?',
+    q5: '5. How well did this activity help you achieve the stated learning objectives related to schizophrenia and LAI preparation and administration?',
+    q6: '6. How well did this activity strengthen your knowledge and competence in caring for patients with schizophrenia who receive LAI antipsychotic therapy?',
+    q7: '7. How would you rate your confidence in applying what you learned about LAI antipsychotic preparation and administration for patients with schizophrenia?',
+    q8: '8. How useful were the schizophrenia and LAI injection skills and concepts presented in this activity to your professional practice or work responsibilities?',
+    q9: '9. How useful were the ideas, tools, resources, or strategies provided for supporting LAI antipsychotic treatment in schizophrenia?',
+    q10: '10. What barriers may affect your ability to apply what you learned about schizophrenia and LAI antipsychotic therapy?',
     q11: '11. Overall quality of this educational activity (1–5)',
-    q12: '12. Participation time in minutes',
-    q13: '13. Changes you will make in practice within the next 30 days',
-    q14: '14. Expected patient outcome improvement',
+    q12: '12. How long did you participate in this live event activity? Please enter your answer in minutes.',
+    q13: '13. Changes you will make in the care of patients with schizophrenia receiving LAI antipsychotic therapy within the next 30 days',
+    q14: '14. Expected outcome improvement for patients with schizophrenia',
     q15: '15. Was this activity free of commercial bias?',
     q16: '16. Description of perceived bias',
-    q17: '17. Most important thing learned',
+    q17: '17. Most important thing learned about schizophrenia and LAI antipsychotic preparation or administration',
     q18: '18. NABP e-Profile ID (pharmacists only)',
     q19: '19. Date of birth MM/DD (pharmacists only)',
-    q20: '20. Current knowledge rating',
+    q20: '20. Please rate your current knowledge of schizophrenia and the use of LAI antipsychotic therapy',
     q21: '21. How did you hear about this event?',
     q22: '22. Certificate / CPE Monitor acknowledgement'
   };
@@ -8052,7 +8064,27 @@ body.rw110-theme::before {
     return (rwceAdminPortalData.evaluations || []).find(item => String(item.id || item.submission_id || '') === String(id || ''));
   }
 
+  // Keep administrative learner data out of the document until an authorized
+  // administrator or manager intentionally opens a report.
+  function ensureCMEEvaluationDetailModal() {
+    const role = document.body.dataset.rwceRole;
+    if (role !== 'admin' && role !== 'manager') return null;
+    let modal = document.getElementById('cmeEvaluationDetailModal');
+    if (modal) return modal;
+    const template = document.getElementById('cmeEvaluationDetailTemplate');
+    if (!template) return null;
+    document.body.appendChild(template.content.cloneNode(true));
+    modal = document.getElementById('cmeEvaluationDetailModal');
+    modal?.querySelector('#closeCmeEvaluationDetailBtn')?.addEventListener('click', closeCMEEvaluationDetail);
+    modal?.addEventListener('click', event => {
+      if (event.target === modal) closeCMEEvaluationDetail();
+    });
+    return modal;
+  }
+
   window.openCMEEvaluationDetail = function openCMEEvaluationDetail(id) {
+    const viewerRole = document.body.dataset.rwceRole;
+    if (viewerRole !== "admin" && viewerRole !== "manager") return;
     const item = findCMEEvaluation(id);
     if (!item) return;
     const responses = item.responses || {};
@@ -8064,7 +8096,7 @@ body.rw110-theme::before {
     const accountLabel = accountType === 'live_event' ? 'Live Event' : accountType === 'webinar' ? 'Webinar' : 'Learner';
     const role = normalizePortalRole(profile.role || 'learner');
 
-    const modal = document.getElementById('cmeEvaluationDetailModal');
+    const modal = ensureCMEEvaluationDetailModal();
     const title = document.getElementById('cmeDetailTitle');
     const subtitle = document.getElementById('cmeDetailSubtitle');
     const body = document.getElementById('cmeEvaluationDetailBody');
@@ -8119,6 +8151,7 @@ body.rw110-theme::before {
       <div class="cme-detail-section-title">Injection Trainer Summary</div>
       <div class="cme-detail-grid">${simulationRows}</div>
     `;
+    modal.hidden = false;
     modal.classList.add('active');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -8128,6 +8161,7 @@ body.rw110-theme::before {
     const modal = document.getElementById('cmeEvaluationDetailModal');
     if (!modal) return;
     modal.classList.remove('active');
+    modal.hidden = true;
     modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
   }
@@ -8264,10 +8298,81 @@ body.rw110-theme::before {
     document.getElementById('refreshCmeEvaluationReportsBtn')?.addEventListener('click', refreshCMEReports);
     document.getElementById('exportCmeEvaluationReportsBtn')?.addEventListener('click', exportCMEEvaluationReports);
     document.getElementById('printCmeEvaluationReportsBtn')?.addEventListener('click', printCMEEvaluationReports);
-    document.getElementById('closeCmeEvaluationDetailBtn')?.addEventListener('click', closeCMEEvaluationDetail);
-    document.getElementById('cmeEvaluationDetailModal')?.addEventListener('click', event => { if (event.target?.id === 'cmeEvaluationDetailModal') closeCMEEvaluationDetail(); });
   });
 })();
 </script>
+<style id="rwce-assessment-report-css">#rwceAssessmentReports{border:1px solid #dbe4ee;border-radius:20px;padding:20px;background:#fff}#rwceAssessmentReports button{cursor:pointer}#rwceAssessmentReports .cme-report-filters{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:10px;align-items:end;margin-top:16px}#rwceAssessmentReports .cme-report-filters label span{display:block;font-size:11px;font-weight:800;color:#64748b}#rwceAssessmentReports input{width:100%;border:1px solid #cbd5e1;border-radius:9px;padding:9px;color:#0f172a}#rwceAssessmentReports .cme-report-button{border:1px solid #cbd5e1;border-radius:9px;padding:9px 12px;background:white;font-weight:800}#rwceAssessmentReports .cme-report-button.primary{color:white;background:#2563eb}#rwceAssessmentReports .admin-table-wrap{overflow:auto}#rwceAssessmentReports table{min-width:850px}@media(max-width:750px){#rwceAssessmentReports .cme-report-filters{grid-template-columns:1fr 1fr}#rwceAssessmentReports .cme-report-filters label:first-child{grid-column:span 2}}</style>
+<script id="rwce-assessment-database-integration">
+(()=>{'use strict';
+ const COURSE='lai-injection-trainer';
+ let records=[],profiles=[];
+ const $=id=>document.getElementById(id);
+ const status=(msg,error=false)=>{if($('assessmentReportStatus')){$('assessmentReportStatus').textContent=msg;$('assessmentReportStatus').style.color=error?'#b91c1c':'#475569'}};
+ const client=()=>window.rwceSupabase||null;
+ const safe=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const num=x=>Number.isFinite(Number(x))?Number(x):null;
+ const date=x=>x?new Date(x).toLocaleString():'—';
+ function trustedModuleEvent(e){
+   const frame=$('moduleFrame');
+   if(!frame||e.source!==frame.contentWindow)return false;
+   // Verify message sender origin is the same as the currently opened module iframe URL.
+   try{const u=new URL(frame.src,location.href);if(u.protocol==='https:'||u.protocol==='http:')return e.origin===u.origin;
+     return u.protocol==='blob:'&&e.origin===location.origin;
+   }catch{return false}
+ }
+ async function persist(e){
+   if(!trustedModuleEvent(e)){console.warn('LAI assessment ignored: submission did not come from the currently embedded LMS module. Open the LAI trainer from within the LMS module viewer, not a separate tab.');return;}
+   const m=e.data,p=m.payload||{},phase=m.phase;
+   if(!['pre','post','knowledge_check','quiz'].includes(phase))return;
+   const fail=message=>{console.error('LAI assessment: '+message);try{e.source?.postMessage({type:'rwce-assessment-storage',ok:false,phase,message},e.origin)}catch{}};
+   if(!client()){fail('LMS Supabase session is not configured');return}
+   const {data:auth,error:authError}=await client().auth.getUser();
+   const user=auth?.user;
+   if(authError||!user){fail('Sign in to the LMS before submitting the assessment');return}
+   const total=Number(p.question_count),correct=Number(p.correct),score=Number(p.score);
+   if(!Number.isInteger(total)||total<1||total>100||!Number.isInteger(correct)||correct<0||correct>total||!Number.isFinite(score)||score<0||score>100){fail('Invalid assessment score payload');return;}
+   const responses=Array.isArray(p.answers)?p.answers.slice(0,100):[];
+   const correctness=Array.isArray(p.question_correct)?p.question_correct.slice(0,100):[];
+   if(responses.length!==total||correctness.length!==total||!Array.isArray(p.question_details)||p.question_details.length!==total){fail('Assessment response detail incomplete');return;}
+   // The user_id comes ONLY from Supabase auth, not the embedded trainer message.
+   const rec={user_id:user.id,course_key:COURSE,assessment_type:phase,assessment_title:String(p.assessment||'LAI injection trainer').slice(0,180),correct_count:correct,question_count:total,score_percent:score,passed:typeof p.passed==='boolean'?p.passed:(phase==='post'?score>=80:null),answers:responses,question_correct:correctness,question_details:Array.isArray(p.question_details)?p.question_details.slice(0,total):[],client_submitted_at:p.submitted_at||new Date().toISOString()};
+   const {data:inserted,error}=await client().from('assessment_attempts').insert(rec).select('id,assessment_type').single();
+   if(error){
+     let explanation=error.message||'Unknown database error';
+     if(error.code==='PGRST204'||/question_details|schema cache/i.test(explanation)) explanation+=' — Check whether the question_details JSONB column was added in Supabase.';
+     if(error.code==='42501'||/row.level.security|permission denied/i.test(explanation)) explanation+=' — Check the signed-in user session and the assessment_attempts INSERT policy.';
+     fail('Database save failed: '+explanation);return
+   }
+   if(!inserted?.id){fail('Database did not return a confirmed assessment record');return}
+   try{e.source?.postMessage({type:'rwce-assessment-storage',ok:true,phase,record_id:inserted.id,message:'Saved to LMS database'},e.origin)}catch{}
+ }
+ window.addEventListener('message',e=>{if(e.data?.type==='rwce-lai-assessment')persist(e)});
+ async function load(){
+  const supa=client();if(!supa){status('Supabase connection unavailable.',true);return}
+  status('Loading saved assessments…');
+  const {data:user}=await supa.auth.getUser();if(!user?.user){status('Sign in to view results.',true);return}
+  const {data:myProfile}=await supa.from('profiles').select('role').eq('id',user.user.id).single();
+  if(!['admin','manager'].includes(String(myProfile?.role||'').toLowerCase())){status('Reports are restricted to admins and managers.',true);return}
+  const [a,u]=await Promise.all([supa.from('assessment_attempts').select('*').order('created_at',{ascending:false}).limit(5000),supa.from('profiles').select('id,full_name,email').limit(1000)]);
+  if(a.error){status('Cannot load assessments: '+a.error.message+'. Apply the assessment SQL migration and verify row-level security.',true);return}
+  records=a.data||[];profiles=u.data||[];status(records.length ? `${records.length} assessment attempts loaded. Use filters or export results.` : 'No assessment records are stored yet. Open the trainer inside this LMS, submit a NEW pre-test, verify its green database-save confirmation, then refresh. Missing question_details column or RLS errors will appear in the trainer status.');render();
+ }
+ function viewRows(){const q=($('assessmentSearch')?.value||'').trim().toLowerCase(),a=$('assessmentStart')?.value||'',b=$('assessmentEnd')?.value||'';
+  return records.filter(r=>{const p=profiles.find(u=>u.id===r.user_id)||{};const hay=[p.full_name,p.email,r.assessment_type,r.assessment_title,r.course_key].join(' ').toLowerCase();const d=(r.created_at||'').slice(0,10);return (!q||hay.includes(q))&&(!a||d>=a)&&(!b||d<=b)})}
+ function summarize(rows){const groups=new Map();for(const r of rows){const k=r.user_id+'|'+r.course_key;let g=groups.get(k);if(!g){g={user_id:r.user_id,course:r.course_key,attempts:[]};groups.set(k,g)}g.attempts.push(r)}return [...groups.values()]}
+ function latest(g,type){return g.attempts.find(r=>r.assessment_type===type)}
+ function render(){const tb=$('assessmentReportRows');if(!tb)return;const groups=summarize(viewRows());tb.innerHTML=groups.length?groups.map((g,i)=>{const p=profiles.find(x=>x.id===g.user_id)||{},pre=latest(g,'pre'),post=latest(g,'post'),other=latest(g,'knowledge_check')||latest(g,'quiz');const delta=pre&&post?Math.round((post.score_percent-pre.score_percent)*10)/10:null;
+ return `<tr><td>${safe(p.full_name||'Learner')}<div class="text-xs">${safe(p.email||g.user_id)}</div></td><td>${safe(g.course)}<div class="text-xs">${g.attempts.length} attempt(s)</div></td><td>${pre?pre.score_percent+'%':'—'}</td><td>${post?post.score_percent+'%':'—'}</td><td>${delta===null?'—':(delta>0?'+':'')+delta+' pp'}</td><td>${other?other.score_percent+'%':'—'}</td><td>${date(g.attempts[0]?.created_at)}</td><td><button type="button" class="cme-report-button" data-assessment-group="${i}">View answers</button></td></tr>`}).join(''):'<tr><td colspan="8">No matching assessment records.</td></tr>';
+ tb.querySelectorAll('[data-assessment-group]').forEach(btn=>btn.addEventListener('click',()=>details(groups[Number(btn.dataset.assessmentGroup)])));
+ }
+ function details(g){const p=profiles.find(x=>x.id===g.user_id)||{};const el=$('assessmentDetail');if(!el)return;el.classList.remove('hidden');el.innerHTML=`<strong>${safe(p.full_name||p.email||g.user_id)} — ${safe(g.course)}</strong>`+g.attempts.map(r=>`<div class="mt-3 border-t pt-3"><strong>${safe(r.assessment_type.replaceAll('_',' '))}: ${r.score_percent}% (${r.correct_count}/${r.question_count})</strong> <span class="text-xs">${date(r.created_at)} · Attempt ${safe(r.id)}</span>${(r.question_details||[]).map((d,i)=>`<div style="margin-top:10px;padding:10px;border:1px solid #e2e8f0;border-radius:10px"><div><strong>Question ${i+1}:</strong> ${safe(d.question||'Question wording unavailable for legacy attempt')}</div><div class="text-sm">Learner answer: ${safe((d.selected_text || d.selected_value || 'No answer'))}</div><div class="text-sm">Correct answer: ${safe((d.correct_text || d.correct_value || 'Unavailable'))}</div><div class="text-xs" style="color:${d.is_correct?'#047857':'#b91c1c'}">${d.is_correct?'Correct':'Incorrect'}</div></div>`).join('')||'<div class="text-xs">Legacy result: full question details were not captured.</div>'}</div>`).join('');el.scrollIntoView({behavior:'smooth',block:'nearest'})}
+
+ function csv(){const header=['Name','Email','User ID','Course','Assessment','Attempt ID','Correct','Questions','Score %','Passed','Recorded At','Question Number','Question Text','Selected Answer','Correct Answer','Correct?'];const lines=[header];for(const r of viewRows()){const p=profiles.find(x=>x.id===r.user_id)||{};for(let i=0;i<r.question_count;i++){const d=r.question_details?.[i]||{};lines.push([p.full_name||'',p.email||'',r.user_id,r.course_key,r.assessment_type,r.id,r.correct_count,r.question_count,r.score_percent,r.passed??'',r.created_at,i+1,d.question||'',(d.selected_text ?? r.answers?.[i] ?? ''),d.correct_text??'',r.question_correct?.[i]??''])}}
+ const body=lines.map(row=>row.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\r\n');const url=URL.createObjectURL(new Blob([body],{type:'text/csv;charset=utf-8;'}));const a=document.createElement('a');a.href=url;a.download='RWCE_Full_Question_Results_'+new Date().toISOString().slice(0,10)+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+
+ document.addEventListener('DOMContentLoaded',()=>{$('assessmentRefresh')?.addEventListener('click',load);$('assessmentExport')?.addEventListener('click',csv);['assessmentSearch','assessmentStart','assessmentEnd'].forEach(id=>{$(id)?.addEventListener('input',render);$(id)?.addEventListener('change',render)});$('assessmentClear')?.addEventListener('click',()=>{['assessmentSearch','assessmentStart','assessmentEnd'].forEach(id=>{if($(id))$(id).value=''});render()})});
+})();
+</script>
+
 </body>
 </html>
