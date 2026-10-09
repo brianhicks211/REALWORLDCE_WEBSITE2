@@ -4379,7 +4379,7 @@ body.rw110-theme::before {
 </div>
 </section>
 <div class="mt-7">
-<div class="text-xs font-black uppercase tracking-[0.16em] text-blue-700">Available Live Event</div>
+<div class="text-xs font-black uppercase tracking-[0.16em] text-blue-700">My Registered Live Events</div>
 <h2 class="mt-1 text-2xl sm:text-3xl font-black tracking-tight text-medicalBlue">Clinical simulation</h2>
 </div>
 <article class="live-event-card mt-5">
@@ -4398,7 +4398,7 @@ body.rw110-theme::before {
 </div>
 <div class="live-event-card__actions">
 <a class="tracked-link live-event-launch" data-view-key="rwce-lai-injection-live-event" href="https://realworldce.github.io/Test_LAI_Trainer/"><span class="material-symbols-outlined">play_arrow</span>Live LAI Injection Trainer</a>
-<div class="live-event-access-note"><span class="material-symbols-outlined">lock_open</span>Available to Live Event accounts</div>
+<div class="live-event-access-note"><span class="material-symbols-outlined">verified</span>Saved to your account — available when you sign in again</div>
 </div>
 </article>
 </div>
@@ -5282,6 +5282,27 @@ body.rw110-theme::before {
       return 'learner';
     }
 
+    // The database stores some Live Event accounts with account_type="learner"
+    // (to satisfy existing account-type constraints). Keep the event entitlement
+    // from durable Supabase Auth metadata / registration_source across sign-outs.
+    // Do not rely on localStorage; logging out intentionally clears it.
+    function resolvePersistentPortalDestination(profile, authUser = null) {
+      const metadata = authUser?.user_metadata || {};
+      const role = normalizePortalRole(profile?.role || metadata.role || 'learner');
+      if (role !== 'learner') return normalizeAccountType(profile?.account_type, role);
+
+      const source = String(profile?.registration_source || metadata.registration_source || '')
+        .trim().toLowerCase().replace(/[\s-]+/g, '_');
+      const databaseType = normalizeAccountType(profile?.portal_destination || profile?.account_type, role);
+      const savedAuthType = normalizeAccountType(metadata.portal_destination || metadata.account_type, role);
+
+      // Registration entitlement wins over the generic learner profile value.
+      if (databaseType === 'live_event' || savedAuthType === 'live_event' ||
+          /(?:^|_)live_event(?:_|$)/.test(source)) return 'live_event';
+      if (databaseType === 'webinar' || savedAuthType === 'webinar') return 'webinar';
+      return 'learner';
+    }
+
     function profileUsesAssignedModules(profile) {
       const role = normalizePortalRole(profile?.role);
       const accountType = normalizeAccountType(profile?.account_type, role);
@@ -5677,7 +5698,8 @@ body.rw110-theme::before {
           ...buildProfileFromAuthUser(data.user),
           ...profile,
           role: 'learner',
-          account_type: normalizedType
+          account_type: normalizedType,
+          portal_destination: normalizedType
         },
         confirmationRequired: false,
         message: ''
@@ -5940,10 +5962,13 @@ body.rw110-theme::before {
       }
 
       const loginRecord = await recordSuccessfulPortalLogin();
+      const persistedDestination = resolvePersistentPortalDestination(profile, authData.user);
       const trackedProfile = {
         ...buildProfileFromAuthUser(authData.user),
         ...profile,
         role: normalizePortalRole(profile.role),
+        account_type: persistedDestination,
+        portal_destination: persistedDestination,
         login_count: Number(loginRecord?.login_count ?? profile.login_count ?? 0),
         last_login_at: loginRecord?.last_login_at ?? profile.last_login_at ?? null
       };
@@ -6002,7 +6027,14 @@ body.rw110-theme::before {
         return false;
       }
 
-      await activatePortalForProfile({ ...buildProfileFromAuthUser(data.session.user), ...profile, role: normalizePortalRole(profile.role) });
+      const persistedDestination = resolvePersistentPortalDestination(profile, data.session.user);
+      await activatePortalForProfile({
+        ...buildProfileFromAuthUser(data.session.user),
+        ...profile,
+        role: normalizePortalRole(profile.role),
+        account_type: persistedDestination,
+        portal_destination: persistedDestination
+      });
       return true;
     }
 
@@ -6102,7 +6134,7 @@ body.rw110-theme::before {
         if (note) note.textContent = type === 'webinar'
           ? 'Webinar accounts open a webinar-only video library and do not display learning modules.'
           : type === 'live_event'
-            ? 'Live Event accounts open the interactive LAI injection training experience.'
+            ? 'Your LAI Injection Trainer registration is saved to your account and will be available whenever you sign in.'
             : 'Learner accounts start with a blank learning screen until a manager assigns modules.';
       };
       signupAccountType?.addEventListener('change', () => {
