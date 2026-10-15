@@ -3845,6 +3845,23 @@ body.rw110-theme::before {
 }
 </style>
 
+
+<style id="rwce-compact-mobile-module-viewer">
+@media(max-width:768px){
+  #moduleViewer{min-height:100dvh!important;overflow:hidden!important;background:#fff!important}
+  #moduleViewer #rwceViewerToolbar{position:relative!important;top:auto!important;padding:0!important;box-shadow:none!important}
+  #moduleViewer #rwceViewerToolbar>.max-w-7xl{display:grid!important;grid-template-columns:44px minmax(0,1fr) 44px!important;gap:6px!important;align-items:center!important;padding:6px 8px!important}
+  #moduleViewer #rwceViewerToolbar>.max-w-7xl>div:last-child{display:contents!important}
+  #moduleViewer #moduleBackBtn,#moduleViewer #moduleNewTabLink{display:flex!important;align-items:center!important;justify-content:center!important;width:44px!important;min-width:44px!important;height:44px!important;min-height:44px!important;max-height:44px!important;padding:4px!important;margin:0!important;border-radius:10px!important;font-size:0!important;overflow:hidden!important}
+  #moduleViewer #moduleBackBtn .material-symbols-outlined,#moduleViewer #moduleNewTabLink .material-symbols-outlined{font-size:24px!important;line-height:1!important;display:inline-flex!important}
+  #moduleViewer #rwceViewerToolbar>.max-w-7xl>div:nth-child(2){min-width:0!important;text-align:center!important;overflow:hidden!important}
+  #moduleViewer #rwceViewerToolbar .text-\[10px\]{display:none!important}
+  #moduleViewer #moduleViewerTitle{font-size:12px!important;line-height:1.2!important;font-weight:850!important;display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;overflow:hidden!important;word-break:normal!important}
+  #moduleViewer #rwceViewerToolbar .rwce-logout-button{display:none!important}
+  #moduleViewer .module-viewer-frame{display:block!important;border:0!important;border-radius:0!important;width:100%!important;max-width:100%!important;min-height:0!important;height:calc(100dvh - 58px)!important;box-shadow:none!important}
+  #moduleViewer>.fixed.bottom-3{display:none!important}
+}
+</style>
 </head>
 <body class="text-slate-800 min-h-screen rwce-auth-locked rw110-theme">
 <div class="fixed inset-0 z-[100] flex items-center justify-center bg-[#07111d] transition-opacity duration-700" id="splash">
@@ -4774,9 +4791,9 @@ body.rw110-theme::before {
 </div>
 </div>
 <section aria-hidden="true" aria-live="polite" class="hidden min-h-screen bg-slate-50" id="moduleViewer" style="display:none;">
-<div class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur-xl">
+<div id="rwceViewerToolbar" class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur-xl">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-<button class="inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-xl bg-medicalBlue px-4 py-2.5 text-sm font-black text-white shadow-soft hover:bg-slate-800 transition" id="moduleBackBtn" type="button">
+<button class="inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-xl bg-medicalBlue px-4 py-2.5 text-sm font-black text-white shadow-soft hover:bg-slate-800 transition" id="moduleBackBtn" type="button" aria-label="Return to LMS main menu">
 <span class="material-symbols-outlined text-[18px]">arrow_back</span>
         Main menu
       </button>
@@ -4785,7 +4802,7 @@ body.rw110-theme::before {
 <div class="truncate text-sm sm:text-base font-black text-medicalBlue" id="moduleViewerTitle">Real World CE Module</div>
 </div>
 <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center sm:justify-end">
-<a class="inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-blue-300 hover:text-blue-700 transition" href="#" id="moduleNewTabLink" rel="noopener noreferrer" target="_blank">
+<a class="inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-blue-300 hover:text-blue-700 transition" href="#" id="moduleNewTabLink" aria-label="Open module in a separate browser tab" rel="noopener noreferrer" target="_blank">
 <span class="material-symbols-outlined text-[18px]">open_in_new</span>
         Open in New Tab
       </a>
@@ -8747,5 +8764,29 @@ window.rwceExportEveryQuestionCSV=download;
 })();
 </script>
 
+
+<script id="rwce-mobile-viewer-height">
+(function(){
+  function fit(){
+    const viewer=document.getElementById('moduleViewer');
+    const frame=document.getElementById('moduleFrame');
+    const toolbar=document.getElementById('rwceViewerToolbar');
+    if(!viewer||!frame||!toolbar)return;
+    if(window.innerWidth>768){frame.style.removeProperty('height');return;}
+    const h=Math.ceil(toolbar.getBoundingClientRect().height)||58;
+    // actual viewport sizing (including on Samsung and iOS browser-chrome changes)
+    const vh=window.visualViewport?.height || window.innerHeight;
+    frame.style.setProperty('height', Math.max(320,Math.round(vh-h))+'px','important');
+  }
+  window.addEventListener('resize',fit);
+  window.visualViewport?.addEventListener('resize',fit);
+  window.addEventListener('orientationchange',()=>setTimeout(fit,150));
+  document.addEventListener('DOMContentLoaded',fit);
+  new MutationObserver(()=>{if(document.getElementById('moduleViewer')?.style.display!=='none')fit()}).observe(document.body,{subtree:false,attributes:false,childList:true});
+  const viewer=document.getElementById('moduleViewer');
+  if(viewer)new MutationObserver(fit).observe(viewer,{attributes:true,attributeFilter:['style','class']});
+  fit();
+})();
+</script>
 </body>
 </html>
