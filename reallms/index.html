@@ -4379,7 +4379,7 @@ body.rw110-theme::before {
 </div>
 </section>
 <div class="mt-7">
-<div class="text-xs font-black uppercase tracking-[0.16em] text-blue-700">My Registered Live Events</div>
+<div class="text-xs font-black uppercase tracking-[0.16em] text-blue-700">Available Live Event</div>
 <h2 class="mt-1 text-2xl sm:text-3xl font-black tracking-tight text-medicalBlue">Clinical simulation</h2>
 </div>
 <article class="live-event-card mt-5">
@@ -4398,7 +4398,7 @@ body.rw110-theme::before {
 </div>
 <div class="live-event-card__actions">
 <a class="tracked-link live-event-launch" data-view-key="rwce-lai-injection-live-event" href="https://realworldce.github.io/Test_LAI_Trainer/"><span class="material-symbols-outlined">play_arrow</span>Live LAI Injection Trainer</a>
-<div class="live-event-access-note"><span class="material-symbols-outlined">verified</span>Saved to your account — available when you sign in again</div>
+<div class="live-event-access-note"><span class="material-symbols-outlined">lock_open</span>Available to Live Event accounts</div>
 </div>
 </article>
 </div>
@@ -4497,6 +4497,18 @@ body.rw110-theme::before {
  <div class="mt-3 flex flex-wrap gap-3 items-end"><label class="text-sm font-semibold">Learner <select id="completeReportLearner" class="block mt-1 border rounded-lg p-2 bg-white"><option value="">All learners</option></select></label><label class="text-sm font-semibold">Search <input id="completeReportSearch" class="block mt-1 border rounded-lg p-2" placeholder="Name or email"></label></div>
  <div id="completeReportStatus" role="status" class="text-sm text-slate-600 mt-3">Select Load Complete Report.</div><div id="completeReportList" class="mt-4 space-y-4"></div>
 </div>
+<section id="rwceInjectionReports" class="mt-6 rounded-2xl border border-blue-200 bg-white p-4 sm:p-5" aria-label="Detailed LAI injection simulation results">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <div><div class="text-xs font-extrabold tracking-widest text-blue-700">REAL WORLD SIM</div>
+      <h3 class="mt-1 text-xl font-black text-slate-900">Injection Attempt Details</h3>
+      <p class="text-sm text-slate-700">Medication, site, preparation decisions, needle angle and depth, correction history, every submitted injection attempt, and learner scores.</p></div>
+    <div class="flex flex-wrap gap-2"><button type="button" id="rwceInjectionRefresh" class="rounded-lg border border-slate-300 px-4 py-2 font-bold text-slate-800">Refresh Injection Results</button><button type="button" id="rwceInjectionExport" class="rounded-lg bg-blue-700 px-4 py-2 font-bold text-white">Export Injection CSV</button></div>
+  </div>
+  <div id="rwceInjectionStatus" role="status" class="mt-3 text-sm font-semibold text-slate-700">Select Refresh Injection Results.</div>
+  <div class="mt-3 overflow-x-auto"><table class="w-full min-w-[740px] text-left text-sm"><thead><tr class="border-b border-slate-300 text-slate-800"><th class="p-2">Learner</th><th class="p-2">Completed</th><th class="p-2">Medication / Site</th><th class="p-2">Injection</th><th class="p-2">Clinical decisions</th><th class="p-2">Detail</th></tr></thead><tbody id="rwceInjectionRows"><tr><td colspan="6" class="p-3 text-slate-700">No results loaded.</td></tr></tbody></table></div>
+  <div id="rwceInjectionDetail" class="mt-4" aria-live="polite"></div>
+</section>
+
 </section>
 <div class="mt-6 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-semibold leading-relaxed text-blue-900">
   Live Event evaluation responses are available in the dedicated <strong>Live Event Reports</strong> tab.
@@ -5282,27 +5294,6 @@ body.rw110-theme::before {
       return 'learner';
     }
 
-    // The database stores some Live Event accounts with account_type="learner"
-    // (to satisfy existing account-type constraints). Keep the event entitlement
-    // from durable Supabase Auth metadata / registration_source across sign-outs.
-    // Do not rely on localStorage; logging out intentionally clears it.
-    function resolvePersistentPortalDestination(profile, authUser = null) {
-      const metadata = authUser?.user_metadata || {};
-      const role = normalizePortalRole(profile?.role || metadata.role || 'learner');
-      if (role !== 'learner') return normalizeAccountType(profile?.account_type, role);
-
-      const source = String(profile?.registration_source || metadata.registration_source || '')
-        .trim().toLowerCase().replace(/[\s-]+/g, '_');
-      const databaseType = normalizeAccountType(profile?.portal_destination || profile?.account_type, role);
-      const savedAuthType = normalizeAccountType(metadata.portal_destination || metadata.account_type, role);
-
-      // Registration entitlement wins over the generic learner profile value.
-      if (databaseType === 'live_event' || savedAuthType === 'live_event' ||
-          /(?:^|_)live_event(?:_|$)/.test(source)) return 'live_event';
-      if (databaseType === 'webinar' || savedAuthType === 'webinar') return 'webinar';
-      return 'learner';
-    }
-
     function profileUsesAssignedModules(profile) {
       const role = normalizePortalRole(profile?.role);
       const accountType = normalizeAccountType(profile?.account_type, role);
@@ -5698,8 +5689,7 @@ body.rw110-theme::before {
           ...buildProfileFromAuthUser(data.user),
           ...profile,
           role: 'learner',
-          account_type: normalizedType,
-          portal_destination: normalizedType
+          account_type: normalizedType
         },
         confirmationRequired: false,
         message: ''
@@ -5962,13 +5952,10 @@ body.rw110-theme::before {
       }
 
       const loginRecord = await recordSuccessfulPortalLogin();
-      const persistedDestination = resolvePersistentPortalDestination(profile, authData.user);
       const trackedProfile = {
         ...buildProfileFromAuthUser(authData.user),
         ...profile,
         role: normalizePortalRole(profile.role),
-        account_type: persistedDestination,
-        portal_destination: persistedDestination,
         login_count: Number(loginRecord?.login_count ?? profile.login_count ?? 0),
         last_login_at: loginRecord?.last_login_at ?? profile.last_login_at ?? null
       };
@@ -6027,14 +6014,7 @@ body.rw110-theme::before {
         return false;
       }
 
-      const persistedDestination = resolvePersistentPortalDestination(profile, data.session.user);
-      await activatePortalForProfile({
-        ...buildProfileFromAuthUser(data.session.user),
-        ...profile,
-        role: normalizePortalRole(profile.role),
-        account_type: persistedDestination,
-        portal_destination: persistedDestination
-      });
+      await activatePortalForProfile({ ...buildProfileFromAuthUser(data.session.user), ...profile, role: normalizePortalRole(profile.role) });
       return true;
     }
 
@@ -6134,7 +6114,7 @@ body.rw110-theme::before {
         if (note) note.textContent = type === 'webinar'
           ? 'Webinar accounts open a webinar-only video library and do not display learning modules.'
           : type === 'live_event'
-            ? 'Your LAI Injection Trainer registration is saved to your account and will be available whenever you sign in.'
+            ? 'Live Event accounts open the interactive LAI injection training experience.'
             : 'Learner accounts start with a blank learning screen until a manager assigns modules.';
       };
       signupAccountType?.addEventListener('change', () => {
@@ -8602,22 +8582,25 @@ async function download(){
   if(roleError||!['admin','manager'].includes(String(me?.role||'').toLowerCase())){status('Administrator or manager access is required to export learner details.',true);return}
   status('Loading complete questions and injection records from Supabase…');
   try{
-    const [a,e,p]=await Promise.all([
+    const [a,e,p,s]=await Promise.all([
       client.from('assessment_attempts').select('*').order('created_at',{ascending:false}).limit(5000),
       client.from('cme_evaluations').select('*').order('completed_at',{ascending:false}).limit(5000),
-      client.from('profiles').select('id,full_name,email').limit(5000)
+      client.from('profiles').select('id,full_name,email').limit(5000),
+      client.from('lai_simulation_attempts').select('*').order('updated_at',{ascending:false}).limit(5000)
     ]);
     if(a.error)throw new Error('Assessment query failed: '+a.error.message);
     if(e.error)throw new Error('CME/CE evaluation query failed: '+e.error.message);
     if(p.error)throw new Error('Profile query failed: '+p.error.message);
-    const assessments=a.data||[], evaluations=e.data||[], profiles=new Map((p.data||[]).map(x=>[x.id,x]));
+    if(s.error)throw new Error('Injection report query failed: '+s.error.message+'. Apply the supplied migration.');
+    const assessments=a.data||[], evaluations=e.data||[], simulations=s.data||[], profiles=new Map((p.data||[]).map(x=>[x.id,x]));
     const selected=get('completeReportLearner')?.value||'';
     const textFilter=(get('completeReportSearch')?.value||'').trim().toLowerCase();
-    const userIds=new Set([...assessments.map(x=>x.user_id),...evaluations.map(x=>x.user_id)].filter(Boolean));
+    const userIds=new Set([...assessments.map(x=>x.user_id),...evaluations.map(x=>x.user_id),...simulations.map(x=>x.user_id)].filter(Boolean));
     const recordsByUser=new Map();
-    for(const uid of userIds){const r={id:uid,assessments:[],evaluations:[]};recordsByUser.set(uid,r)}
+    for(const uid of userIds){const r={id:uid,assessments:[],evaluations:[],simulations:[]};recordsByUser.set(uid,r)}
     for(const x of assessments)recordsByUser.get(x.user_id)?.assessments.push(x);
     for(const x of evaluations)recordsByUser.get(x.user_id)?.evaluations.push(x);
+    for(const x of simulations)recordsByUser.get(x.user_id)?.simulations.push(x);
     const allowed=[...recordsByUser.values()].filter(u=>{
       const pr=profiles.get(u.id)||{};const ev=u.evaluations[0]||{};
       const n=nameOf(pr)||[ev.learner_first_name,ev.learner_last_name].filter(Boolean).join(' ');
@@ -8646,6 +8629,13 @@ async function download(){
           rows.push([...prefix,d.number??i+1,d.question??'',options,sel,correct,d.is_correct??a.question_correct?.[i]??'','','','']);
         }
       }
+      for(const sim of u.simulations){
+        const prefix=common('Injection Simulation',sim.course_key,'simulation',sim.scenario_id,sim.completed_at||sim.updated_at,sim.injection_score_percent,'','');
+        const fields={medication:sim.medication_label,ordered_site:sim.ordered_site,selected_site:sim.selected_site,preparation_method:sim.preparation_method,cleaning_percent:sim.cleaning_coverage_percent,injection_attempts:sim.injection_attempts,first_attempt_success:sim.injection_first_attempt_success,injection_score_percent:sim.injection_score_percent,clinical_decision_score_percent:sim.clinical_decision_score_percent,corrections:sim.clinical_corrections,actual_layer:sim.tissue_layer,expected_layer:sim.expected_tissue_layer,angle_degrees:sim.angle_deg,target_angle_degrees:sim.target_angle_deg,tip_depth_percent:sim.tip_depth_percent,completed:sim.completed};
+        for(const [key,value] of Object.entries(fields))rows.push([...prefix,'','','','','','',key,flatValue(value),'']);
+        for(const attempt of sim.injection_reviews||[])rows.push([...prefix,'','','','','','',`injection_attempt_${attempt.number}`,flatValue(attempt),'']);
+        for(const [i,action] of (sim.event_log||[]).entries())rows.push([...prefix,'','','','','','',`clinical_action_${i+1}`,flatValue(action),'']);
+      }
       for(const e of u.evaluations){
         const prefix=common('CME/CE Evaluation','','cme_ce',e.submission_id||e.id,e.completed_at||e.created_at,'','','');
         const responses=e.responses&&typeof e.responses==='object'?e.responses:{};
@@ -8671,5 +8661,91 @@ async function download(){
 window.rwceExportEveryQuestionCSV=download;
 })();
 </script>
+<script id="rwce-lai-simulation-database-integration">
+(()=>{'use strict';
+  const COURSE='lai-injection-trainer';
+  const allowed=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const el=id=>document.getElementById(id);
+  const escapeHTML=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const int=(v,min,max)=>{if(v===null||v===undefined||v==='')return null;const n=Number(v);return Number.isFinite(n)?Math.max(min,Math.min(max,Math.round(n))):null};
+  const text=(v,n=250)=>String(v??'').slice(0,n);
+  const visible=()=>el('managerPortal')?.style.display!=='none';
+  const isTrusted=(e)=>{
+    const frame=el('moduleFrame');if(!frame||e.source!==frame.contentWindow)return false;
+    try {const u=new URL(frame.src,location.href);return e.origin===(u.protocol==='blob:'?location.origin:u.origin)}catch{return false}
+  };
+  async function persist(event){
+    if(event.data?.type!=='rwce-lai-simulation'||!isTrusted(event))return;
+    const p=event.data.payload||{},id=text(p.scenario_id,40);
+    const ack=(ok,message,completed=false)=>{try{event.source?.postMessage({type:'rwce-assessment-storage',phase:'simulation',scenario_id:id,completed,ok,message},event.origin)}catch{}};
+    if(!allowed.test(id)||p.course_key!==COURSE||!p.injection||!Array.isArray(p.injection.reviews)||!Array.isArray(p.event_log))return ack(false,'Simulation reporting payload is incomplete or invalid.');
+    const supabase=window.rwceSupabase;
+    if(!supabase)return ack(false,'LMS Supabase connection is unavailable.');
+    const {data,error:authError}=await supabase.auth.getUser();
+    if(authError||!data?.user)return ack(false,'Sign in to the LMS before saving injection results.');
+    if(p.event_log.length>150||p.injection.reviews.length>50)return ack(false,'Simulation record exceeds supported history limits.');
+    const inj=p.injection,clinical=p.clinical||{},prep=p.preparation||{},site=p.site||{},med=p.medication||{};
+    const completed=!!p.completed;
+    const record={
+      user_id:data.user.id,scenario_id:id,course_key:COURSE,activity_title:text(p.activity_title,200),
+      patient_case:text(p.patient_case,120),medication_key:text(med.ordered_key,90),medication_label:text(med.ordered_label,220),
+      route:text(med.route,40),ordered_site:text(site.ordered_label,200),selected_site:text(site.selected_label,200),
+      preparation_method:text(prep.selected_method,100),preparation_completed:!!prep.completed,
+      cleaning_coverage_percent:int(p.cleaning?.coverage_percent,0,100),injection_attempts:int(inj.attempts,0,1000),
+      injection_first_attempt_success:!!inj.first_attempt_success,injection_score_percent:int(inj.score_percent,0,100),
+      clinical_decision_score_percent:int(clinical.decision_score_percent,0,100),clinical_corrections:int(clinical.corrections,0,1000),
+      successful:!!inj.passed,angle_deg:int(inj.angle_deg,0,110),target_angle_deg:int(inj.target_angle_deg,0,110),
+      tip_depth_percent:int(inj.tip_depth_percent,0,100),tissue_layer:text(inj.actual_layer,60),expected_tissue_layer:text(inj.expected_layer,60),
+      injection_reviews:inj.reviews,milestones:p.milestones||{},event_log:p.event_log,
+      payload:p,completed,completed_at:completed?(p.completed_at||new Date().toISOString()):null,
+      updated_at:new Date().toISOString()
+    };
+    const {error}=await supabase.from('lai_simulation_attempts').upsert(record,{onConflict:'user_id,scenario_id'});
+    if(error)return ack(false,'Injection result database save failed: '+error.message,completed);
+    ack(true,completed?'Injection results saved to LMS database.':'Injection attempt saved to LMS database.',completed);
+  }
+  // Serialize messages per scenario to prevent an older in-progress write overwriting final completion.
+  const writes=new Map();
+  window.addEventListener('message',event=>{
+    if(event.data?.type!=='rwce-lai-simulation'||!isTrusted(event))return;
+    const id=String(event.data?.payload?.scenario_id||'');
+    const next=(writes.get(id)||Promise.resolve()).catch(()=>{}).then(()=>persist(event));
+    writes.set(id,next);next.finally(()=>{if(writes.get(id)===next)writes.delete(id)});
+  });
+
+  let records=[],profiles=[];
+  const status=(s,error=false)=>{const x=el('rwceInjectionStatus');if(x){x.textContent=s;x.style.color=error?'#b91c1c':'#334155'}};
+  const label=x=>String(x??'').replace(/_/g,' ');
+  const fmt=d=>d?new Date(d).toLocaleString():'In progress';
+  function user(r){return profiles.find(p=>p.id===r.user_id)||{}}
+  const val=(k,v)=>`<div class="rounded-lg border border-slate-200 bg-slate-50 p-2"><div class="text-xs text-slate-600">${escapeHTML(label(k))}</div><div class="font-bold break-words text-slate-900">${escapeHTML(typeof v==='object'?JSON.stringify(v):v)}</div></div>`;
+  function showDetail(index){const r=records[index];if(!r)return;const p=r.payload||{},reviews=r.injection_reviews||[],events=r.event_log||[];
+    el('rwceInjectionDetail').innerHTML=`<article class="rounded-xl border border-blue-200 p-4 bg-blue-50 text-slate-900"><h4 class="font-black text-lg">${escapeHTML(user(r).full_name||user(r).email||r.user_id)} · ${escapeHTML(r.medication_label||'Simulation')}</h4><div class="text-xs text-slate-700">Scenario ID ${escapeHTML(r.scenario_id)} · ${escapeHTML(fmt(r.completed_at))} · ${r.completed?'Complete':'In progress'}</div><div class="grid grid-cols-1 gap-2 sm:grid-cols-3 mt-3">${[['Ordered Site',r.ordered_site],['Selected Site',r.selected_site],['Preparation',r.preparation_method],['Site Cleaning',String(r.cleaning_coverage_percent??'')+'%'],['Injection Attempts',r.injection_attempts],['Injection Score',r.injection_score_percent===null?'Pending':r.injection_score_percent+'%'],['Decision Score',r.clinical_decision_score_percent+'%'],['Needle Angle',String(r.angle_deg??'')+'°'],['Target Angle',String(r.target_angle_deg??'')+'°'],['Tip Depth',String(r.tip_depth_percent??'')+'%'],['Tissue Layer',r.tissue_layer],['Expected Layer',r.expected_tissue_layer]].map(([k,v])=>val(k,v)).join('')}</div><h5 class="mt-4 font-black">Every Injection Attempt</h5>${reviews.length?reviews.map(x=>`<div class="mt-2 rounded-lg border p-3 bg-white">Attempt ${escapeHTML(x.number)} · ${x.passed?'Passed':'Correction needed'} · Angle ${escapeHTML(x.angle_deg)}° · Depth ${escapeHTML(x.tip_depth_percent)}% · Layer ${escapeHTML(x.layer)}<div class="text-sm mt-1">${escapeHTML(x.feedback)}</div></div>`).join(''):'<p class="text-sm">No injection attempts recorded yet.</p>'}<h5 class="mt-4 font-black">Clinical Decision History</h5>${events.length?events.map(x=>`<div class="mt-1 p-2 rounded border bg-white text-sm"><strong>${escapeHTML(label(x.action))}</strong> · ${escapeHTML(x.at)} · ${x.correct===undefined?'':x.correct?'Correct':'Corrected'}<span class="block break-words">${escapeHTML(JSON.stringify(x))}</span></div>`).join(''):'No event history recorded'}</article>`;
+  }
+  function draw(){const tbody=el('rwceInjectionRows');if(!tbody)return;tbody.innerHTML=records.length?records.map((r,i)=>`<tr class="border-b border-slate-200"><td class="p-2">${escapeHTML(user(r).full_name||user(r).email||r.user_id)}</td><td class="p-2">${escapeHTML(fmt(r.completed_at))}</td><td class="p-2">${escapeHTML(r.medication_label)}<div class="text-xs">${escapeHTML(r.ordered_site)}</div></td><td class="p-2">${r.injection_score_percent===null?'Pending':escapeHTML(r.injection_score_percent)+'%'} · ${escapeHTML(r.injection_attempts)} attempt(s)</td><td class="p-2">${escapeHTML(r.clinical_decision_score_percent)}% · ${escapeHTML(r.clinical_corrections)} corrected</td><td class="p-2"><button type="button" class="rounded-lg bg-blue-50 px-3 py-2 font-bold text-blue-800" data-rwce-inj="${i}">View All Steps</button></td></tr>`).join(''):'<tr><td colspan="6" class="p-3">No learner injection records found.</td></tr>';tbody.querySelectorAll('[data-rwce-inj]').forEach(x=>x.addEventListener('click',()=>showDetail(Number(x.dataset.rwceInj))));status(`${records.length} injection scenario record(s) loaded.`,false)}
+  async function refresh(){const c=window.rwceSupabase;if(!c)return status('Supabase is not connected.',true);
+    const {data:auth,error:authError}=await c.auth.getUser();if(authError||!auth?.user)return status('Sign in to the LMS.',true);
+    const {data:role,error:roleError}=await c.from('profiles').select('role').eq('id',auth.user.id).single();
+    if(roleError||!['admin','manager'].includes(String(role?.role||'').toLowerCase()))return status('Admin or manager role required.',true);
+    status('Loading injection records…');const [r,p]=await Promise.all([c.from('lai_simulation_attempts').select('*').order('updated_at',{ascending:false}).limit(5000),c.from('profiles').select('id,full_name,email').limit(5000)]);
+    if(r.error)return status('Could not load simulation records: '+r.error.message+'. Apply the supplied migration and verify RLS.',true);
+    records=r.data||[];profiles=p.data||[];draw();if(p.error)status('Simulation records loaded, but learner profile names were not available.',true);
+  }
+  function csv(){if(!records.length)return status('Refresh injection results before exporting.',true);
+    const rows=[['Learner Name','Email','User ID','Scenario ID','Completed','Medication','Ordered Site','Selected Site','Preparation','Injection Attempts','Injection Score %','Clinical Decision Score %','Corrections','Angle °','Tip Depth %','Layer','Record Type','Sequence','Timestamp','Action','Selected','Expected','Correct','Feedback']];
+    for(const r of records){const p=user(r),base=[p.full_name||'',p.email||'',r.user_id,r.scenario_id,r.completed_at||'',r.medication_label,r.ordered_site,r.selected_site,r.preparation_method,r.injection_attempts,r.injection_score_percent,r.clinical_decision_score_percent,r.clinical_corrections,r.angle_deg,r.tip_depth_percent,r.tissue_layer];
+      rows.push([...base,'Summary','','','','','','','']);
+      for(const t of r.injection_reviews||[])rows.push([...base,'Injection Attempt',t.number,t.at,'injection_attempt',t.angle_deg,t.target_angle_deg,t.passed,t.feedback]);
+      for(const t of r.event_log||[])rows.push([...base,'Clinical Action',t.sequence_index??'',t.at,t.action,t.selected??'',t.expected??'',t.correct??'',t.feedback??'']);
+    }
+    const clean=v=>{let s=String(v??'');if(/^[\s]*[=+@\-]/.test(s))s="'"+s;return '"'+s.replaceAll('"','""')+'"'};
+    const csv=rows.map(row=>row.map(clean).join(',')).join('\r\n');const url=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='RWCE_Complete_Injection_Simulation_Results.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);
+    status(`Exported ${rows.length-1} injection result rows.`);
+  }
+  document.addEventListener('DOMContentLoaded',()=>{el('rwceInjectionRefresh')?.addEventListener('click',refresh);el('rwceInjectionExport')?.addEventListener('click',csv)});
+  window.rwceRefreshInjectionReports=refresh;
+})();
+</script>
+
 </body>
 </html>
