@@ -3579,7 +3579,7 @@ body:not(.learning-mode) .debrief-grid strong{overflow-wrap:anywhere}
       <div class="chart-card"><strong>Body Habitus</strong><span id="chart-body-habitus">Standard</span></div>
       <div class="chart-card"><strong>Medication Order</strong><span id="chart-medication">Pending medication order</span></div>
       <div class="chart-card"><strong>Ordered Dose / Strength</strong><span>Verify the prescribed dose and available strength against the source order before administration; no dose is supplied by this demonstration case.</span></div>
-      <div class="chart-card"><strong>Route</strong><span id="chart-route">Deep intramuscular (IM)</span></div>
+      <div class="chart-card"><strong>Route</strong><span id="chart-route">Intramuscular (IM)</span></div>
       <div class="chart-card"><strong>Ordered Site</strong><span id="chart-site">Deltoid</span></div>
       <div class="chart-card"><strong>Administration Notes</strong><span id="chart-notes">Verify patient, medication, dose, route, and site before site preparation.</span></div>
     </div>
@@ -3605,7 +3605,7 @@ body:not(.learning-mode) .debrief-grid strong{overflow-wrap:anywhere}
         <input class="chart-check-input" type="checkbox" data-check="medication">
         <div>
           <strong>Verify medication order</strong>
-          <span>Confirm the ordered long-acting injectable medication and that it is intended for deep IM administration.</span>
+          <span>Confirm the ordered long-acting injectable medication and that it is intended for IM administration.</span>
         </div>
       </label>
 
@@ -3959,7 +3959,7 @@ function injectionProfile(siteKey){
     siteMismatch:"<strong>Location needs correction:</strong> the selected subcutaneous site is used for medications intended to stay in subcutaneous tissue. It is not interchangeable with an intramuscular site. Recheck the chart order before proceeding.",
     siteToast:`${sites[siteKey].label} selected from the chart order. The avatar has been rotated to the front view—clean the marked site next.`
   } : {
-    routeLabel:"Deep intramuscular (IM)",
+    routeLabel:"Intramuscular (IM)",
     routeShort:"IM",
     expectedLayer:"Muscle",
     depthSuccessLabel:"IM depth",
@@ -3968,7 +3968,7 @@ function injectionProfile(siteKey){
     placementSuccessLabel:"Muscle layer reached",
     pendingFeedback:"The angle starts at 0°. Choose the depth and angle, then submit the attempt. Apply your training to decide the correct technique. If the selection is incorrect, the trainer will explain why.",
     popupIntro:"Guide the needle through the skin layers and choose the correct depth and angle yourself. Apply what you have learned to complete the injection correctly.",
-    chartMedicationCopy:"Confirm the ordered long-acting injectable medication and that it is intended for deep IM administration.",
+    chartMedicationCopy:"Confirm the ordered long-acting injectable medication and that it is intended for IM administration.",
     chartRouteCopy:"Confirm the ordered route is IM and that the procedure requires appropriate injection technique.",
     chartNotes:"Verify patient, medication, prescribed dose/strength, route, and site. This demonstration chart does not supply an authorized dose: confirm the dose from the actual medication order and prescribing information before real-world administration.",
     step5Copy:"Use the popup to choose the injection depth and angle, then submit the attempt based on your training.",
