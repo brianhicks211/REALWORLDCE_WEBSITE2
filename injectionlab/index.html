@@ -2943,6 +2943,135 @@ body:not(.learning-mode) #prep-popup .prep-feedback.good *,body:not(.learning-mo
 @media(max-width:900px){.rwce-landmark-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:480px){.rwce-landmark-cards{grid-template-columns:1fr 1fr}.rwce-landmark-card{padding:9px}.rwce-landmark-card p{font-size:12px!important}#skin-popup .popup-controls{gap:10px!important}.lm-main .lm-option span,.lm-main .lm-qfeedback,.lm-main .lm-card p{font-size:15px!important}}
 </style>
+
+<style id="rwce-standalone-mobile-final-2026">
+/* Standalone, phone-first presentation patch: visual and accessibility only. */
+@media (max-width:768px){
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:clip}
+  body{overflow-x:clip}
+  button,a,input,textarea,select{-webkit-tap-highlight-color:rgba(25,118,210,.12)}
+  button:focus-visible,input:focus-visible,textarea:focus-visible,[role="button"]:focus-visible{outline:3px solid #38a7f5!important;outline-offset:2px}
+  /* Pretest and post-test questions: one readable, thumb-accessible column. */
+  #rwce-assessment{padding:calc(10px + env(safe-area-inset-top,0px)) 10px calc(18px + env(safe-area-inset-bottom,0px))!important;scroll-padding-bottom:84px;overscroll-behavior-y:contain}
+  .rwce-assessment-shell{width:100%;max-width:100%}
+  .rwce-a-head{padding:17px 16px!important;border-radius:16px!important;margin-bottom:12px!important}
+  .rwce-a-kicker{font-size:11px!important;line-height:1.4!important;letter-spacing:.095em!important}
+  .rwce-a-head h2{font-size:clamp(24px,7vw,30px)!important;line-height:1.16!important}
+  .rwce-a-head p{font-size:15px!important;line-height:1.55!important}
+  .rwce-a-stat{font-size:13px!important}
+  .rwce-a-question{padding:15px!important;margin:10px 0!important;border-radius:15px!important}
+  .rwce-a-question h3{font-size:17px!important;line-height:1.45!important;margin:0 0 12px!important}
+  .rwce-a-option{min-height:56px!important;padding:13px 12px!important;font-size:15px!important;line-height:1.45!important;align-items:center!important;gap:10px!important;overflow-wrap:anywhere}
+  .rwce-a-option input{flex:0 0 20px;width:20px;height:20px;min-width:20px;margin:0}
+  .rwce-a-option b{font-size:15px!important}
+  .rwce-a-actions{position:sticky;bottom:0;z-index:9;display:flex;justify-content:stretch!important;gap:8px!important;margin:14px -10px 0!important;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px))!important;background:linear-gradient(0deg,#061321 88%,rgba(6,19,33,.93));border-top:1px solid #284a65}
+  .rwce-a-actions .rwce-a-btn{flex:1 1 0;min-width:0;min-height:50px;font-size:15px!important;padding:10px 12px!important;white-space:normal}
+  .rwce-a-result{padding:18px!important}
+  .rwce-a-results-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .rwce-a-results-grid span{font-size:12px!important}
+  /* Lessons: compact course navigation with explicit toggle. */
+  body.learning-mode .lm-shell{grid-template-columns:1fr!important;overscroll-behavior-y:contain!important;scroll-padding-top:8px}
+  body.learning-mode .lm-nav{padding:13px 12px!important;min-width:0!important}
+  body.learning-mode .lm-nav-list{display:none!important}
+  body.learning-mode .lm-shell.rwce-phone-lessons-expanded .lm-nav-list{display:grid!important;grid-template-columns:1fr!important;gap:6px!important;margin-top:8px!important}
+  body.learning-mode .lm-nav-note{display:none!important}
+  body.learning-mode .lm-brand .rwce-brand-logo{max-width:100%;height:auto;max-height:42px;object-fit:contain;object-position:left center}
+  body.learning-mode .lm-course-title h1{font-size:21px!important;line-height:1.2!important}
+  body.learning-mode .lm-course-title p{font-size:13px!important;line-height:1.4!important;margin:5px 0!important}
+  body.learning-mode .lm-progress-wrap{margin:8px 0!important}
+  body.learning-mode .lm-nav-btn{min-height:49px!important}
+  body.learning-mode .lm-nav-btn .lm-nav-label{font-size:14px!important}
+  .rwce-phone-lessons-toggle{width:100%;min-height:47px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-radius:12px;padding:10px 15px;border:1px solid #b8d7f5;background:#eaf4ff;color:#123c68;font-size:15px;font-weight:850;cursor:pointer}
+  .rwce-phone-lessons-toggle>span:last-child{font-size:21px;font-weight:900;line-height:1}
+  body.learning-mode .lm-inner{width:calc(100% - 20px)!important;max-width:100%!important;padding:12px 0 20px!important}
+  body.learning-mode .lm-topbar{display:flex!important;gap:10px!important;flex-wrap:wrap!important;align-items:center}
+  body.learning-mode .lm-topbar-left{flex:1 1 100%!important;min-width:0!important;font-size:13px!important}
+  body.learning-mode .lm-topbar>div:last-child{display:flex!important;justify-content:space-between;width:100%;gap:10px!important}
+  body.learning-mode .lm-exit{min-height:44px;font-size:13px!important;flex:0 1 auto}
+  body.learning-mode .lm-section h2{font-size:clamp(23px,6.6vw,30px)!important;line-height:1.18!important}
+  body.learning-mode .lm-main .lm-lead,body.learning-mode .lm-main .lm-method-detail,body.learning-mode .lm-main .lm-card p,body.learning-mode .lm-main .lm-step p,body.learning-mode .lm-main .lm-callout,body.learning-mode .lm-main .lm-option span,body.learning-mode .lm-main .lm-qfeedback,body.learning-mode .lm-main .lm-seq span{font-size:15px!important;line-height:1.55!important}
+  body.learning-mode .lm-main .lm-question h3{font-size:17px!important;line-height:1.45!important}
+  body.learning-mode .lm-main .lm-option{min-height:56px!important;padding:12px 13px!important}
+  body.learning-mode .lm-main .lm-option input{width:20px;height:20px;min-width:20px;accent-color:#1c74d3}
+  body.learning-mode .lm-main .lm-footer-nav{display:grid!important;grid-template-columns:1fr!important;gap:9px!important}
+  body.learning-mode .lm-main .lm-footer-nav>.lm-btn,body.learning-mode .lm-main .lm-footer-nav>button{width:100%!important;min-height:50px!important;font-size:15px!important}
+  body.learning-mode .lm-main .lm-footer-nav>:empty{display:none}
+  body.learning-mode .lm-main .lm-ref{word-break:break-word}
+  body.learning-mode .lm-grid-2,body.learning-mode .lm-grid-3,body.learning-mode .lm-methods,body.learning-mode .lm-sequence,body.learning-mode .lm-sim-milestones,body.learning-mode .lm-visual-strip{grid-template-columns:1fr!important}
+  body.learning-mode .lm-method,body.learning-mode .lm-card,body.learning-mode .lm-question{min-width:0!important}
+  /* Mobile: evaluation input names/email, 22 questions and accessible submission. */
+  #cme-evaluation{padding:0!important;align-items:stretch!important;justify-content:stretch!important}
+  #cme-evaluation .cme-eval-card{width:100vw!important;max-width:100%!important;max-height:100dvh!important;height:100dvh!important;border-radius:0!important;display:flex!important;flex-direction:column;overscroll-behavior:contain!important;overflow-y:auto!important;scroll-padding-bottom:100px}
+  #cme-evaluation .cme-eval-head{position:relative!important;flex-shrink:0;padding:calc(14px + env(safe-area-inset-top,0px)) 16px 16px!important;border-radius:0!important}
+  #cme-evaluation .cme-eval-head h2{font-size:clamp(22px,6vw,28px)!important;line-height:1.18!important}
+  #cme-evaluation .cme-eval-head p{font-size:14px!important;line-height:1.5!important}
+  #cme-evaluation .cme-eval-body{padding:13px 12px 18px!important;display:block!important;flex:1 0 auto}
+  #cme-evaluation .cme-eval-q{padding:15px 13px!important;border-radius:14px!important;margin-bottom:10px!important}
+  #cme-evaluation .cme-eval-q h3{font-size:16px!important;line-height:1.48!important;margin:0 0 12px!important}
+  #cme-evaluation .cme-option{min-height:52px!important;gap:10px!important;font-size:14px!important;line-height:1.4!important;padding:11px 12px!important;color:#263f5c!important;overflow-wrap:anywhere}
+  #cme-evaluation .cme-option input{width:20px;height:20px;min-width:20px;flex:0 0 20px;margin:0;accent-color:#176bd2}
+  #cme-evaluation .cme-options.cols{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #cme-evaluation .cme-grid-check{grid-template-columns:1fr!important}
+  #cme-evaluation .cme-input,#cme-evaluation .cme-textarea{font-size:16px!important;line-height:1.45!important;min-height:50px!important;padding:12px 13px!important;border-radius:11px!important}
+  #cme-evaluation .cme-textarea{min-height:118px!important}
+  #cme-evaluation .cme-char{font-size:12px!important}
+  #cme-evaluation .cme-eval-note{font-size:14px!important;line-height:1.5!important}
+  #cme-evaluation .cme-eval-actions{position:sticky!important;bottom:0!important;z-index:10;display:grid!important;grid-template-columns:minmax(0,.8fr) minmax(0,1.6fr)!important;gap:9px!important;align-items:stretch;padding:11px 12px calc(11px + env(safe-area-inset-bottom,0px))!important;flex-shrink:0;background:#fff!important;box-shadow:0 -8px 26px #142e4a18}
+  #cme-evaluation .cme-eval-actions .cme-eval-error{grid-column:1/-1;order:-1;font-size:13px!important;line-height:1.45!important}
+  #cme-evaluation .cme-eval-btn{width:100%!important;min-height:54px!important;font-size:13px!important;line-height:1.26!important;padding:9px!important;white-space:normal!important}
+  #rwce-direct-eval-status{margin:12px!important;padding:11px 12px!important;font-size:13px!important;line-height:1.5!important}
+  #rwce-direct-status{display:none!important} /* Save details remain visible in CME/CE evaluation; no obstruction of patient controls. */
+  #rwce-direct-status[data-kind="error"]{display:block!important;bottom:calc(87px + env(safe-area-inset-bottom,0px))!important;left:12px!important;right:12px!important;max-width:none!important;padding:8px 12px!important;pointer-events:none!important;font-size:12px!important}
+  #rwce-assessment-save-status{bottom:calc(82px + env(safe-area-inset-bottom,0px))!important;left:12px!important;right:12px!important;max-width:none!important;font-size:12px!important}
+  #cme-complete{padding:10px!important}
+  #cme-complete .cme-complete-card{width:100%!important;max-height:calc(100dvh - 20px)!important;overflow:auto!important;padding:22px 16px!important}
+  #cme-complete .cme-complete-card h2{font-size:26px!important}
+  #cme-complete .cme-complete-card p,#cme-complete .cme-complete-meta{font-size:14px!important}
+  /* Procedural popups must remain scrollable and have reachable controls. */
+  .chart-popup-backdrop,.skin-popup-backdrop,.debrief-backdrop{padding:6px!important}
+  .chart-popup,.skin-popup,.prep-popup,.debrief-card{width:100%!important;max-width:100%!important;max-height:calc(100dvh - 12px)!important;overflow-y:auto!important;overscroll-behavior:contain!important;border-radius:15px!important;padding:15px!important;scroll-padding-bottom:74px}
+  .chart-popup-title,.skin-popup-title{font-size:23px!important;line-height:1.22!important}
+  .chart-popup-copy,.skin-popup-copy{font-size:14px!important;line-height:1.5!important}
+  .chart-check-item{min-height:60px;align-items:flex-start!important}
+  .chart-check-input{flex:0 0 20px!important;width:20px!important;height:20px!important}
+  #skin-popup .popup-injection-stage{height:clamp(225px,34dvh,318px)!important;min-height:225px!important;max-height:318px!important;overflow:hidden}
+  #skin-popup .popup-visual-column{min-width:0!important}
+  #skin-popup .popup-controls{min-width:0!important;gap:10px!important}
+  #skin-popup .popup-controls .popup-slider-row{font-size:14px!important;grid-template-columns:74px minmax(0,1fr) 46px!important;gap:6px!important}
+  #skin-popup .popup-controls .popup-slider-row input[type="range"]{height:46px!important;min-height:46px;min-width:0!important;touch-action:pan-x}
+  #skin-popup .popup-angle-guide{max-width:100%;overflow:hidden}
+  #skin-popup .popup-needle{touch-action:none!important}
+  #skin-popup .skin-popup-actions{position:sticky!important;bottom:-15px!important;z-index:15;margin:12px -15px -15px!important;padding:12px 15px calc(12px + env(safe-area-inset-bottom,0px))!important;background:#fff!important;border-top:1px solid #d4e3f1;display:flex!important;flex-direction:column-reverse!important;gap:8px!important}
+  #skin-popup .skin-popup-actions button{width:100%!important;min-height:52px!important;font-size:15px!important}
+  #skin-popup .popup-controls .layer-info-card span,#skin-popup #popup-technique-feedback{font-size:14px!important;line-height:1.5!important}
+  #skin-popup .rwce-phone-needle-help{display:block;padding:11px 13px;border:1px solid #bbdcf3;border-radius:12px;background:#eaf6ff;color:#193b61;font-size:14px;line-height:1.5;margin:3px 0 10px}
+  .popup-readout-grid{grid-template-columns:1fr!important}
+  .rwce-landmark-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  /* Patient viewport: preserve full-screen 3D view but keep controls inside safe areas. */
+  body:not(.learning-mode) .app,body:not(.learning-mode) .app>.stage{height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important}
+  body:not(.learning-mode) .rwce-stage-topbar{top:calc(9px + env(safe-area-inset-top,0px))!important;left:8px!important;right:8px!important}
+  body:not(.learning-mode) .rwce-stage-step{min-width:0!important;flex:1!important;max-width:none!important;font-size:12px!important;line-height:1.28!important}
+  body:not(.learning-mode) .rwce-mobile-action-dock{bottom:calc(8px + env(safe-area-inset-bottom,0px))!important;min-height:68px!important}
+  body:not(.learning-mode) #rwce-dock-button{min-height:48px!important;font-size:13px!important}
+  body:not(.learning-mode) .stage .mobile-cleaning-workspace{max-height:min(49dvh,350px)!important;overflow-y:auto!important;overscroll-behavior:contain!important}
+  body:not(.learning-mode) .stage .mobile-cleaning-workspace .touch-zone{min-height:112px!important}
+  #rwce-mobile-menu-button{min-height:46px!important}
+}
+@media (max-width:359px){
+  #cme-evaluation .cme-options.cols{grid-template-columns:1fr!important}
+  #cme-evaluation .cme-eval-actions{grid-template-columns:1fr!important}
+  #cme-evaluation .cme-eval-btn{min-height:47px!important}
+  .rwce-a-actions{flex-direction:column!important}
+  .rwce-a-results-grid{grid-template-columns:1fr!important}
+  .rwce-landmark-cards{grid-template-columns:1fr!important}
+  body:not(.learning-mode) .rwce-stage-step{font-size:11px!important}
+}
+@media (min-width:769px){.rwce-phone-lessons-toggle,.rwce-phone-needle-help{display:none!important}}
+@media (prefers-reduced-motion:reduce){
+  .rwce-a-track div,.cme-eval-progress>div{transition:none!important}
+}
+</style>
+
 </head>
 <body class="learning-mode">
 <section id="rwce-assessment" role="dialog" aria-modal="true" aria-label="LAI pre-test and post-test" hidden><div class="rwce-assessment-shell"><div class="rwce-a-head"><div class="rwce-a-kicker">REAL WORLD CE · LAI PREPARATION & ADMINISTRATION</div><h2 id="rwce-a-title">Pre-Test</h2><p id="rwce-a-intro"></p><div class="rwce-a-stat"><span id="rwce-a-stage"></span><span id="rwce-a-count"></span></div><div class="rwce-a-track"><div id="rwce-a-progress"></div></div></div><div id="rwce-a-content"></div><div class="rwce-a-actions" id="rwce-a-actions"></div></div></section>
@@ -3712,7 +3841,7 @@ body:not(.learning-mode) #prep-popup .prep-feedback.good *,body:not(.learning-mo
       <div><small>Corrected choices</small><strong id="debrief-corrections">—</strong></div>
     </div>
     <div class="debrief-note" id="debrief-note"><span class="material-symbols-outlined">lightbulb</span><span>Strong sequence. Continue practicing until verification and technique are automatic.</span></div>
-    <div class="debrief-actions"><button class="skin-popup-btn secondary" type="button" onclick="window.rwceRetrySimulationSave?.()" title="Retry saving this simulation to the LMS">Retry LMS Save</button>
+    <div class="debrief-actions"><button class="skin-popup-btn secondary" type="button" onclick="window.rwceStandaloneFlush?.()" title="Retry pending results to Supabase">Retry Database Save</button>
   <button class="skin-popup-btn secondary" onclick="closeDebrief()">Close / Review Scenario</button>
   <button class="skin-popup-btn retry-scenario-btn" onclick="retryDifferentScenario()"><span class="material-symbols-outlined">shuffle</span>Try a Different Scenario</button>
   <button class="skin-popup-btn primary" onclick="openCMEEvaluation()"><span class="material-symbols-outlined">fact_check</span>Continue to CME Evaluation</button>
@@ -3904,6 +4033,10 @@ function rwceAuditStep(action, values={}){
   state.reportEvents.push({at:new Date().toISOString(),step:state.step,action,...values});
   if(state.reportEvents.length>150)state.reportEvents=state.reportEvents.slice(-150);
   saveLAIScenario();
+  window.rwceStandaloneQueueEvent?.('simulation_action',{
+    scenario_id:state.reportSessionId,step:state.step,action,details:values,
+    occurred_at:new Date().toISOString()
+  });
 }
 function rwceResetAudit(){
   state.reportSessionId=self.crypto?.randomUUID?.()||"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{const r=Math.floor(Math.random()*16);return(c==="x"?r:(r&3|8)).toString(16)});
@@ -3935,6 +4068,13 @@ function sendLAISimulationReport(force=false){
   if(!state.reportSessionId || (!state.injectionAttempts && !state.finished))return;
   if(state.reportAcknowledged&&!force)return;
   if(!force && state.reportSending)return;
+  if(window.RWCE_STANDALONE_MODE){
+    if(state.finished && window.__rwceDirectReportedScenario!==state.reportSessionId){
+      window.__rwceDirectReportedScenario=state.reportSessionId;
+      window.rwceStandaloneQueueEvent?.('simulation_summary',rwceSimulationPayload());
+    }
+    return;
+  }
   if(window.parent===window){if(state.finished)console.info('LAI simulation stored locally; launch inside the LMS to save it to Supabase.');return;}
   state.reportSending=true;
   window.rwceAssessmentSavePending?.('simulation');
@@ -5432,6 +5572,20 @@ window.addEventListener("three-ready",()=>{initThree();render();applyResponsiveS
     const pct=Math.round((correct/6)*100), pass=correct>=5;
     lmState.quizPassed=lmState.quizPassed||pass;
     lmState.quizCompleted=true; save();
+    window.rwceStandaloneQueueEvent?.('knowledge_check',{
+      correct,score:pct,passed:pass,question_count:6,
+      answers:Array.from({length:6},(_,i)=>lmState.answers[i]??null),
+      question_details:Array.from({length:6},(_,i)=>{
+        const el=document.querySelector(`.lm-question[data-q="${i}"]`);
+        const choices=Array.from(el?.querySelectorAll('.lm-option')||[]).map(n=>({
+          value:n.querySelector('input')?.value||'',text:n.querySelector('span')?.textContent?.trim()||''
+        }));
+        return {number:i+1,question:el?.querySelector('h3')?.textContent?.trim()||'',
+          options:choices,selected_value:lmState.answers[i]??null,
+          correct_value:el?.dataset.answer||null,
+          is_correct:lmState.answers[i]===el?.dataset.answer};
+      }),submitted_at:new Date().toISOString()
+    });
     document.querySelectorAll('.lm-question input').forEach(i=>i.disabled=true);
     if(window.parent && window.parent !== window){
       window.rwceAssessmentSavePending?.('knowledge_check');window.parent.postMessage({type:'rwce-lai-assessment',phase:'knowledge_check',payload:{
@@ -5540,7 +5694,7 @@ window.addEventListener("three-ready",()=>{initThree();render();applyResponsiveS
     <div class="cme-eval-actions"><div id="cme-eval-error" class="cme-eval-error">Please complete all required questions.</div><button type="button" class="cme-eval-btn" onclick="closeCMEEvaluation()">Return to Debrief</button><button type="button" class="cme-eval-btn primary" onclick="submitCMEEvaluation()">Submit Evaluation &amp; Complete Activity</button></div>
   </div>
 </div>
-<div id="cme-complete" class="cme-complete-backdrop" role="dialog" aria-modal="true"><div class="cme-complete-card"><div class="cme-complete-icon"><span class="material-symbols-outlined">verified</span></div><h2>Activity Complete</h2><p>Your evaluation has been submitted and this learning activity is now complete.</p><div class="cme-complete-meta">Certificate of completion will be sent within 24 hours. Pharmacists’ credits will be reported automatically to CPE Monitor. Questions or concerns may be directed to <strong>Michelle@realworldce.org</strong>.</div><div id="cme-storage-status" class="cme-storage-status">Your responses are saved in this browser. When launched through the Real World CE LMS, they will also be sent securely to the CME/CE reporting database.</div><button type="button" class="cme-eval-btn primary" onclick="resetTrainer();closeCMEComplete()">Start New Patient Scenario</button></div></div>
+<div id="cme-complete" class="cme-complete-backdrop" role="dialog" aria-modal="true"><div class="cme-complete-card"><div class="cme-complete-icon"><span class="material-symbols-outlined">verified</span></div><h2>Activity Complete</h2><p>Your CME/CE evaluation and activity results have been saved to the Real World CE database.</p><div class="cme-complete-meta">Completion does not automatically issue a certificate or report credits. Real World CE staff will review accreditation requirements. Questions or concerns may be directed to <strong>Michelle@realworldce.org</strong>.</div><div id="cme-storage-status" class="cme-storage-status">Your responses are saved in this browser. When launched through the Real World CE LMS, they will also be sent securely to the CME/CE reporting database.</div><button type="button" class="cme-eval-btn primary" onclick="resetTrainer();closeCMEComplete()">Start New Patient Scenario</button></div></div>
 
 
 <script id="cme-evaluation-script">
@@ -5689,7 +5843,15 @@ window.addEventListener("three-ready",()=>{initThree();render();applyResponsiveS
   $('rwce-a-content').innerHTML=questions.map((item,i)=>`<div class="rwce-a-question"><h3>${i+1}. ${safe(item[0])}</h3>${item[1].map((option,j)=>`<label class="rwce-a-option"><input type="radio" name="rwce-a-q${i}" value="${j}" ${answers[i]===j?'checked':''}><b>${'ABCD'[j]}.</b><span>${safe(option)}</span></label>`).join('')}</div>`).join('');
   $('rwce-a-content').querySelectorAll('input').forEach(x=>x.addEventListener('change',()=>{const i=Number(x.name.slice(8));answers[i]=Number(x.value);$('rwce-a-count').textContent=`${Object.keys(answers).length} of 10 answered`;$('rwce-a-progress').style.width=(Object.keys(answers).length*10)+'%';$('rwce-a-submit').disabled=Object.keys(answers).length!==10}));
   $('rwce-a-actions').innerHTML='<button class="rwce-a-btn" id="rwce-a-submit" disabled>Submit '+(pre?'Pre-Test':'Post-Test')+'</button>';
-  $('rwce-a-submit').onclick=()=>{if(Object.keys(answers).length!==questions.length)return;let correct=questions.reduce((a,q,i)=>a+(answers[i]===q[2]?1:0),0);results[phase]={correct,score:correct*10,submitted_at:new Date().toISOString(),answers:questions.map((q,i)=>answers[i]),question_correct:questions.map((q,i)=>answers[i]===q[2])};save();notify(phase,results[phase]);draw();$('rwce-assessment').scrollTo(0,0)};
+  $('rwce-a-submit').onclick=()=>{if(Object.keys(answers).length!==questions.length)return;let correct=questions.reduce((a,q,i)=>a+(answers[i]===q[2]?1:0),0);results[phase]={correct,score:correct*10,submitted_at:new Date().toISOString(),answers:questions.map((q,i)=>answers[i]),question_correct:questions.map((q,i)=>answers[i]===q[2])};save();
+    window.rwceStandaloneQueueEvent?.(phase==='pre'?'pretest':'posttest',{
+      ...results[phase],phase,question_count:questions.length,
+      question_details:questions.map((q,i)=>({number:i+1,question:q[0],
+        options:q[1].map((answer,j)=>({value:j,text:answer})),
+        selected_value:results[phase].answers?.[i]??null,
+        correct_value:q[2],is_correct:results[phase].question_correct?.[i]===true}))
+    });
+    notify(phase,results[phase]);draw();$('rwce-assessment').scrollTo(0,0)};
  }
  // The pre-test blocks entry into the learning module; post-test precedes the existing CE evaluation.
  window.__rwceShowPrePost=show;
@@ -6459,5 +6621,264 @@ if(typeof updateMobileCleaningWorkspace === "function")updateMobileCleaningWorks
   stage?.addEventListener('pointercancel',end,true);
 })();
 </script>
+<script id="rwce-standalone-supabase">
+// Real World CE standalone direct saving; independent of LMS.
+// Only public endpoint URL belongs in HTML. Never include a service-role key.
+(function(){
+  'use strict';
+  window.RWCE_STANDALONE_MODE=true;
+  const ENDPOINT='https://mfcvunvlmacwxoguznoh.supabase.co/functions/v1/lai-standalone-events';
+  const STORE='rwce_lai_direct_session_v1';
+  const OUTBOX='rwce_lai_direct_outbox_v1';
+  const EVAL_ID='rwce_lai_direct_evaluation_id_v1';
+  const EVAL_DRAFT='rwce_lai_direct_evaluation_draft_v1';
+  const MAX_LOCAL_QUEUE=400;
+  let busy=null;
+  let lastStatus='';
+  const $=id=>document.getElementById(id);
+  const jsonGet=(k,f)=>{try{return JSON.parse(localStorage.getItem(k)||'null')||f}catch(_){return f}};
+  const jsonSet=(k,o)=>localStorage.setItem(k,JSON.stringify(o));
+  const now=()=>new Date().toISOString();
+  const uuid=()=>{if(!crypto.randomUUID)throw Error('Use HTTPS with a modern browser for secure activity saving.');return crypto.randomUUID()};
+  const newSecret=()=>{
+    const b=new Uint8Array(32);crypto.getRandomValues(b);
+    return btoa(String.fromCharCode(...b)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/g,'');
+  };
+  function getSession(){
+    let s=jsonGet(STORE,null);
+    if(!s||!s.session_id||!s.session_token){s={session_id:uuid(),session_token:newSecret(),started_at:now(),finalized:false};jsonSet(STORE,s)}
+    return s;
+  }
+  function setStatus(msg,kind){
+    lastStatus=msg;
+    const el=$('rwce-direct-status'); if(el){el.textContent=msg;el.dataset.kind=kind||''}
+    const item=$('rwce-direct-eval-status');if(item){item.textContent=msg;item.dataset.kind=kind||''}
+  }
+  function prepareUI(){
+    const evalButtons=document.querySelector('#cme-evaluation .cme-eval-actions');
+    if(evalButtons&&!$('rwce-direct-eval-status')){
+      const e=document.createElement('p');e.id='rwce-direct-eval-status';e.setAttribute('role','status');e.textContent=lastStatus||'Your results will be saved directly to Real World CE at evaluation submission.';
+      evalButtons.parentElement.insertBefore(e,evalButtons);
+    }
+    const complete=$('cme-complete');
+    if(complete&&!$('rwce-new-activity')){
+      const btn=document.createElement('button');btn.id='rwce-new-activity';btn.type='button';btn.textContent='Start a New Activity';
+      btn.style.cssText='display:block;margin:18px auto 4px;background:#1668bd;color:#fff;border:0;border-radius:10px;padding:12px 20px;font-weight:800;cursor:pointer';
+      btn.onclick=()=>window.rwceStandaloneNewActivity?.();
+      complete.querySelector('.cme-complete-card')?.appendChild(btn);
+    }
+    if(!$('rwce-direct-status')){
+      const e=document.createElement('div');e.id='rwce-direct-status';e.setAttribute('role','status');e.textContent=lastStatus||'Preparing secure results storage…';document.body.appendChild(e);
+    }
+    const style=document.createElement('style');style.textContent=`
+      #rwce-direct-status{position:fixed;right:12px;bottom:12px;z-index:300;max-width:min(310px,calc(100vw - 24px));background:#f0f7ff;border:1px solid #8cbbe0;color:#133c5b;border-radius:11px;padding:7px 12px;font:700 11px/1.4 Inter,Arial,sans-serif;box-shadow:0 7px 24px #1238;pointer-events:none}
+      #rwce-direct-status[data-kind="error"]{background:#fff3f3;border-color:#e89999;color:#9b2133}
+      #rwce-direct-status[data-kind="ok"]{background:#eaf8ef;border-color:#7ecba2;color:#136544}
+      #rwce-direct-eval-status{padding:10px 12px;margin:10px 0;border-radius:11px;background:#eaf3fc;color:#214969;font-size:13px!important;line-height:1.5}
+      #rwce-direct-eval-status[data-kind="error"]{background:#fff0f0;color:#92283a}
+      #rwce-direct-eval-status[data-kind="ok"]{background:#e8f8ec;color:#226d43}
+      @media(max-width:640px){#rwce-direct-status{left:10px;right:10px;bottom:74px;max-width:none;font-size:10px;padding:5px 9px}}`;
+    document.head.appendChild(style);
+  }
+  async function call(data){
+    if(!location.protocol.startsWith('http'))throw Error('Publish the trainer at its HTTPS URL before using the Supabase endpoint.');
+    const ctrl=new AbortController();const timeout=setTimeout(()=>ctrl.abort(),18000);
+    try{
+      const response=await fetch(ENDPOINT,{method:'POST',mode:'cors',headers:{'content-type':'application/json'},body:JSON.stringify(data),signal:ctrl.signal});
+      const body=await response.json().catch(()=>({}));
+      if(!response.ok||!body.ok)throw Error(body.error||`Database responded ${response.status}`);
+      return body;
+    }finally{clearTimeout(timeout)}
+  }
+  async function start(){
+    const s=getSession();
+    if(s.started_server)return s;
+    const r=await call({action:'start',session_id:s.session_id,session_token:s.session_token});
+    s.started_server=true;s.finalized=!!r.finalized;jsonSet(STORE,s);return s;
+  }
+  function takeQueue(){return jsonGet(OUTBOX,[])}
+  window.rwceStandaloneQueueEvent=function(kind,payload){
+    if(!['pretest','posttest','knowledge_check','simulation_action','simulation_summary'].includes(kind))return;
+    try{
+      const s=getSession();
+      if(s.finalized)return;
+      const queue=takeQueue();
+      if(queue.length>=MAX_LOCAL_QUEUE){setStatus('Local event queue full; retry database saving before continuing.','error');return}
+      queue.push({id:uuid(),kind,payload,occurred_at:now()});jsonSet(OUTBOX,queue);
+      setStatus(`${queue.length} result${queue.length===1?'':'s'} queued for secure storage…`,'');
+      window.rwceStandaloneFlush().catch(()=>{});
+    }catch(e){setStatus('Unable to cache this result: '+e.message,'error')}
+  };
+  async function performFlush(){
+    const s=await start();
+    if(s.finalized)return {queued:takeQueue().length};
+    let q=takeQueue();
+    while(q.length){
+      const ev=q[0];
+      await call({action:'event',session_id:s.session_id,session_token:s.session_token,event:ev});
+      q=takeQueue().filter(x=>x.id!==ev.id);jsonSet(OUTBOX,q);
+    }
+    setStatus('All recorded results saved securely. Learner identity will link at evaluation.','ok');
+    return {queued:0};
+  }
+  window.rwceStandaloneFlush=function(){
+    if(busy)return busy;
+    busy=performFlush().catch(e=>{setStatus('Pending results are safe in this browser. Database: '+e.message,'error');throw e}).finally(()=>{busy=null});
+    return busy;
+  };
+  function evalValid(){
+    const req=[...document.querySelectorAll('#cme-eval-form .cme-eval-q[data-required]')];
+    let first=null;
+    req.forEach(q=>{
+      const type=q.dataset.required,name=q.dataset.name,els=[...q.querySelectorAll(`[name="${name}"]`)];
+      const ok=type==='radio'||type==='checkbox'?els.some(e=>e.checked):type==='email'? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((els[0]?.value||'').trim()):!!els[0]?.value.trim();
+      q.classList.toggle('invalid',!ok);if(!ok&&!first)first=q;
+    });
+    const biasNo=document.querySelector('input[name="q15"][value="No"]:checked');
+    const bias= document.querySelector('.cme-eval-q[data-name="q16"]');
+    const missingBias=!!biasNo && !(bias?.querySelector('[name="q16"]')?.value||'').trim();
+    bias?.classList.toggle('invalid',missingBias);if(missingBias&&!first)first=bias;
+    const error=$('cme-eval-error');
+    if(first){if(error){error.classList.add('active');error.textContent='Complete all required fields, including the requested bias detail.'}first.scrollIntoView({behavior:'smooth',block:'center'});return false}
+    error?.classList.remove('active');return true;
+  }
+  function formData(){
+    const out={};
+    for(const [key,val] of new FormData($('cme-eval-form')).entries()){
+      if(out[key]!==undefined)out[key]=Array.isArray(out[key])?[...out[key],val]:[out[key],val];else out[key]=val;
+    }
+    out.completedAt=now();return out;
+  }
+  function restoreEvaluationDraft(){
+    const form=$('cme-eval-form'),saved=jsonGet(EVAL_DRAFT,null);
+    if(!form||!saved)return;
+    try{window.initCMEEvaluation?.()}catch(_){}
+    for(const el of form.querySelectorAll('input,textarea')){
+      if(!el.name || !(el.name in saved))continue;
+      const value=saved[el.name];
+      if(el.type==='radio'||el.type==='checkbox') el.checked=(Array.isArray(value)?value:[value]).includes(el.value);
+      else el.value=String(value??'');
+    }
+    window.updateCMEEvaluationProgress?.();
+  }
+  function snapshot(){
+    const tests=jsonGet('rwce_lai_matched_pre_post_v1',{});
+    const quiz=jsonGet('rwce_lai_learning_state',{});
+    let simulation={};try{if(typeof rwceSimulationPayload==='function')simulation=rwceSimulationPayload()}catch(_){}
+    return {pretest:tests.pre||null,posttest:tests.post||null,knowledge_check:{answers:quiz.answers||{},quizPassed:!!quiz.quizPassed,quizCompleted:!!quiz.quizCompleted},simulation};
+  }
+  window.submitCMEEvaluation=async function(){
+    if(!evalValid())return;
+    const sData=snapshot();
+    if(!sData.pretest || !sData.posttest || !sData.simulation?.completed){
+      setStatus('Complete the pretest, clinical simulation and post-test before submitting.','error');return;
+    }
+    const form=formData();
+    jsonSet(EVAL_DRAFT,form); // An unfinished submission can be retried after refresh.
+    const btn=document.querySelector('#cme-evaluation .cme-eval-btn.primary');
+    const original=btn?.textContent; if(btn){btn.disabled=true;btn.textContent='Saving results securely…';}
+    try{
+      setStatus('Saving all test attempts and injection results…','');
+      await window.rwceStandaloneFlush();
+      const session=getSession();
+      let id=localStorage.getItem(EVAL_ID);
+      if(!id){id=uuid();localStorage.setItem(EVAL_ID,id)}
+      const response=await call({action:'finalize',session_id:session.session_id,session_token:session.session_token,evaluation_id:id,
+        learner:{first_name:form.learner_first_name,last_name:form.learner_last_name,email:form.learner_email},
+        evaluation:form,snapshot:sData});
+      session.finalized=true;session.receipt_id=response.receipt_id;jsonSet(STORE,session);
+      // Avoid retaining the full evaluation (including pharmacist fields) on a shared device after saving.
+      jsonSet('rwce-lai-cme-evaluation',{submissionId:id,completedAt:form.completedAt});
+      localStorage.removeItem(EVAL_DRAFT);
+      $('cme-evaluation')?.classList.remove('active');$('cme-complete')?.classList.add('active');
+      const node=document.querySelector('#cme-complete .cme-complete-meta');
+      if(node)node.textContent='Real World CE database receipt: '+response.receipt_id+'. Credit and certificate processing require provider verification.';
+      setStatus('Activity Completed — Results Saved Successfully.','ok');
+    }catch(err){
+      setStatus('Save failed; your answers remain on this device. Retry Submit. '+(err.message||'Connection error'),'error');
+    }finally{if(btn){btn.disabled=false;btn.textContent=original||'Submit Evaluation & Complete Activity';}}
+  };
+  window.rwceStandaloneNewActivity=function(){
+    if(!window.confirm('Start a new activity? Your submitted results remain in Supabase. A new pretest, Knowledge Check and simulation will be required.'))return;
+    for(const key of [STORE,OUTBOX,EVAL_ID,EVAL_DRAFT,'rwce-lai-cme-evaluation',
+      'rwce_lai_matched_pre_post_v1','rwce_lai_learning_state','rwce_lai_scenario_v2'])localStorage.removeItem(key);
+    window.location.reload();
+  };
+  const boot=()=>{prepareUI();getSession();restoreEvaluationDraft();window.rwceStandaloneFlush().catch(()=>{});
+    window.addEventListener('online',()=>window.rwceStandaloneFlush().catch(()=>{}));
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden)window.rwceStandaloneFlush().catch(()=>{})});
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+})();
+
+</script>
+
+<script id="rwce-standalone-mobile-final-script">
+(function(){
+  'use strict';
+  const phone=()=>window.matchMedia('(max-width:768px)').matches;
+  const shell=document.getElementById('learning-module');
+  const nav=shell?.querySelector('.lm-nav');
+  const navList=shell?.querySelector('.lm-nav-list');
+  const progress=nav?.querySelector('.lm-progress-wrap');
+  if(shell&&navList&&progress){
+    let toggle=nav.querySelector('#rwce-phone-lessons-toggle');
+    if(!toggle){
+      toggle=document.createElement('button');
+      toggle.type='button';toggle.id='rwce-phone-lessons-toggle';toggle.className='rwce-phone-lessons-toggle';
+      toggle.setAttribute('aria-controls',navList.id||'lm-nav-list');toggle.setAttribute('aria-expanded','false');
+      toggle.innerHTML='<span>Browse learning sections</span><span aria-hidden="true">+</span>';
+      progress.after(toggle);
+    }
+    const close=()=>{shell.classList.remove('rwce-phone-lessons-expanded');toggle.setAttribute('aria-expanded','false');toggle.firstElementChild.textContent='Browse learning sections';toggle.lastElementChild.textContent='+'};
+    toggle.addEventListener('click',()=>{
+      const expanded=!shell.classList.contains('rwce-phone-lessons-expanded');
+      shell.classList.toggle('rwce-phone-lessons-expanded',expanded);
+      toggle.setAttribute('aria-expanded',String(expanded));
+      toggle.firstElementChild.textContent=expanded?'Hide learning sections':'Browse learning sections';
+      toggle.lastElementChild.textContent=expanded?'−':'+';
+    });
+    navList.addEventListener('click',e=>{if(phone()&&e.target.closest('.lm-nav-btn')){close();requestAnimationFrame(()=>shell.scrollTo({top:0,behavior:'instant'}))}});
+    window.addEventListener('resize',()=>{if(!phone())close()},{passive:true});
+  }
+  const skin=document.getElementById('skin-popup');
+  if(skin){
+    const ctrl=skin.querySelector('.popup-controls');
+    if(ctrl&&!ctrl.querySelector('.rwce-phone-needle-help')){
+      const note=document.createElement('div');note.className='rwce-phone-needle-help';note.setAttribute('role','note');
+      note.textContent='Use Tip depth to move the needle from the skin into the intended tissue layer. Adjust the Angle slider, then tap Submit Injection Attempt. If the trainer asks for a correction, change the controls and submit again.';
+      ctrl.prepend(note);
+    }
+  }
+  const evalPopup=document.getElementById('cme-evaluation');
+  const evalHead=evalPopup?.querySelector('.cme-eval-head');
+  const form=document.getElementById('cme-eval-form');
+  if(evalHead&&form){
+    const status=document.createElement('div');status.id='rwce-mobile-eval-progress';status.setAttribute('role','status');
+    status.style.cssText='margin-top:9px;font:800 13px/1.4 Inter,Arial,sans-serif;color:#fff';
+    evalHead.appendChild(status);
+    const update=()=>{
+      const qs=[...form.querySelectorAll('.cme-eval-q[data-required]')];
+      const done=qs.filter(q=>{
+        const kind=q.dataset.required,name=q.dataset.name;
+        if(kind==='radio'||kind==='checkbox')return !!q.querySelector('input[name="'+name+'"]:checked');
+        const el=q.querySelector('[name="'+name+'"]');return !!el&&!!String(el.value||'').trim();
+      }).length;
+      status.textContent=done+' of '+qs.length+' required items answered';
+    };
+    form.addEventListener('input',update);form.addEventListener('change',update);
+    update();
+  }
+})();
+</script>
+
+
+<style id="rwce-standalone-mobile-final-overrides">
+@media(max-width:768px){
+  #rwce-assessment .rwce-a-option b{display:inline-block!important;flex:0 0 24px!important;min-width:24px!important;white-space:nowrap!important;overflow-wrap:normal!important;font-size:15px!important}
+  body #skin-popup .popup-visual-column .popup-angle-hint{display:none!important}
+}
+</style>
+
 </body>
 </html>
