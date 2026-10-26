@@ -2875,6 +2875,41 @@
       .webinar-hero { border-radius: 1.4rem; }
     }
 
+
+
+/* Real World CE LMS | LAI pre/post outcomes tab (admin-only) */
+#adminViewLaiAssessment .lai-rpt-shell{background:linear-gradient(145deg,#fff 0%,#f2fbfd 70%,#e9f8f7 100%);border:1px solid #d4e8ee;border-radius:24px;padding:clamp(16px,3vw,27px);color:#173653;box-shadow:0 10px 28px rgba(9,55,93,.06)}
+#adminViewLaiAssessment .lai-rpt-head{display:flex;gap:18px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+#adminViewLaiAssessment .lai-rpt-eyebrow{font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:900;color:#087f93}
+#adminViewLaiAssessment h3{font-size:clamp(21px,3vw,27px);font-weight:900;line-height:1.18;margin:5px 0;color:#113a64}
+#adminViewLaiAssessment .lai-rpt-description{font-size:14px;line-height:1.6;color:#506a80;max-width:700px}
+#adminViewLaiAssessment .lai-rpt-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+#adminViewLaiAssessment .lai-rpt-btn{border:1px solid #bbdce3;border-radius:11px;background:white;color:#155c75;font-weight:800;font-size:13px;padding:10px 14px;min-height:42px;cursor:pointer}
+#adminViewLaiAssessment .lai-rpt-btn.primary{background:#087f9f;color:#fff;border-color:#087f9f}
+#adminViewLaiAssessment .lai-rpt-btn:disabled{opacity:.55;cursor:wait}
+#adminViewLaiAssessment .lai-rpt-btn:focus-visible,#adminViewLaiAssessment input:focus-visible,#adminViewLaiAssessment select:focus-visible{outline:3px solid #88d5d1;outline-offset:2px}
+#adminViewLaiAssessment .lai-rpt-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:11px;margin:20px 0}
+#adminViewLaiAssessment .lai-rpt-stat{padding:15px 14px;border-radius:15px;background:#fff;border:1px solid #dcecf0;min-height:83px}
+#adminViewLaiAssessment .lai-rpt-stat b{display:block;color:#0c4768;font-size:25px;line-height:1.25;font-variant-numeric:tabular-nums}
+#adminViewLaiAssessment .lai-rpt-stat span{display:block;color:#61778a;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
+#adminViewLaiAssessment .lai-rpt-filters{display:flex;gap:12px;flex-wrap:wrap;margin:17px 0;align-items:end}
+#adminViewLaiAssessment .lai-rpt-filters label{display:grid;gap:6px;font-size:12px;font-weight:800;color:#496176}
+#adminViewLaiAssessment .lai-rpt-filters input,#adminViewLaiAssessment .lai-rpt-filters select{width:100%;border:1px solid #d0e2e9;background:#fff;border-radius:9px;min-height:39px;padding:8px 10px;color:#1b3d57;font:inherit;max-width:290px}
+#adminViewLaiAssessment .lai-rpt-filters .lai-rpt-search{flex:1 1 210px}
+#adminViewLaiAssessment .lai-rpt-notice{padding:12px 14px;border-radius:11px;background:#eff8fc;color:#356174;border:1px solid #cce6f0;font-size:13px;font-weight:650;margin:12px 0;white-space:pre-wrap}
+#adminViewLaiAssessment .lai-rpt-notice.error{color:#9b3030;background:#fff2f2;border-color:#f0c4c4}
+#adminViewLaiAssessment .lai-rpt-notice.success{color:#17624f;background:#e8f8f2;border-color:#bee9d5}
+#adminViewLaiAssessment .lai-rpt-card{background:#fff;border:1px solid #e0eaee;border-radius:16px;padding:16px;margin-top:16px}
+#adminViewLaiAssessment .lai-rpt-card h4{margin:0 0 11px;font-size:16px;font-weight:900;color:#123c62}
+#adminViewLaiAssessment .lai-rpt-tablewrap{overflow-x:auto;max-width:100%;border:1px solid #e5eef0;border-radius:10px}
+#adminViewLaiAssessment table{border-collapse:collapse;width:100%;min-width:790px;font-size:12.5px}
+#adminViewLaiAssessment th,#adminViewLaiAssessment td{padding:11px 12px;border-bottom:1px solid #e9eff2;text-align:left;vertical-align:top;overflow-wrap:anywhere}
+#adminViewLaiAssessment thead th{background:#15385d;color:#fff;font-weight:850;letter-spacing:.015em;white-space:nowrap}
+#adminViewLaiAssessment tbody tr:nth-child(even){background:#f5fafc}
+#adminViewLaiAssessment .lai-rpt-chip{display:inline-block;border:1px solid #c8e6e7;background:#e6f7f6;border-radius:20px;padding:3px 8px;font-weight:800;color:#0c6672;white-space:nowrap}
+#adminViewLaiAssessment .lai-rpt-help{font-size:12px;color:#647789;margin-top:11px;line-height:1.5}
+@media(max-width:950px){#adminViewLaiAssessment .lai-rpt-stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:580px){#adminViewLaiAssessment .lai-rpt-stats{grid-template-columns:repeat(2,minmax(0,1fr))}#adminViewLaiAssessment .lai-rpt-stat b{font-size:21px}}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&amp;family=Oswald:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><style>
 /* =========================================================
@@ -4495,6 +4530,7 @@ body.rw110-theme::before {
 <button class="admin-tab-button is-active" data-admin-tab="dashboard" type="button">Dashboard</button>
 <button class="admin-tab-button" data-admin-tab="reports" type="button">User Reports</button>
 <button class="admin-tab-button" data-admin-tab="injectionlab" type="button"><span class="material-symbols-outlined text-[17px] align-middle">vaccines</span> InjectionLab Reports</button>
+<button class="admin-tab-button" data-admin-tab="laiassessment" data-min-role="admin" type="button"><span class="material-symbols-outlined text-[17px] align-middle">fact_check</span> LAI Assessments / Evaluation</button>
 <button class="admin-tab-button" data-admin-tab="liveevents" type="button"><span class="material-symbols-outlined text-[17px] align-middle">event_available</span> Live Event Reports</button>
 <button class="admin-tab-button" data-admin-tab="analytics" type="button">Module Analytics</button>
 <button class="admin-tab-button" data-admin-tab="users" type="button">Add Users</button>
@@ -4612,6 +4648,73 @@ body.rw110-theme::before {
  </div>
 </section>
 
+<section aria-label="LAI pretest and post-test administrator results" class="admin-view-panel" data-min-role="admin" id="adminViewLaiAssessment">
+<div class="lai-rpt-shell">
+<!-- BEGIN RWCE UNIFIED LAI ADMIN REPORT -->
+<section aria-label="Unified LAI pretest, post-test, and evaluation results" class="lai-rpt-card" id="laiUnifiedSection">
+  <div class="lai-rpt-head">
+    <div><div class="lai-rpt-eyebrow">One-link assessment · October 31, 2026</div>
+      <h4>Unified Assessment &amp; Evaluation Results</h4>
+      <p class="lai-rpt-description">Each learner submits one combined record after completing the pretest, post-test, evaluation, and name/email form. View every answer and export the evaluation responses.</p></div>
+    <div class="lai-rpt-actions">
+      <button class="lai-rpt-btn primary" type="button" id="laiUnifiedRefresh">Refresh Unified Results</button>
+      <button class="lai-rpt-btn" type="button" id="laiUnifiedCsv" disabled>Export Summary CSV</button>
+      <button class="lai-rpt-btn" type="button" id="laiUnifiedEvalCsv" disabled>Export All Evaluation Questions CSV</button>
+    </div>
+  </div>
+  <div class="lai-rpt-stats" aria-label="Unified LAI statistics">
+    <div class="lai-rpt-stat"><b id="laiUnifiedCount">—</b><span>Complete Submissions</span></div>
+    <div class="lai-rpt-stat"><b id="laiUnifiedEmails">—</b><span>Unique Emails</span></div>
+    <div class="lai-rpt-stat"><b id="laiUnifiedPreAvg">—</b><span>Pretest Mean / 3</span></div>
+    <div class="lai-rpt-stat"><b id="laiUnifiedPostAvg">—</b><span>Post-test Mean / 3</span></div>
+    <div class="lai-rpt-stat"><b id="laiUnifiedChange">—</b><span>Average Score Change</span></div>
+  </div>
+  <div class="lai-rpt-filters"><label class="lai-rpt-search">Search learner or email<input id="laiUnifiedSearch" type="search" placeholder="Name or email"></label><label>From <input id="laiUnifiedFrom" type="date"></label><label>To <input id="laiUnifiedTo" type="date"></label><button class="lai-rpt-btn" id="laiUnifiedClear" type="button">Clear Filters</button></div>
+  <div id="laiUnifiedStatus" role="status" class="lai-rpt-notice">Sign in as an LMS administrator and select Refresh Unified Results.</div>
+  <div class="lai-rpt-tablewrap"><table><thead><tr><th>Learner</th><th>Email (Self-reported)</th><th>Pretest / 3</th><th>Post-test / 3</th><th>Change</th><th>Evaluation</th><th>Submitted</th><th>Details</th></tr></thead><tbody id="laiUnifiedRows"><tr><td colspan="8">No results loaded.</td></tr></tbody></table></div>
+  <div id="laiUnifiedDetail" class="lai-rpt-card" hidden aria-live="polite"></div>
+  <p class="lai-rpt-help">Email matches are not identity verification. Results are accessible to LMS administrators only and do not independently award CE/CME credit. Learners retain answers only in their browser until final submission.</p>
+</section>
+<!-- END RWCE UNIFIED LAI ADMIN REPORT -->
+
+<div class="lai-rpt-head">
+<div>
+<div class="lai-rpt-eyebrow">Real World CE · Live LAI Education</div>
+<h3>LAI Pretest &amp; Post-test Results</h3>
+<p class="lai-rpt-description">Review the October 31, 2026 APNA education activity. Match pretest and post-test records by submitted email, inspect all three answers, and export every attempt. Each submission is retained.</p>
+</div>
+<div class="lai-rpt-actions">
+<button class="lai-rpt-btn primary" id="laiRptRefresh" type="button">Refresh Results</button>
+<button class="lai-rpt-btn" disabled="" id="laiRptExportAttempts" type="button">Export All Answers CSV</button>
+<button class="lai-rpt-btn" disabled="" id="laiRptExportPairs" type="button">Export Comparison CSV</button>
+</div>
+</div>
+<div aria-label="LAI assessment performance" class="lai-rpt-stats">
+<div class="lai-rpt-stat"><b id="laiRptCount">—</b><span>Total Attempts</span></div>
+<div class="lai-rpt-stat"><b id="laiRptLearners">—</b><span>Submitted Emails</span></div>
+<div class="lai-rpt-stat"><b id="laiRptPreAvg">—</b><span>Pretest Avg / 3</span></div>
+<div class="lai-rpt-stat"><b id="laiRptPostAvg">—</b><span>Post-test Avg / 3</span></div>
+<div class="lai-rpt-stat"><b id="laiRptPaired">—</b><span>Paired Learners</span></div>
+</div>
+<div aria-label="Filter LAI assessment results" class="lai-rpt-filters">
+<label class="lai-rpt-search">Search learner or email<input autocomplete="off" id="laiRptSearch" placeholder="First name, last name, or email" type="search"/></label>
+<label>Assessment<select id="laiRptType"><option value="all">All attempts</option><option value="pre">Pretest</option><option value="post">Post-test</option></select></label>
+<label>From<input id="laiRptFrom" type="date"/></label>
+<label>To<input id="laiRptTo" type="date"/></label>
+<button class="lai-rpt-btn" id="laiRptClear" type="button">Clear Filters</button>
+</div>
+<div aria-live="polite" class="lai-rpt-notice" id="laiRptStatus" role="status">Open this tab as an administrator to load results from Supabase.</div>
+<section aria-label="Paired pretest and post-test comparison" class="lai-rpt-card">
+<h4>Pretest vs. Post-test — Individual Comparison</h4>
+<div class="lai-rpt-tablewrap"><table><thead><tr><th>Learner</th><th>Email</th><th>LMS Account</th><th>Latest Pretest</th><th>Latest Post-test</th><th>Change</th><th>Attempts</th></tr></thead><tbody id="laiRptPairRows"><tr><td colspan="7">No data loaded.</td></tr></tbody></table></div>
+<p class="lai-rpt-help">Records are matched by the email entered by the learner, not by authenticated identity. An LMS account match is only an email match and does not verify the participant or establish CME/CE eligibility.</p>
+</section>
+<section aria-label="Question-level LAI assessment attempts" class="lai-rpt-card">
+<h4>Complete Assessment Attempts — Question-level Details</h4>
+<div class="lai-rpt-tablewrap"><table><thead><tr><th>Submitted</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Assessment</th><th>Question 1</th><th>Question 2</th><th>Question 3</th><th>Score</th></tr></thead><tbody id="laiRptAttemptRows"><tr><td colspan="9">No data loaded.</td></tr></tbody></table></div>
+</section>
+</div>
+</section>
 <section class="admin-view-panel" id="adminViewLiveEvents">
   <div class="cme-report-panel">
     <div class="cme-report-head">
@@ -6421,12 +6524,14 @@ body.rw110-theme::before {
 
     function showAdminTab(tab = 'dashboard') {
       const normalized = String(tab || 'dashboard').toLowerCase();
+      if (normalized === 'laiassessment' && normalizePortalRole(rwceAuthenticatedProfile?.role || 'locked') !== 'admin') { showAdminTab('dashboard'); return; }
       document.querySelectorAll('.admin-view-panel').forEach(panel => panel.classList.remove('is-active'));
       const target = document.getElementById({
         dashboard: 'adminViewDashboard',
         reports: 'adminViewReports',
         liveevents: 'adminViewLiveEvents',
         injectionlab: 'adminViewInjectionLab',
+        laiassessment: 'adminViewLaiAssessment',
         analytics: 'adminViewAnalytics',
         users: 'adminViewUsers',
         access: 'adminViewAccess',
@@ -6440,6 +6545,11 @@ body.rw110-theme::before {
       if (normalized === 'upload' && !['admin', 'manager'].includes(currentRole)) {
         showAdminTab('dashboard');
         return;
+      }
+      if (normalized === 'laiassessment') {
+        window.rwceLaiReport?.load(false);
+        window.rwceLaiUnifiedReport?.load(false);
+        loadManagerPortalData(false);
       }
       if (['dashboard', 'reports', 'liveevents', 'injectionlab', 'analytics', 'users', 'access', 'upload'].includes(normalized)) {
         if (normalized === 'liveevents' && typeof renderCMEEvaluationReports === 'function') renderCMEEvaluationReports();
@@ -8990,6 +9100,256 @@ window.rwceExportEveryQuestionCSV=download;
  window.rwceLoadInjectionLabReports=()=>{if(!loaded&&!busy)refresh();else if(loaded)render()};
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind);else bind();
 })();
+</script>
+<script>
+/* Real World CE | LAI open-access pre/post reporting — LMS Administrator Portal.
+   Uses the existing LMS Supabase client and authenticated admin session.
+   The database RLS policy, not this UI, authorizes access to learner results.
+*/
+(function () {
+  'use strict';
+  const TABLE = 'lai_apna_assessment_attempts';
+  const PAGE_SIZE = 500;
+  const MAX_PAGES = 100;
+  const $ = id => document.getElementById(id);
+  const state = {rows: [], loaded: false, busy: false, truncated: false, lastMatchRows: [], lastVisibleRows: []};
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const emailKey = value => String(value || '').trim().toLowerCase();
+  const score = r => Number(r?.score ?? 0);
+  const formatDate = value => {
+    const d = value ? new Date(value) : null;
+    return d && Number.isFinite(d.getTime()) ? d.toLocaleString() : '—';
+  };
+  const datetimeMs = r => Number.isFinite(Date.parse(r.submitted_at || '')) ? Date.parse(r.submitted_at) : 0;
+  const status = (message, variant = '') => {
+    const element = $('laiRptStatus');
+    if (element) { element.textContent = message; element.className = 'lai-rpt-notice' + (variant ? ' ' + variant : ''); }
+  };
+  const isAdmin = () => typeof normalizePortalRole === 'function' &&
+    normalizePortalRole(typeof rwceAuthenticatedProfile !== 'undefined' ? rwceAuthenticatedProfile?.role : '') === 'admin';
+  const client = () => (typeof rwceSupabase !== 'undefined' && rwceSupabase) || window.rwceSupabase || null;
+  const currentProfileMatches = () => {
+    const items = (typeof rwceAdminPortalData !== 'undefined' ? rwceAdminPortalData?.users : []) || [];
+    return new Set(items.map(x => emailKey(x.email)).filter(Boolean));
+  };
+  const accountStatus = (email, matches) => !email ? '—' : matches.has(email) ? 'Email match' : 'Not in loaded profiles';
+
+  function filterRows(includeType = true) {
+    const q = String($('laiRptSearch')?.value || '').trim().toLowerCase();
+    const type = String($('laiRptType')?.value || 'all');
+    const from = $('laiRptFrom')?.value || '';
+    const to = $('laiRptTo')?.value || '';
+    return state.rows.filter(r => {
+      if (includeType && type !== 'all' && r.assessment_type !== type) return false;
+      const haystack = [r.first_name, r.last_name, r.learner_email, r.assessment_type].map(x => String(x || '').toLowerCase()).join(' ');
+      if (q && !haystack.includes(q)) return false;
+      const day = typeof r.submitted_at === 'string' ? r.submitted_at.slice(0,10) : '';
+      if (from && day < from) return false;
+      if (to && day > to) return false;
+      return true;
+    });
+  }
+  function summaries(rows) {
+    // Rows arrive newest first. Latest pre/post of each email are paired.
+    const byPerson = new Map();
+    for (const r of rows) {
+      const key = emailKey(r.learner_email) || (r.user_id ? 'legacy-id:' + r.user_id : 'unknown:' + r.id);
+      let p = byPerson.get(key);
+      if (!p) {
+        p = {first_name: r.first_name || '', last_name: r.last_name || '', email: emailKey(r.learner_email), pre: null, post: null, count: 0};
+        byPerson.set(key, p);
+      }
+      p.count++;
+      if (!p.first_name && r.first_name) p.first_name = r.first_name;
+      if (!p.last_name && r.last_name) p.last_name = r.last_name;
+      if (!p.email && r.learner_email) p.email = emailKey(r.learner_email);
+      if ((r.assessment_type === 'pre' || r.assessment_type === 'post') && !p[r.assessment_type]) p[r.assessment_type] = r;
+    }
+    return Array.from(byPerson.values());
+  }
+  function mean(rows) {
+    if (!rows.length) return '—';
+    return (rows.reduce((a,r) => a + score(r),0) / rows.length).toFixed(2);
+  }
+  function render() {
+    if (!state.loaded) return;
+    const matched = filterRows(false);
+    const visible = filterRows(true);
+    const grouped = summaries(matched);
+    const matches = currentProfileMatches();
+    state.lastMatchRows = grouped;
+    state.lastVisibleRows = visible;
+    const pre = matched.filter(x => x.assessment_type === 'pre');
+    const post = matched.filter(x => x.assessment_type === 'post');
+    $('laiRptCount').textContent = matched.length.toLocaleString();
+    $('laiRptLearners').textContent = grouped.length.toLocaleString();
+    $('laiRptPreAvg').textContent = mean(pre);
+    $('laiRptPostAvg').textContent = mean(post);
+    $('laiRptPaired').textContent = grouped.filter(x => x.pre && x.post).length.toLocaleString();
+    $('laiRptExportAttempts').disabled = !state.rows.length;
+    $('laiRptExportPairs').disabled = !state.rows.length;
+
+    const scoreLabel = item => item ? `${score(item)} / ${item.total_questions || 3}` : '—';
+    const deltaLabel = p => p.pre && p.post ? `${(score(p.post) - score(p.pre)) > 0 ? '+' : ''}${score(p.post)-score(p.pre)} / 3` : '—';
+    $('laiRptPairRows').innerHTML = grouped.length ? grouped.slice(0,500).map(p => `
+      <tr><td>${esc([p.first_name,p.last_name].filter(Boolean).join(' ') || '—')}</td>
+      <td>${esc(p.email || '—')}</td><td>${esc(accountStatus(p.email,matches))}</td>
+      <td>${esc(scoreLabel(p.pre))}</td><td>${esc(scoreLabel(p.post))}</td><td><strong>${esc(deltaLabel(p))}</strong></td><td>${p.count}</td></tr>`).join('') : '<tr><td colspan="7">No records match these filters.</td></tr>';
+    $('laiRptAttemptRows').innerHTML = visible.length ? visible.slice(0,500).map(r => `
+      <tr><td>${esc(formatDate(r.submitted_at))}</td><td>${esc(r.first_name || '—')}</td><td>${esc(r.last_name || '—')}</td>
+      <td>${esc(r.learner_email || '—')}</td><td><span class="lai-rpt-chip">${r.assessment_type === 'pre' ? 'Pretest' : 'Post-test'}</span></td>
+      <td>${esc(r.q1 || '—')}</td><td>${esc(r.q2 || '—')}</td><td>${esc(r.q3 || '—')}</td>
+      <td><strong>${esc(scoreLabel(r))}</strong></td></tr>`).join('') : '<tr><td colspan="9">No records match these filters.</td></tr>';
+    const typeNotice = $('laiRptType').value !== 'all' ? ' Assessment filter applies to the question-level table; the comparison continues to show both test types.' : '';
+    const cutoff = (visible.length > 500 || grouped.length > 500) ? ' Tables display the first 500 matching rows; CSV exports include all loaded attempts.' : '';
+    const trunc = state.truncated ? ' Warning: data reached the 50,000-attempt safety limit; narrow the date range or export directly from Supabase for older attempts.' : '';
+    status(`${matched.length.toLocaleString()} assessment attempt(s) found for ${grouped.length.toLocaleString()} learner key(s). Scores are calculated by the database; all attempts are preserved.${typeNotice}${cutoff}${trunc}`,state.truncated?'':'success');
+  }
+
+  async function verifyAdmin() {
+    if (!isAdmin()) throw new Error('Only an administrator can open these reports.');
+    const c = client();
+    if (!c) throw new Error('LMS Supabase is not connected. Sign in to the LMS first.');
+    const {data: {user} = {}, error: authErr} = await c.auth.getUser();
+    if (authErr || !user) throw new Error('Your LMS session is no longer authenticated. Sign in again.');
+    const {data:profile, error: profileErr} = await c.from('profiles').select('role').eq('id',user.id).maybeSingle();
+    if (profileErr || typeof normalizePortalRole !== 'function' || normalizePortalRole(profile?.role) !== 'admin') {
+      throw new Error('Database administrator access is required for learner assessment results.');
+    }
+    return c;
+  }
+  async function load(force = false) {
+    if (state.busy) return;
+    if (state.loaded && !force) {render(); return;}
+    state.busy = true;
+    $('laiRptRefresh').disabled = true;
+    $('laiRptExportAttempts').disabled = true;
+    $('laiRptExportPairs').disabled = true;
+    status('Checking administrator permissions and loading LAI results…');
+    try {
+      const c = await verifyAdmin();
+      const rows = [];
+      let truncated = true;
+      for (let page=0; page<MAX_PAGES; page++) {
+        const offset = page*PAGE_SIZE;
+        const {data,error} = await c.from(TABLE)
+          .select('id,user_id,first_name,last_name,learner_email,assessment_type,q1,q2,q3,score,total_questions,submitted_at')
+          .order('submitted_at',{ascending:false}).range(offset,offset+PAGE_SIZE-1);
+        if (error) throw error;
+        rows.push(...(data || []));
+        if (!data || data.length<PAGE_SIZE) {truncated = false;break;}
+      }
+      rows.sort((a,b) => datetimeMs(b)-datetimeMs(a));
+      state.rows = rows;
+      state.truncated = truncated;
+      state.loaded = true;
+      render();
+    } catch (e) {
+      state.rows = []; state.loaded = false;
+      for (const id of ['laiRptCount','laiRptLearners','laiRptPreAvg','laiRptPostAvg','laiRptPaired']) $(id).textContent='—';
+      $('laiRptPairRows').innerHTML='<tr><td colspan="7">No authorized records loaded.</td></tr>';
+      $('laiRptAttemptRows').innerHTML='<tr><td colspan="9">No authorized records loaded.</td></tr>';
+      let msg = String(e?.message || e);
+      if (/does not exist|schema cache|PGRST205|42P01/i.test(msg)) msg += ' The LAI assessment table may not exist. Apply the included SQL in the Real World CE Supabase project.';
+      if (/permission denied|42501|row-level security|not authorized/i.test(msg)) msg += ' Check the database GRANT and administrator RLS policy in the included SQL.';
+      status('Unable to load LAI assessment reports: ' + msg, 'error');
+    } finally {
+      $('laiRptRefresh').disabled = false;
+      state.busy = false;
+    }
+  }
+  function csvCell(value) {
+    let v = String(value ?? '');
+    // Prevent spreadsheet formulas in CSV fields from being evaluated.
+    if (/^\s*[=+@\-\t\r]/.test(v)) v = "'" + v;
+    return '"' + v.replace(/"/g,'""') + '"';
+  }
+  function downloadCsv(filename, header, values) {
+    const csv = '\uFEFF' + [header.map(csvCell).join(','),...values.map(row => row.map(csvCell).join(','))].join('\r\n');
+    const url = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+    const anchor = document.createElement('a');anchor.href=url;anchor.download=filename;document.body.appendChild(anchor);anchor.click();anchor.remove();
+    setTimeout(()=> URL.revokeObjectURL(url),2000);
+  }
+  function exportAttempts() {
+    if (!state.loaded || !isAdmin())return;
+    const header=['Attempt ID','Submitted At','First Name','Last Name','Email (Self Reported)','LMS User ID','Assessment','Question 1','Question 2','Question 3','Score','Total Questions'];
+    downloadCsv('RWCE_LAI_Pre_Post_All_Attempts.csv',header,state.rows.map(r=>[
+      r.id,r.submitted_at,r.first_name,r.last_name,r.learner_email,r.user_id,r.assessment_type,r.q1,r.q2,r.q3,r.score,r.total_questions
+    ]));
+  }
+  function exportPairs() {
+    if(!state.loaded || !isAdmin())return;
+    const head=['First Name','Last Name','Email (Self Reported)','LMS Email Match (Not Identity Verified)','Pretest Score','Post-test Score','Score Change','Pretest Submitted At','Post-test Submitted At','All Attempts'];
+    const matches=currentProfileMatches();
+    downloadCsv('RWCE_LAI_Pre_Post_Learner_Comparison.csv',head,summaries(state.rows).map(p=>[
+      p.first_name,p.last_name,p.email,accountStatus(p.email,matches),p.pre?.score ?? '',p.post?.score ?? '',
+      (p.pre && p.post) ? score(p.post)-score(p.pre) : '',p.pre?.submitted_at || '',p.post?.submitted_at || '',p.count
+    ]));
+  }
+  function init() {
+    if (!$('adminViewLaiAssessment')) return;
+    $('laiRptRefresh')?.addEventListener('click',()=>load(true));
+    $('laiRptExportAttempts')?.addEventListener('click',exportAttempts);
+    $('laiRptExportPairs')?.addEventListener('click',exportPairs);
+    ['laiRptSearch','laiRptType','laiRptFrom','laiRptTo'].forEach(id => $(id)?.addEventListener(id==='laiRptSearch'?'input':'change',render));
+    $('laiRptClear')?.addEventListener('click',()=>{['laiRptSearch','laiRptFrom','laiRptTo'].forEach(id=>{if($(id))$(id).value='';});$('laiRptType').value='all';render();});
+  }
+  window.rwceLaiReport = {load, render};
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
+})();
+
+</script>
+
+<style>
+#laiUnifiedSection{background:linear-gradient(135deg,#f7fcfd,#ffffff);border:1px solid #b9e7e3;margin:0 0 22px;padding:19px}
+#laiUnifiedSection h4{font-size:20px;color:#123d5c}
+#laiUnifiedSection .lai-rpt-description{max-width:720px}
+#laiUnifiedSection #laiUnifiedDetail{background:white;scroll-margin-top:100px}
+#laiUnifiedSection #laiUnifiedRows button{font-size:12px;padding:7px 10px;white-space:nowrap}
+</style>
+
+<script>
+/* BEGIN RWCE UNIFIED LAI ADMIN SCRIPT */
+(function(){
+ 'use strict';
+ const TABLE='lai_apna_activity_submissions', $=id=>document.getElementById(id);
+ const state={rows:[],loaded:false,busy:false,truncated:false};
+ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const client=()=>((typeof rwceSupabase!=='undefined'&&rwceSupabase)||window.rwceSupabase||null);
+ const isAdmin=()=>typeof normalizePortalRole==='function'&&normalizePortalRole(typeof rwceAuthenticatedProfile!=='undefined'?rwceAuthenticatedProfile?.role:'')==='admin';
+ const status=(s,error=false)=>{const e=$('laiUnifiedStatus');if(e){e.textContent=s;e.className='lai-rpt-notice'+(error?' error':'');}};
+ const date=v=>{const d=new Date(v||'');return isNaN(d.getTime())?'—':d.toLocaleString()};
+ const scores=v=>Number(v||0);
+ function matches(){const term=($('laiUnifiedSearch')?.value||'').trim().toLowerCase(),from=$('laiUnifiedFrom')?.value||'',to=$('laiUnifiedTo')?.value||'';
+  return state.rows.filter(r=>{const day=String(r.submitted_at||'').slice(0,10);return(!term||[r.first_name,r.last_name,r.learner_email].join(' ').toLowerCase().includes(term))&&(!from||day>=from)&&(!to||day<=to)});
+ }
+ function average(rows,key){return rows.length?(rows.reduce((n,r)=>n+scores(r[key]),0)/rows.length).toFixed(2):'—';}
+ function render(){if(!state.loaded)return;const rows=matches();$('laiUnifiedCount').textContent=String(rows.length);$('laiUnifiedEmails').textContent=String(new Set(rows.map(r=>(r.learner_email||'').toLowerCase())).size);
+  $('laiUnifiedPreAvg').textContent=average(rows,'pre_score');$('laiUnifiedPostAvg').textContent=average(rows,'post_score');
+  $('laiUnifiedChange').textContent=rows.length?(rows.reduce((n,r)=>n+scores(r.post_score)-scores(r.pre_score),0)/rows.length).toFixed(2):'—';
+  $('laiUnifiedCsv').disabled=!rows.length;$('laiUnifiedEvalCsv').disabled=!rows.length;
+  $('laiUnifiedRows').innerHTML=rows.length?rows.slice(0,400).map(r=>{const delta=scores(r.post_score)-scores(r.pre_score);return `<tr><td>${esc([r.first_name,r.last_name].join(' '))}</td><td>${esc(r.learner_email)}</td><td>${esc(r.pre_score)}</td><td>${esc(r.post_score)}</td><td>${delta>0?'+':''}${delta}</td><td>${Object.keys(r.evaluation_answers||{}).length} response(s)</td><td>${esc(date(r.submitted_at))}</td><td><button type="button" class="lai-rpt-btn" data-unified-details="${esc(r.id)}">View Responses</button></td></tr>`}).join(''):'<tr><td colspan="8">No unified submissions match this filter.</td></tr>';
+  status(`${rows.length} complete unified submission(s) found. Includes every pretest, post-test and evaluation answer.${rows.length>400?' Table limited to 400; CSV includes all loaded rows.':''}${state.truncated?' Warning: 50,000-row limit reached.':''}`);
+ }
+ async function authorize(){if(!isAdmin())throw Error('Only LMS administrators can access this report.');const c=client();if(!c)throw Error('LMS Supabase client is not connected.');const {data:{user}={},error}=await c.auth.getUser();if(error||!user)throw Error('LMS administrator session required.');const {data:profile,error:pError}=await c.from('profiles').select('role').eq('id',user.id).maybeSingle();if(pError||typeof normalizePortalRole!=='function'||normalizePortalRole(profile?.role)!=='admin')throw Error('Database administrator role required.');return c;}
+ async function load(force=false){if(state.busy)return;if(state.loaded&&!force){render();return;}state.busy=true;$('laiUnifiedRefresh').disabled=true;status('Checking administrator permissions and loading unified LAI results…');try{
+  const c=await authorize();const all=[];let truncated=true;for(let p=0;p<100;p++){const start=p*500;const {data,error}=await c.from(TABLE).select('id,client_submission_id,first_name,last_name,learner_email,pre_q1,pre_q2,pre_q3,post_q1,post_q2,post_q3,pre_score,post_score,evaluation_form_version,evaluation_answers,evaluation_question_snapshot,pre_completed_at,post_completed_at,submitted_at').order('submitted_at',{ascending:false}).range(start,start+499);if(error)throw error;all.push(...(data||[]));if(!data||data.length<500){truncated=false;break;}}
+  state.rows=all;state.loaded=true;state.truncated=truncated;render();
+ }catch(error){state.loaded=false;state.rows=[];let msg=String(error.message||error);if(/PGRST205|42P01|does not exist|schema cache/i.test(msg))msg+=' Install the unified LAI database SQL in the Real World CE project.';status('Unable to load unified LAI results: '+msg,true);}finally{state.busy=false;$('laiUnifiedRefresh').disabled=false;}}
+ function detail(id){const r=state.rows.find(x=>x.id===id);if(!r)return;const el=$('laiUnifiedDetail');el.hidden=false;const answer=(v)=>Array.isArray(v)?v.join('; '):String(v??'—');const questions=Array.isArray(r.evaluation_question_snapshot)?r.evaluation_question_snapshot:[];
+  el.innerHTML=`<h4>All Answers — ${esc(r.first_name)} ${esc(r.last_name)} (${esc(r.learner_email)})</h4><p class="lai-rpt-help">Submitted ${esc(date(r.submitted_at))} · Pretest ${esc(r.pre_score)}/3 · Post-test ${esc(r.post_score)}/3 · Evaluation version ${esc(r.evaluation_form_version)}</p><div class="lai-rpt-tablewrap"><table><thead><tr><th>Assessment</th><th>Question</th><th>Answer</th></tr></thead><tbody>${[['Pretest','Question 1',r.pre_q1],['Pretest','Question 2',r.pre_q2],['Pretest','Question 3',r.pre_q3],['Post-test','Question 1',r.post_q1],['Post-test','Question 2',r.post_q2],['Post-test','Question 3',r.post_q3]].map(([a,b,c])=>`<tr><td>${esc(a)}</td><td>${esc(b)}</td><td>${esc(c)}</td></tr>`).join('')}${questions.map(q=>`<tr><td>Evaluation</td><td>${esc(q.prompt||q.question_key)}</td><td>${esc(answer((r.evaluation_answers||{})[q.question_key]))}</td></tr>`).join('')}</tbody></table></div><div class="lai-rpt-actions" style="margin-top:12px"><button type="button" class="lai-rpt-btn" id="laiUnifiedClose">Close Responses</button></div>`;
+  $('laiUnifiedClose').addEventListener('click',()=>{el.hidden=true;el.innerHTML='';});el.scrollIntoView({behavior:'smooth',block:'start'});
+ }
+ function csvCell(v){let text=String(v??'');if(/^\s*[=+@\-\t\r]/.test(text))text="'"+text;return '"'+text.replace(/"/g,'""')+'"';}
+ function saveCsv(filename,headers,rows){const lines=[headers,...rows].map(line=>line.map(csvCell).join(','));const blob=new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);}
+ function exportSummary(){if(!state.loaded||!isAdmin())return;const columns=['Submission ID','Submitted At','First Name','Last Name','Email (Self Reported)','Pre 1','Pre 2','Pre 3','Pre Score','Post 1','Post 2','Post 3','Post Score','Change','Evaluation Version','Evaluation Answer Count'];saveCsv('RWCE_LAI_Unified_Submissions.csv',columns,matches().map(r=>[r.id,r.submitted_at,r.first_name,r.last_name,r.learner_email,r.pre_q1,r.pre_q2,r.pre_q3,r.pre_score,r.post_q1,r.post_q2,r.post_q3,r.post_score,scores(r.post_score)-scores(r.pre_score),r.evaluation_form_version,Object.keys(r.evaluation_answers||{}).length]));}
+ function exportEvaluation(){if(!state.loaded||!isAdmin())return;const rows=[];for(const r of matches()){const qs=Array.isArray(r.evaluation_question_snapshot)?r.evaluation_question_snapshot:[];for(const q of qs){const value=(r.evaluation_answers||{})[q.question_key];rows.push([r.id,r.submitted_at,r.first_name,r.last_name,r.learner_email,r.pre_score,r.post_score,q.question_key,q.prompt,q.response_type,Array.isArray(value)?value.join(' | '):value,r.evaluation_form_version]);}}saveCsv('RWCE_LAI_Evaluation_All_Questions.csv',['Submission ID','Submitted At','First Name','Last Name','Email (Self Reported)','Pretest Score','Post-test Score','Question Key','Full Question','Response Type','User Response','Evaluation Version'],rows);}
+ function bind(){if(!$('laiUnifiedSection'))return;$('laiUnifiedRefresh').addEventListener('click',()=>load(true));$('laiUnifiedCsv').addEventListener('click',exportSummary);$('laiUnifiedEvalCsv').addEventListener('click',exportEvaluation);$('laiUnifiedRows').addEventListener('click',e=>{const b=e.target.closest('[data-unified-details]');if(b)detail(b.dataset.unifiedDetails);});for(const id of ['laiUnifiedSearch','laiUnifiedFrom','laiUnifiedTo'])$(id).addEventListener(id==='laiUnifiedSearch'?'input':'change',render);$('laiUnifiedClear').addEventListener('click',()=>{for(const id of ['laiUnifiedSearch','laiUnifiedFrom','laiUnifiedTo'])$(id).value='';render();});}
+ window.rwceLaiUnifiedReport={load,render};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind);else bind();
+})();
+/* END RWCE UNIFIED LAI ADMIN SCRIPT */
+
 </script>
 </body>
 </html>
