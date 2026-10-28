@@ -3164,6 +3164,92 @@ body:not(.learning-mode) #prep-popup .prep-feedback.good *,body:not(.learning-mo
   #cme-evaluation .cme-eval-actions {grid-template-columns:1fr!important}
 }
 </style>
+
+<style id="rwce-preparation-overview-layout-fix">
+/* Preparation-method overview and detail cards: fill desktop rows evenly.
+   Scoped to lesson 2 so other lesson diagrams retain their own grid. */
+@media (min-width: 981px) {
+  body.learning-mode .lm-section[data-lm-section="2"] > .lm-visual-strip,
+  body.learning-mode .lm-section[data-lm-section="2"] > .lm-methods {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    align-items: stretch;
+    width: 100%;
+  }
+}
+/* Medium screens: center the third overview card beneath the first two. */
+@media (min-width: 769px) and (max-width: 980px) {
+  body.learning-mode .lm-section[data-lm-section="2"] > .lm-visual-strip,
+  body.learning-mode .lm-section[data-lm-section="2"] > .lm-methods {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  body.learning-mode .lm-section[data-lm-section="2"] > .lm-visual-strip > .lm-visual-item:nth-child(3):last-child,
+  body.learning-mode .lm-section[data-lm-section="2"] > .lm-methods > .lm-method:nth-child(3):last-child {
+    grid-column: 1 / -1;
+    width: calc(50% - 6px);
+    justify-self: center;
+  }
+}
+/* Phones: preserve the readable one-card-per-row mobile layout. */
+@media (max-width: 768px) {
+  body.learning-mode .lm-section[data-lm-section="2"] > .lm-visual-strip,
+  body.learning-mode .lm-section[data-lm-section="2"] > .lm-methods {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  body.learning-mode .lm-section[data-lm-section="2"] > .lm-visual-strip > .lm-visual-item,
+  body.learning-mode .lm-section[data-lm-section="2"] > .lm-methods > .lm-method {
+    grid-column: auto;
+    width: 100%;
+  }
+}
+body.learning-mode .lm-section[data-lm-section="2"] > .lm-visual-strip > .lm-visual-item,
+  body.learning-mode .lm-section[data-lm-section="2"] > .lm-methods > .lm-method {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+</style>
+
+
+<style id="rwce-callout-overlap-fix">
+/* Fix callout icons when external Material Symbols fail to load or text is enlarged. */
+.lm-main .lm-callout {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 14px !important;
+}
+.lm-main .lm-callout > .lm-callout-icon {
+  box-sizing: border-box;
+  flex: 0 0 38px !important;
+  width: 38px !important;
+  min-width: 38px !important;
+  height: 38px !important;
+  border-radius: 11px;
+  border: 1px solid #d8e9fb;
+  background: #fff;
+  color: #1477e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.lm-main .lm-callout > .lm-callout-icon svg {
+  width: 21px !important;
+  height: 21px !important;
+  flex: 0 0 21px;
+  display: block;
+  stroke: currentColor;
+}
+.lm-main .lm-callout > div:not(.lm-callout-icon) {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+.lm-main .lm-callout.safety > .lm-callout-icon {color: #128254; border-color:#caeadb;}
+.lm-main .lm-callout.warn > .lm-callout-icon {color: #b46a14; border-color:#f1ddb3;}
+@media (max-width: 480px) {
+  .lm-main .lm-callout {gap: 11px !important; padding: 13px 12px !important;}
+  .lm-main .lm-callout > .lm-callout-icon {flex-basis: 34px !important; width: 34px !important; min-width: 34px !important; height: 34px !important;}
+}
+</style>
 </head>
 <body class="learning-mode">
 <section id="rwce-assessment" role="dialog" aria-modal="true" aria-label="LAI pre-test and post-test" hidden><div class="rwce-assessment-shell"><div class="rwce-a-head"><div class="rwce-a-kicker">REAL WORLD CE · LAI PREPARATION & ADMINISTRATION</div><h2 id="rwce-a-title">Pre-Test</h2><p id="rwce-a-intro"></p><div class="rwce-a-stat"><span id="rwce-a-stage"></span><span id="rwce-a-count"></span></div><div class="rwce-a-track"><div id="rwce-a-progress"></div></div></div><div id="rwce-a-content"></div><div class="rwce-a-actions" id="rwce-a-actions"></div></div></section>
@@ -3199,7 +3285,7 @@ body:not(.learning-mode) #prep-popup .prep-feedback.good *,body:not(.learning-mo
     <div class="lm-inner">
       <div class="lm-topbar"><button type="button" id="rwce-top-back" class="rwce-top-back" onclick="lmBack()" aria-label="Previous lesson"><span class="material-symbols-outlined">arrow_back</span> Back</button><div class="lm-topbar-left"><span class="material-symbols-outlined" style="font-size:16px">medical_services</span><span id="lm-current-label">Course Introduction</span></div><div style="display:flex;gap:8px;align-items:center"><span class="lm-status"><i></i><span id="lm-status-text">Learning</span></span><button class="lm-exit" onclick="lmJumpToSimulation()">Go to Simulation</button></div></div>
 
-      <section class="lm-section active" data-lm-section="0"><div class="lm-callout"><span class="material-symbols-outlined">info</span><div><strong>How to use this trainer:</strong> Read each learning section and use the Continue button at the bottom. Complete the Knowledge Check to unlock the clinical simulation. The top-right “Go to Simulation” button takes you to the Knowledge Check until it has been passed. You may return to the simulation later without repeating the pretest.</div></div>
+      <section class="lm-section active" data-lm-section="0"><div class="lm-callout"><span class="lm-callout-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg></span><div><strong>How to use this trainer:</strong> Read each learning section and use the Continue button at the bottom. Complete the Knowledge Check to unlock the clinical simulation. The top-right “Go to Simulation” button takes you to the Knowledge Check until it has been passed. You may return to the simulation later without repeating the pretest.</div></div>
         
 <div class="rwce-lesson-next-note" role="note"><strong>How to continue:</strong> Read this section, then use the blue button at the bottom to move to the next lesson. <strong>Go to Simulation</strong> at the top becomes available after you pass the Knowledge Check; until then it opens the Knowledge Check.</div>
 <div class="lm-hero">
@@ -3240,7 +3326,7 @@ body:not(.learning-mode) #prep-popup .prep-feedback.good *,body:not(.learning-mo
           <div class="lm-card"><span class="material-symbols-outlined">science</span><h3>2. Match the preparation method</h3><p>Recognize that LAIs are not prepared the same way. The ordered formulation determines whether you shake, reconstitute, couple syringes, or draw a ready solution.</p></div>
           <div class="lm-card"><span class="material-symbols-outlined">vaccines</span><h3>3. Administer safely</h3><p>Match route and site to the product, landmark correctly, use aseptic technique, inject with controlled technique, and close the loop with documentation and follow-up.</p></div>
         </div>
-        <div class="lm-callout safety"><span class="material-symbols-outlined">verified_user</span><div><strong>Learning objectives</strong><br>By the end of this module, the learner should be able to distinguish common LAI preparation methods, sequence a safe medication-preparation workflow, select an appropriate administration pathway based on the exact product, demonstrate route-appropriate injection technique in the trainer, and complete aftercare and documentation.</div></div>
+        <div class="lm-callout safety"><span class="lm-callout-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 20 6v5.5c0 5.4-3.2 8.3-8 10-4.8-1.7-8-4.6-8-10V6z"/><path d="m8.3 12.2 2.5 2.5 4.9-5"/></svg></span><div><strong>Learning objectives</strong><br>By the end of this module, the learner should be able to distinguish common LAI preparation methods, sequence a safe medication-preparation workflow, select an appropriate administration pathway based on the exact product, demonstrate route-appropriate injection technique in the trainer, and complete aftercare and documentation.</div></div>
         <div class="lm-footer-nav"><span></span><button class="lm-btn primary" onclick="lmNext()">Begin Module <span class="material-symbols-outlined">arrow_forward</span></button></div>
       </section>
 
@@ -3279,7 +3365,7 @@ body:not(.learning-mode) #prep-popup .prep-feedback.good *,body:not(.learning-mo
           <div class="lm-step"><div class="lm-step-num">03</div><div><h3>Confirm route, permitted site, and timing</h3><p>Use the current product information to verify whether the dose is IM or SC, which sites are permitted, whether initiation or maintenance rules apply, and whether any product-specific timing or overlap requirements affect the dose.</p></div></div>
           <div class="lm-step"><div class="lm-step-num">04</div><div><h3>Check allergies, integrity, storage, and expiration</h3><p>Inspect packaging and components before use. Verify storage conditions were maintained and do not use compromised or expired medication.</p></div></div>
         </div>
-        <div class="lm-callout warn"><span class="material-symbols-outlined">warning</span><div><strong>Avoid a common error:</strong> choosing the preparation method from memory based only on the drug name. The exact formulation and presentation determine what comes next.</div></div>
+        <div class="lm-callout warn"><span class="lm-callout-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 10 18H2L12 3z"/><path d="M12 9v5"/><path d="M12 17h.01"/></svg></span><div><strong>Avoid a common error:</strong> choosing the preparation method from memory based only on the drug name. The exact formulation and presentation determine what comes next.</div></div>
         <div class="lm-footer-nav"><button class="lm-btn" onclick="lmBack()"><span class="material-symbols-outlined">arrow_back</span>Back</button><button class="lm-btn primary" onclick="lmNext()">Preparation Methods<span class="material-symbols-outlined">arrow_forward</span></button></div>
       </section>
 
@@ -3311,7 +3397,7 @@ body:not(.learning-mode) #prep-popup .prep-feedback.good *,body:not(.learning-mo
           <div class="lm-method"><div class="lm-method-top"><div class="lm-method-icon"><span class="material-symbols-outlined">experiment</span></div><span class="lm-method-tag">Powder + diluent</span></div><h3>Manual reconstitution</h3><p>A dry or lyophilized medication must be combined with the specified diluent and mixed into a uniform suspension before withdrawal.</p><div class="lm-method-detail"><strong>Trainer example:</strong> ABILIFY MAINTENA® (aripiprazole) vial-kit pathway. This simulation specifically teaches the vial presentation; other presentations can differ.</div></div>
           <div class="lm-method"><div class="lm-method-top"><div class="lm-method-icon"><span class="material-symbols-outlined">medication</span></div><span class="lm-method-tag">Ready-to-use SC device</span></div><h3>Product-specific syringe preparation</h3><p>Inspect the exact product, then follow its manufacturer instructions for the supplied prefilled syringe and safety needle.</p><div class="lm-method-detail"><strong>Trainer example:</strong> UZEDY® (risperidone) for SUBQ upper arm or abdomen. No reconstitution or syringe coupling is required.</div></div>
         </div>
-        <div class="lm-callout"><span class="material-symbols-outlined">compare</span><div><strong>Core decision rule:</strong> identify the exact product first, then use the preparation method specified for that product. Similar-sounding LAIs are not interchangeable preparation workflows.</div></div>
+        <div class="lm-callout"><span class="lm-callout-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h17"/><path d="m16 3 4 4-4 4"/><path d="M21 17H4"/><path d="m8 13-4 4 4 4"/></svg></span><div><strong>Core decision rule:</strong> identify the exact product first, then use the preparation method specified for that product. Similar-sounding LAIs are not interchangeable preparation workflows.</div></div>
         <div class="lm-footer-nav"><button class="lm-btn" onclick="lmBack()"><span class="material-symbols-outlined">arrow_back</span>Back</button><button class="lm-btn primary" onclick="lmNext()">Prepare the Medication<span class="material-symbols-outlined">arrow_forward</span></button></div>
       </section>
 
@@ -3354,7 +3440,7 @@ body:not(.learning-mode) #prep-popup .prep-feedback.good *,body:not(.learning-mo
           <div class="lm-card good"><span class="material-symbols-outlined">clean_hands</span><h3>Aseptic preparation</h3><p>CDC recommends aseptic technique, a clean medication-preparation area, and preparing injections as close as practical to the time of administration.</p></div>
           <div class="lm-card warn"><span class="material-symbols-outlined">block</span><h3>Do not reuse equipment</h3><p>Use a new sterile needle and syringe for each patient and discard used equipment appropriately. Never reuse a syringe or needle between patients.</p></div>
         </div>
-        <div class="lm-callout safety"><span class="material-symbols-outlined">shield</span><div><strong>Pause before moving on:</strong> confirm the prepared dose still matches the patient, medication, strength, dose, route, and planned site before leaving the preparation area.</div></div>
+        <div class="lm-callout safety"><span class="lm-callout-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 20 6v5.5c0 5.4-3.2 8.3-8 10-4.8-1.7-8-4.6-8-10V6z"/><path d="m8.3 12.2 2.5 2.5 4.9-5"/></svg></span><div><strong>Pause before moving on:</strong> confirm the prepared dose still matches the patient, medication, strength, dose, route, and planned site before leaving the preparation area.</div></div>
         <div class="lm-footer-nav"><button class="lm-btn" onclick="lmBack()"><span class="material-symbols-outlined">arrow_back</span>Back</button><button class="lm-btn primary" onclick="lmNext()">Route, Site & Equipment<span class="material-symbols-outlined">arrow_forward</span></button></div>
       </section>
 
@@ -3386,8 +3472,8 @@ body:not(.learning-mode) #prep-popup .prep-feedback.good *,body:not(.learning-mo
           <div class="lm-card"><span class="material-symbols-outlined">accessibility_new</span><h3>Choose a permitted site</h3><p>Use only anatomical sites allowed for the exact formulation. The antipsychotic cases cover deltoid and gluteal IM practice, plus abdominal and back-of-upper-arm SC sites where permitted by the exact product. SC thigh is not used in these antipsychotic cases.</p></div>
           <div class="lm-card"><span class="material-symbols-outlined">straighten</span><h3>Match equipment to patient and product</h3><p>Needle gauge/length and device components may depend on the product, selected site, patient weight, and body habitus. Follow the product instructions and local policy.</p></div>
         </div>
-        <div class="lm-callout"><span class="material-symbols-outlined">info</span><div><strong>Example:</strong> current INVEGA SUSTENNA® (paliperidone palmitate) prescribing information differentiates needle selection by deltoid and gluteal administration sites, as well as patient weight. This is why the exact product and site must be verified before injection.</div></div>
-        <div class="lm-callout warn"><span class="material-symbols-outlined">warning</span><div><strong>Trainer-specific safety design:</strong> the dorsogluteal site remains review-only in this simulation. Learners practice approved trainer sites and must landmark rather than aim for a single memorized screen coordinate.</div></div>
+        <div class="lm-callout"><span class="lm-callout-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg></span><div><strong>Example:</strong> current INVEGA SUSTENNA® (paliperidone palmitate) prescribing information differentiates needle selection by deltoid and gluteal administration sites, as well as patient weight. This is why the exact product and site must be verified before injection.</div></div>
+        <div class="lm-callout warn"><span class="lm-callout-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 10 18H2L12 3z"/><path d="M12 9v5"/><path d="M12 17h.01"/></svg></span><div><strong>Trainer-specific safety design:</strong> the dorsogluteal site remains review-only in this simulation. Learners practice approved trainer sites and must landmark rather than aim for a single memorized screen coordinate.</div></div>
         <div class="lm-footer-nav"><button class="lm-btn" onclick="lmBack()"><span class="material-symbols-outlined">arrow_back</span>Back</button><button class="lm-btn primary" onclick="lmNext()">Prepare Patient & Site<span class="material-symbols-outlined">arrow_forward</span></button></div>
       </section>
 
@@ -3478,7 +3564,7 @@ body:not(.learning-mode) #prep-popup .prep-feedback.good *,body:not(.learning-mo
           <div class="lm-seq"><b>3</b><strong>Administer with control</strong><span>Deliver the dose according to the product instructions without rushing or changing the intended tissue plane.</span></div>
           <div class="lm-seq"><b>4</b><strong>Withdraw and secure</strong><span>Withdraw safely, apply gauze as needed, activate safety features, and move the device directly to sharps disposal.</span></div>
         </div>
-        <div class="lm-callout warn"><span class="material-symbols-outlined">rule</span><div><strong>Do not generalize one product's procedure to another.</strong> Administration details such as route, site, needle selection, injection rate, and special handling are product-specific. The simulation uses selected examples for practice.</div></div>
+        <div class="lm-callout warn"><span class="lm-callout-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2 2 4-5"/><path d="M15 7h5"/><path d="M4 17h3l2 2 4-5"/><path d="M15 17h5"/></svg></span><div><strong>Do not generalize one product's procedure to another.</strong> Administration details such as route, site, needle selection, injection rate, and special handling are product-specific. The simulation uses selected examples for practice.</div></div>
         <div class="lm-footer-nav"><button class="lm-btn" onclick="lmBack()"><span class="material-symbols-outlined">arrow_back</span>Back</button><button class="lm-btn primary" onclick="lmNext()">Aftercare & Documentation<span class="material-symbols-outlined">arrow_forward</span></button></div>
       </section>
 
@@ -3510,7 +3596,7 @@ body:not(.learning-mode) #prep-popup .prep-feedback.good *,body:not(.learning-mo
           <div class="lm-card good"><span class="material-symbols-outlined">delete_forever</span><h3>Dispose of sharps immediately</h3><p>Place the used needle/syringe or device in the approved sharps container at the point of use. Do not leave contaminated equipment on the work surface.</p></div>
           <div class="lm-card good"><span class="material-symbols-outlined">edit_note</span><h3>Document the administration</h3><p>Record the medication/product, dose, route, site, date/time, administration details required by policy, patient response, education, and follow-up plan.</p></div>
         </div>
-        <div class="lm-callout safety"><span class="material-symbols-outlined">event_repeat</span><div><strong>Close the treatment loop:</strong> confirm the next injection plan, any monitoring requirements, and how missed-dose or follow-up questions will be handled according to the specific LAI protocol.</div></div>
+        <div class="lm-callout safety"><span class="lm-callout-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 4v5h-5"/><path d="M5 20v-5h5"/><path d="M6 9a7 7 0 0 1 12.3-2.5L19 9"/><path d="M5 15a7 7 0 0 0 12.3 2.5L19 15"/></svg></span><div><strong>Close the treatment loop:</strong> confirm the next injection plan, any monitoring requirements, and how missed-dose or follow-up questions will be handled according to the specific LAI protocol.</div></div>
         <div class="lm-footer-nav"><button class="lm-btn" onclick="lmBack()"><span class="material-symbols-outlined">arrow_back</span>Back</button><button class="lm-btn primary" onclick="lmNext()">Knowledge Check<span class="material-symbols-outlined">quiz</span></button></div>
       </section>
 
