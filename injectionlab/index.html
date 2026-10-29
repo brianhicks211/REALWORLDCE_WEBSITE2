@@ -4678,7 +4678,7 @@ function injectionProfile(siteKey){
     safetyInjectCopy:`Use the tissue-layer view to control angle and depth for a subcutaneous injection at about ${habitus.scAngle}°.`,
     passFeedback:"Correct. The needle reached the subcutaneous layer at an acceptable angle, so the trainer will move to the next step.",
     siteMismatch:"<strong>Location needs correction:</strong> the selected subcutaneous site is used for medications intended to stay in subcutaneous tissue. It is not interchangeable with an intramuscular site. Recheck the chart order before proceeding.",
-    siteToast:`${sites[siteKey].label} selected from the chart order. The avatar has been rotated to the front view—clean the marked site next.`
+    siteToast:`${sites[siteKey].label} selected from the chart order. The avatar has been rotated to the ${siteKey==="subcutaneousArm"?"back":"front"} view—clean the marked site next.`
   } : {
     routeLabel:"Intramuscular (IM)",
     routeShort:"IM",
@@ -5617,13 +5617,44 @@ function selectSite(key){
     focusWorkflowSection("stage",120);
   },450);
 }
+// Place the back-of-upper-arm marker on the actual posterior upper arm, not at a
+// fixed viewport percentage. On narrow phones the 3D arm projects farther from
+// the centre of the stage than it does on desktop.
+function activeSiteScreenPoint(site=currentSite()){
+  if(!site)return null;
+  const point=site.targets ? site.targets[state.currentView] : (state.currentView===site.view ? site.target : null);
+  if(!point || site!==sites.subcutaneousArm || state.currentView!=="back")return point;
+  const stage=document.getElementById("stage");
+  if(!stage || !stage.clientWidth || !stage.clientHeight)return point;
+
+  // Coordinates relative to the existing avatar mesh (posterior triceps area).
+  // Use the same position for the visible marker, the swab coverage and scoring.
+  const arm={x:-0.36,y:0.34,z:-0.10};
+  if(patient && camera && window.THREE){
+    patient.updateMatrixWorld(true);
+    camera.updateMatrixWorld(true);
+    const projected=patient.localToWorld(new THREE.Vector3(arm.x,arm.y,arm.z)).project(camera);
+    if(Number.isFinite(projected.x) && Number.isFinite(projected.y)){
+      return {x:Math.max(7,Math.min(93,(projected.x+1)*50)),y:Math.max(9,Math.min(91,(1-projected.y)*50))};
+    }
+  }
+  // Match the current back-view camera before the avatar finishes loading.
+  const aspect=stage.clientWidth/stage.clientHeight;
+  const scale=0.82, cameraZ=3.05, offsetY=-0.05;
+  const depth=cameraZ+arm.z*scale;
+  const halfHeight=depth*Math.tan(35*Math.PI/360);
+  return {
+    x:Math.max(7,Math.min(93,50+50*(-arm.x*scale)/(halfHeight*aspect))),
+    y:Math.max(9,Math.min(91,50-50*(arm.y*scale+offsetY)/halfHeight))
+  };
+}
 function updateTarget(){
   const target=document.getElementById("site-target"),label=document.getElementById("site-label"),site=currentSite();
   if(!target || !label)return;
   if(!site){target.classList.remove("active","blocked","zone");return}
   // Never reuse the original point on another anatomical view: e.g. an abdominal SC target
   // must not appear over the lateral hip simply because the learner switched to Side.
-  const point=site.targets ? site.targets[state.currentView] : (state.currentView===site.view ? site.target : null);
+  const point=activeSiteScreenPoint(site);
   if(!point){
     target.classList.remove("active","blocked","zone");
     target.setAttribute("aria-hidden","true");
@@ -5638,9 +5669,9 @@ function updateTarget(){
   target.setAttribute("aria-hidden","false");
   label.textContent=site.label;
 }
-function resetNeedleNearTarget(){const site=currentSite();state.needleX=site?Math.max(5,Math.min(95,site.target.x+7)):50;state.needleY=site?Math.max(5,Math.min(95,site.target.y+4)):50;state.angle=0;const s=document.getElementById("angle-slider");if(s)s.value=0;updateNeedle()}
+function resetNeedleNearTarget(){const site=currentSite(),point=activeSiteScreenPoint(site);state.needleX=point?Math.max(5,Math.min(95,point.x+7)):50;state.needleY=point?Math.max(5,Math.min(95,point.y+4)):50;state.angle=0;const s=document.getElementById("angle-slider");if(s)s.value=0;updateNeedle()}
 function setNeedleAngle(value){state.angle=Number(value);updateNeedle()}
-function placementScore(){const site=currentSite();if(!site)return 0;const dx=state.needleX-site.target.x,dy=state.needleY-site.target.y,dist=Math.sqrt(dx*dx+dy*dy);return Math.max(0,Math.min(100,Math.round(100-dist*7)))}
+function placementScore(){const point=activeSiteScreenPoint();if(!point)return 0;const dx=state.needleX-point.x,dy=state.needleY-point.y,dist=Math.sqrt(dx*dx+dy*dy);return Math.max(0,Math.min(100,Math.round(100-dist*7)))}
 function updateNeedle(){const needle=document.getElementById("needle"),angle=document.getElementById("angle-value"),placement=document.getElementById("placement-readout"),technique=document.getElementById("technique-readout"),feedback=document.getElementById("needle-feedback");const site=currentSite(),show=false;const profile=currentInjectionProfile();needle.classList.toggle("active",!!show);needle.style.left=`${state.needleX}%`;needle.style.top=`${state.needleY}%`;needle.style.transform=`translate(-18px,-50%) rotate(${state.angle-90}deg)`;angle.textContent=`${state.angle}°`;const score=placementScore(),angleOk=Math.abs(state.angle-profile.targetAngle)<=profile.angleTolerance,placementOk=score>=82;placement.textContent=!site?"Pending":`${score}% ${placementOk?"acceptable":"adjust needed"}`;technique.textContent=angleOk?"Angle aligned":"Adjust angle";if(!site)feedback.textContent="Select a site to begin.";else if(!site.allowed)feedback.textContent="This site is review-only. Select an approved site.";else if(state.step<3)feedback.textContent="Follow the step card on the left.";else if(!state.injected)feedback.textContent=`Use the skin layer popup to complete the ${profile.routeShort} injection depth and angle.`;else feedback.textContent="Injection completed. Continue to aftercare."}
 
 function cleaningGoal(site){
@@ -5658,8 +5689,9 @@ function resetSwabCleaning(){
     state.swabX = Math.max(6, Math.min(94, area.x - area.width/2 + 4));
     state.swabY = Math.max(6, Math.min(94, area.y - area.height/2 + 4));
   } else if(site){
-    state.swabX = Math.max(6, Math.min(94, site.target.x - 8));
-    state.swabY = Math.max(6, Math.min(94, site.target.y - 8));
+    const point=activeSiteScreenPoint(site);
+    state.swabX = Math.max(6, Math.min(94, point.x - 8));
+    state.swabY = Math.max(6, Math.min(94, point.y - 8));
   } else {
     state.swabX = 50;
     state.swabY = 50;
@@ -5689,8 +5721,10 @@ function markCleanedArea(){
     const key = bucketX + "-" + bucketY;
     state.cleanCoverage[key] = true;
   } else {
-    const dx = state.swabX - site.target.x;
-    const dy = state.swabY - site.target.y;
+    const point=activeSiteScreenPoint(site);
+    if(!point)return;
+    const dx = state.swabX - point.x;
+    const dy = state.swabY - point.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
     if(distance > 18) return;
     const bucketX = Math.round((dx + 18) / 6);
