@@ -4619,6 +4619,7 @@ body.rw110-theme::before {
    <div><div class="rw-inj-kicker">Real World CE · Learning Analytics</div>
     <h3>InjectionLab Reports</h3>
     <p>Track saved learning outcomes for <strong>Schizophrenia &amp; LAI Activity Evaluation</strong>: pretests, posttests, knowledge checks, simulation attempts and submitted CME/CE evaluations.</p>
+    <p class="rw-inj-sub" style="margin-top:9px"><strong>Evaluation update:</strong> The current InjectionLab has 20 evaluation questions (presenter question removed; “How did you hear about this activity?” updated) and expanded learner information. Reports show the exact questions and fields saved at submission; older submissions retain their previous wording. The separate Live Event Reports tab uses a different form.</p>
    </div>
    <div class="rw-inj-actions">
     <button type="button" id="rwInjRefresh" class="rw-inj-btn rw-inj-primary"><span class="material-symbols-outlined">sync</span> Refresh Results</button>
@@ -4640,6 +4641,11 @@ body.rw110-theme::before {
    <label>Started through<input id="rwInjTo" type="date"></label>
    <button id="rwInjClear" type="button" class="rw-inj-btn">Clear filters</button>
   </div>
+  <details class="rw-inj-notice" style="margin-bottom:14px">
+   <summary style="cursor:pointer;font-weight:800">View current 20-question evaluation form (reference)</summary>
+   <p style="margin:8px 0">This list is the form in the updated InjectionLab HTML, not a change to historical submissions. Learner information is collected separately, before these questions.</p>
+   <ol style="padding-left:22px;list-style:decimal;display:grid;gap:7px"><li>How relevant was the content on schizophrenia and long-acting injectable (LAI) antipsychotic therapy to your professional practice?</li><li>How effective were the organization, format, and presentation of the activity in supporting your learning?</li><li>How well did this schizophrenia and LAI injection training activity meet your expectations and learning needs?</li><li>How well did this activity help you achieve the stated learning objectives related to schizophrenia and LAI preparation and administration?</li><li>How well did this activity strengthen your knowledge and competence in caring for patients with schizophrenia who receive LAI antipsychotic therapy?</li><li>How would you rate your confidence in applying what you learned about LAI antipsychotic preparation and administration for patients with schizophrenia?</li><li>How useful were the schizophrenia and LAI injection skills and concepts presented in this activity to your professional practice or work responsibilities?</li><li>How useful were the ideas, tools, resources, or strategies provided for supporting LAI antipsychotic treatment in schizophrenia?</li><li>What barriers may affect your ability to apply what you learned about schizophrenia and LAI antipsychotic therapy? Please select all that apply.</li><li>On a scale of 1 to 5, with 5 being the highest, how do you rank the overall quality of this educational activity?</li><li>How long did you participate in this live event activity? Please enter your answer in minutes.</li><li>Based on what you learned, what changes will you make in your care of patients with schizophrenia who receive LAI antipsychotic therapy within the next 30 days?</li><li>When you make the changes you just mentioned, how do you expect outcomes for patients with schizophrenia to improve?</li><li>Was this activity free of commercial bias? Please select one.</li><li>If you answered No, please describe the perceived bias. Free-text response; leave blank if Yes.</li><li>What is the most important thing you learned about schizophrenia and LAI antipsychotic preparation or administration from this activity?</li><li>For pharmacists only: What is your NABP e-Profile ID (ePID)?</li><li>For pharmacists only: What is your date of birth? Enter the month and day only (MM/DD).</li><li>How did you hear about this activity?</li><li>Do you understand that your certificate of completion will be sent within one week, pharmacists’ credits will be reported automatically to CPE Monitor, and any questions or concerns should be directed to contact@realworldce.org?</li></ol>
+  </details>
   <p id="rwInjStatus" role="status" aria-live="polite" class="rw-inj-status">Select Refresh Results to load InjectionLab activity from Supabase.</p>
   <div class="rw-inj-tablewrap"><table class="rw-inj-table"><thead><tr><th>Learner</th><th>Started</th><th>Progress</th><th>Pretest</th><th>Posttest</th><th>Gain</th><th>Knowledge</th><th>Injection</th><th>CME/CE Evaluation</th><th>Report</th></tr></thead>
    <tbody id="rwInjRows"><tr><td colspan="10">No InjectionLab records loaded.</td></tr></tbody></table></div>
@@ -9046,6 +9052,24 @@ window.rwceExportEveryQuestionCSV=download;
   }catch(e){status('Unable to load InjectionLab reports: '+(e?.message||e)+'. Confirm the dedicated reporting Edge Function is deployed and your LMS session has permission.',true)}
   finally{busy=false;if(b)b.disabled=false;}
  }
+ // New demographic fields are kept in the evaluation JSONB record, not the LMS user profile.
+ // Never reassign old q3/q21/etc: display question IDs and wording from each stored snapshot.
+ const INJ_LEARNER_FIELDS=[
+  ['learner_first_name','First Name'],['learner_last_name','Last Name'],['learner_email','Email'],
+  ['learner_address','Address'],['learner_city','City'],['learner_country_region','Country/Region'],
+  ['learner_state_province','State/Province'],['learner_postal_code','ZIP/Postal code'],
+  ['learner_phone','Phone'],['learner_job_title','Job title'],['learner_organization','Organization'],
+  ['learner_questions_comments','Questions & Comments'],['learner_specialty','Specialty'],
+  ['learner_experience_level','Experience level'],['learner_profession','Profession']
+ ];
+ const evalForm=d=>{const v=d?.evaluation?.evaluation;return v&&typeof v==='object'&&!Array.isArray(v)?v:{}};
+ const fieldValue=(form,r,key)=>{
+  const submitted=form[key];if(submitted!==undefined&&submitted!==null&&String(submitted).trim()!=='')return submitted;
+  if(key==='learner_first_name')return r.learner?.first_name||'Not provided';
+  if(key==='learner_last_name')return r.learner?.last_name||'Not provided';
+  if(key==='learner_email')return r.learner?.email||'Not provided';
+  return 'Not collected in this submission';
+ };
  const textValue=v=>typeof v==='object'&&v!==null?JSON.stringify(v):String(v??'—');
  const answerText=(options,val)=>{if(Array.isArray(options)){const found=options.find(o=>String(o.value)===String(val));if(found)return found.text??found.value}return val??'—'};
  const detailQuestions=(title,thing)=>{
@@ -9059,16 +9083,17 @@ window.rwceExportEveryQuestionCSV=download;
    const last=k=>all.filter(e=>e.kind===k).slice(-1)[0]?.payload||null;
    const pre=snap.pretest||last('pretest'),post=snap.posttest||last('posttest'),knowledge=snap.knowledge_check||last('knowledge_check');
    const sim=snap.simulation&&Object.keys(snap.simulation).length?snap.simulation:last('simulation_summary')||{};
-   const items=ev.evaluation?.evaluation_question_details||[];const injection=sim.injection||{},reviews=injection.reviews||[];
+   const form=evalForm(d),items=Array.isArray(form.evaluation_question_details)?form.evaluation_question_details:[];
+   const injection=sim.injection||{},reviews=injection.reviews||[];
    const simActions=all.filter(x=>x.kind==='simulation_action');
    el.innerHTML=`<header><div><h4>${escape(learnerName(r))} · InjectionLab activity</h4><div class="rw-inj-sub">${escape(r.learner?.email||'No identity submitted')} · ${escape(r.id)} · ${escape(fmt(r.created_at))}</div></div><div class="rw-inj-actions"><button type="button" id="rwInjSelectedCsv" class="rw-inj-btn">Export this learner</button><button type="button" id="rwInjClose" class="rw-inj-btn">Close</button></div></header>
     <p class="rw-inj-status">Evaluation: ${escape(ev.id?'Submitted '+fmt(ev.submitted_at):'Not submitted')} · Identity: ${escape(r.learner?.identity_verified?'Verified':'Not verified')} · CE eligibility and certificate issuance are not established by this record.</p>
-    <div class="rw-inj-detail-grid">${detailQuestions('Pretest · All recorded answers',pre)}${detailQuestions('Posttest · All recorded answers',post)}
+    <div class="rw-inj-detail-grid"><article class="rw-inj-detail-card" style="grid-column:1/-1"><h5>Learner information · Submitted with this evaluation</h5><p class="rw-inj-sub">Fields unavailable in historical submissions are labeled “Not collected in this submission”. These values are self-reported, not verified identity.</p><div class="rw-inj-detail-grid">${INJ_LEARNER_FIELDS.map(([key,label])=>`<div class="rw-inj-answer"><strong>${escape(label)}</strong><small>${escape(textValue(fieldValue(form,r,key)))}</small></div>`).join('')}</div></article>${detailQuestions('Pretest · All recorded answers',pre)}${detailQuestions('Posttest · All recorded answers',post)}
     ${detailQuestions('Knowledge checks · All recorded answers',knowledge)}
     <article class="rw-inj-detail-card"><h5>Injection simulation</h5><div class="rw-inj-answer">Medication: ${escape(sim.medication?.ordered_label||'—')}<small>Ordered site: ${escape(sim.site?.ordered_label||'—')} · Selected site: ${escape(sim.site?.selected_label||'—')}</small><small>Preparation: ${escape(sim.preparation?.selected_method||'—')} · Cleaning: ${escape(sim.cleaning?.coverage_percent??'—')}%</small><small>Injection score: ${escape(percent(injection.score_percent))} · Decision score: ${escape(percent(sim.clinical?.decision_score_percent))}</small><small>Attempts: ${escape(injection.attempts??0)} · Angle: ${escape(injection.angle_deg??'—')}° · Depth: ${escape(injection.tip_depth_percent??'—')}%</small></div>
     ${reviews.map((attempt,i)=>`<div class="rw-inj-answer"><strong>Injection attempt ${escape(attempt.number??i+1)}</strong><small>${escape(attempt.passed?'Passed':'Correction needed')} · Angle: ${escape(attempt.angle_deg??'—')}° · Depth: ${escape(attempt.tip_depth_percent??'—')}%</small><small>${escape(attempt.feedback||'')}</small></div>`).join('')}
     <details><summary class="rw-inj-btn" style="margin-top:.5rem">View ${simActions.length} saved simulation actions</summary>${simActions.map(a=>`<div class="rw-inj-answer">${escape(fmt(a.occurred_at))}<small>${escape(textValue(a.payload))}</small></div>`).join('')}</details></article>
-    <article class="rw-inj-detail-card" style="grid-column:1/-1"><h5>Schizophrenia &amp; LAI Activity Evaluation · ${items.length} question responses</h5>${items.length?items.map(x=>`<div class="rw-inj-answer"><strong>${escape(x.question_text||x.question_id||'Evaluation question')}</strong><small>Response: ${escape(textValue(x.response))}</small></div>`).join(''):'<p class="rw-inj-sub">No completed CME/CE evaluation question details available.</p>'}</article></div>`;
+    <article class="rw-inj-detail-card" style="grid-column:1/-1"><h5>Schizophrenia &amp; LAI Activity Evaluation · ${items.length} question responses</h5><p class="rw-inj-sub">Questions are shown exactly as saved at submission time; historical wording is preserved.</p>${items.length?items.map((x,i)=>`<div class="rw-inj-answer"><strong>Question ${i+1}: ${escape(String(x.question_text||x.question_id||'Evaluation question').replace(/^\s*\d+\s*[.)]\s*/,''))}</strong><small>Response: ${escape(textValue(x.response))}</small></div>`).join(''):'<p class="rw-inj-sub">No completed CME/CE evaluation question details available in this record.</p>'}</article></div>`;
    $('rwInjClose')?.addEventListener('click',()=>{el.hidden=true;el.textContent=''});
    $('rwInjSelectedCsv')?.addEventListener('click',()=>exportDetails([r]));
   }catch(e){el.textContent='Could not load this learner report: '+(e?.message||e)}
@@ -9091,7 +9116,12 @@ window.rwceExportEveryQuestionCSV=download;
   for(const [k,p] of [['pretest',snap.pretest],['posttest',snap.posttest],['knowledge_check',snap.knowledge_check]]){if(written.has(k)||!p)continue;
    for(const q of p.question_details||[])emit('Assessment snapshot',k,q.question||q.question_text||'',answerText(q.options,q.selected_value),answerText(q.options,q.correct_value),q.is_correct,number(p.score_percent??p.score),evalRec.submitted_at,'Stored in completed evaluation');
   }
-  for(const q of evalRec.evaluation?.evaluation_question_details||[])emit('CME/CE Evaluation',q.question_id||'',q.question_text||'',typeof q.response==='object'?JSON.stringify(q.response):q.response,'','',null,evalRec.submitted_at,'');
+  const form=evalForm(d);
+  if(evalRec.id){
+   for(const [key,label] of INJ_LEARNER_FIELDS)emit('Learner information',key,label,fieldValue(form,r,key),'','',null,evalRec.submitted_at,'Self-reported evaluation form');
+  }
+  for(const [i,q] of (Array.isArray(form.evaluation_question_details)?form.evaluation_question_details:[]).entries())
+   emit('CME/CE Evaluation',q.question_id||`Question ${i+1}`,q.question_text||'Question wording not recorded',typeof q.response==='object'?JSON.stringify(q.response):q.response,'','',null,evalRec.submitted_at,`Displayed question ${i+1}`);
   return out;
  }
  async function exportDetails(list){if(!loaded){status('Refresh InjectionLab results before exporting.',true);return}const eligible=list||filtered();if(!eligible.length){status('No records match your filters.',true);return}
