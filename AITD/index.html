@@ -93,7 +93,7 @@ main{flex:1;display:grid;grid-template-columns:225px minmax(360px,1fr) minmax(37
       <div class="wave-row" id="waveRow" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
       <div class="voice-config-row">
         <label for="voiceChoice">Voice</label>
-        <select id="voiceChoice" aria-label="Choose speaking voice"><option value="coral">Coral · warm &amp; friendly</option><option value="shimmer">Shimmer · smooth &amp; bright</option><option value="nova">Nova · confident &amp; clear</option><option value="marin">Marin · polished &amp; natural</option><option value="browser">Browser voice · free fallback</option></select>
+        <select id="voiceChoice" aria-label="Choose speaking voice"><option value="Kore">Kore · clear and confident</option><option value="Aoede">Aoede · warm and conversational</option><option value="Leda">Leda · friendly and youthful</option><option value="Zephyr">Zephyr · bright and upbeat</option><option value="browser">Browser voice · free fallback</option></select>
       </div>
       <div class="voice-config-row rate-row">
         <label for="voiceRate">Speed</label><input id="voiceRate" type="range" min="0.75" max="1.25" step="0.05" value="0.95"/><span id="voiceRateText">0.95×</span>
@@ -147,7 +147,8 @@ main{flex:1;display:grid;grid-template-columns:225px minmax(360px,1fr) minmax(37
 <script>
 'use strict';
 const API='https://wvdvylixnmhmuahgtybh.supabase.co/functions/v1/td-avatar-chat';
-const VOICE_API='https://wvdvylixnmhmuahgtybh.supabase.co/functions/v1/td-avatar-voice';
+const VOICE_API='https://wvdvylixnmhmuahgtybh.supabase.co/functions/v1/td-gemini-voice';
+const GEMINI_CHAT_API='https://wvdvylixnmhmuahgtybh.supabase.co/functions/v1/td-gemini-chat';
 const $=id=>document.getElementById(id);
 let token=sessionStorage.getItem('rwce_td_session')||'';
 let expiresAt=Number(sessionStorage.getItem('rwce_td_expires')||0);
@@ -296,7 +297,7 @@ function finishSpeaking(){
   $('avatarHalo').classList.remove('speaking');$('waveRow').classList.remove('talking');
   for(const bar of $('waveRow').children)bar.style.height='';
   $('stopSpeakBtn').disabled=true;$('avatarBadge').textContent='Ready to guide you';
-  $('audioStatus').textContent='Natural AI voice ready';activeUtterance=null;
+  $('audioStatus').textContent='Gemini AI voice ready';activeUtterance=null;
 }
 function clearVoice(){
   voiceGeneration++;
@@ -330,7 +331,7 @@ async function speak(text,{force=false,isDemo=false}={}){
     if(isDemo)openConsent();return;
   }
   voiceBusy=true;$('testSpeakBtn').disabled=true;
-  $('testCaption').textContent='Generating a natural-sounding voice...';
+  $('testCaption').textContent='Generating Gemini natural speech...';
   try{
     const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),29000);
     let res;
@@ -348,7 +349,7 @@ async function speak(text,{force=false,isDemo=false}={}){
     audioPlayer.onended=()=>{if(id===voiceGeneration){finishSpeaking();$('testCaption').textContent='Finished speaking. Try a different voice!';}};
     audioPlayer.onerror=()=>{if(id===voiceGeneration){finishSpeaking();toast('Audio playback failed.');}};
     await audioPlayer.play();
-    $('testCaption').textContent=isDemo?'Natural AI voice introduction playing.':'Reading your answer with AI-generated speech.';
+    $('testCaption').textContent=isDemo?'Gemini voice introduction playing.':'Reading your answer with AI-generated speech.';
   }catch(e){if(id===voiceGeneration){finishSpeaking();const msg=e.message||'Voice generation unavailable';$('testCaption').textContent=msg+' Using browser voice instead.';toast(msg+' — using browser voice.');speakBrowser(text,isDemo);}}
   finally{if(id===voiceGeneration){voiceBusy=false;$('testSpeakBtn').disabled=false;}}
 }
@@ -359,7 +360,7 @@ async function call(action,payload,authToken=''){const ctrl=new AbortController(
 function openConsent(){$('consentModal').classList.remove('hidden');$('consentCheck').checked=false;$('confirmConsent').disabled=true}
 $('startButton').onclick=()=>token?toast('Your learner session is already active.'):openConsent();$('cancelConsent').onclick=()=>$('consentModal').classList.add('hidden');$('consentCheck').onchange=e=>$('confirmConsent').disabled=!e.target.checked;
 $('confirmConsent').onclick=async()=>{if(!$('consentCheck').checked)return;$('confirmConsent').disabled=true;$('confirmConsent').textContent='Starting...';try{const data=await call('start',{consent:true});token=data.session_token;expiresAt=new Date(data.expires_at).getTime();sessionStorage.setItem('rwce_td_session',token);sessionStorage.setItem('rwce_td_expires',String(expiresAt));$('consentModal').classList.add('hidden');updateSession();toast('Session started. You can try the natural voice or ask a TD question.')}catch(e){toast(e.name==='AbortError'?'Connection timed out.':e.message||'Could not start the session.')}finally{$('confirmConsent').textContent='Agree & start';$('confirmConsent').disabled=!$('consentCheck').checked}};
-async function ask(){const q=$('question').value.trim();if(busy||!q)return;if(q.length<3){toast('Enter at least three characters.');return}if(!token){openConsent();toast('Start your session first.');return}if(expiresAt<Date.now()){token='';updateSession();openConsent();return}showChat();clearVoice();appendMessage('user',q);$('question').value='';busy=true;$('sendButton').disabled=true;$('inputStatus').textContent='Preparing answer...';$('avatarHalo').classList.add('thinking');$('avatarBadge').textContent='Thinking...';try{const data=await call('ask',{question:q},token);appendMessage('assistant',data.answer);latestResponse=data.answer;$('replayAnswerBtn').disabled=false;speak(data.answer)}catch(e){appendMessage('assistant',e.name==='AbortError'?'The response timed out. Please try again.':(e.message||'Could not process the question.').includes('awaiting clinical approval')?'The TD knowledge base is not yet connected to the live answers. The natural voice demo is available.':(e.message||'Could not process the question.'),true);if(/invalid|expired/i.test(e.message||'')){token='';sessionStorage.removeItem('rwce_td_session');updateSession()}}finally{$('avatarHalo').classList.remove('thinking');if(!$('avatarHalo').classList.contains('speaking'))$('avatarBadge').textContent='Ready to guide you';busy=false;$('sendButton').disabled=false;$('inputStatus').textContent=token?'Ready for your next question.':'Start a session before asking.'}}
+async function ask(){const q=$('question').value.trim();if(busy||!q)return;if(q.length<3){toast('Enter at least three characters.');return}if(!token){openConsent();toast('Start your session first.');return}if(expiresAt<Date.now()){token='';updateSession();openConsent();return}showChat();clearVoice();appendMessage('user',q);$('question').value='';busy=true;$('sendButton').disabled=true;$('inputStatus').textContent='Preparing answer...';$('avatarHalo').classList.add('thinking');$('avatarBadge').textContent='Thinking...';try{const r=await fetch(GEMINI_CHAT_API,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({question:q})});const data=await r.json().catch(()=>({}));if(!r.ok)throw Error(data.error||'Gemini chat unavailable');appendMessage('assistant',data.answer);latestResponse=data.answer;$('replayAnswerBtn').disabled=false;speak(data.answer)}catch(e){appendMessage('assistant',e.name==='AbortError'?'The response timed out. Please try again.':(e.message||'Could not process the question.'),true);if(/invalid|expired/i.test(e.message||'')){token='';sessionStorage.removeItem('rwce_td_session');updateSession()}}finally{$('avatarHalo').classList.remove('thinking');if(!$('avatarHalo').classList.contains('speaking'))$('avatarBadge').textContent='Ready to guide you';busy=false;$('sendButton').disabled=false;$('inputStatus').textContent=token?'Ready for your next question.':'Start a session before asking.'}}
 $('chatForm').addEventListener('submit',e=>{e.preventDefault();ask()});$('question').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask()}});
 document.querySelectorAll('.suggest').forEach(el=>el.addEventListener('click',()=>{$('question').value=el.dataset.q;showChat();$('question').focus();if(!token)openConsent()}));
 document.querySelectorAll('.nav-btn').forEach(el=>el.addEventListener('click',()=>el.dataset.view==='refs'?showRefs():showChat()));
@@ -369,7 +370,7 @@ $('replayAnswerBtn').onclick=()=>{if(latestResponse)speak(latestResponse,{force:
 $('stopSpeakBtn').onclick=clearVoice;
 $('voiceRate').oninput=()=>{$('voiceRateText').textContent=Number($('voiceRate').value).toFixed(2)+'×'};
 $('voiceChoice').onchange=()=>localStorage.setItem('rwce_td_ai_voice',$('voiceChoice').value);
-const previousVoice=localStorage.getItem('rwce_td_ai_voice');if(['coral','shimmer','nova','marin','browser'].includes(previousVoice))$('voiceChoice').value=previousVoice;
+const previousVoice=localStorage.getItem('rwce_td_ai_voice');if(['Kore','Aoede','Leda','Zephyr','browser'].includes(previousVoice))$('voiceChoice').value=previousVoice;
 
 if(!speechSupported){$('voiceChoice').querySelector('option[value=browser]').disabled=true;}
 if(SpeechRecognition){recognition=new SpeechRecognition();recognition.lang='en-US';recognition.interimResults=false;recognition.continuous=false;recognition.onstart=()=>{$('micButton').classList.add('mic-on');$('avatarHalo').classList.add('listening');$('avatarBadge').textContent='Listening...';$('inputStatus').textContent='Listening. Speak your question.'};recognition.onresult=e=>{$('question').value=(e.results[0][0].transcript||'').slice(0,1500);$('question').focus()};recognition.onend=()=>{$('micButton').classList.remove('mic-on');$('avatarHalo').classList.remove('listening');$('avatarBadge').textContent='Ready to guide you';$('inputStatus').textContent='Review your dictated question and press Send.'};recognition.onerror=e=>{toast('Microphone: '+(e.error||'not available'))};$('micButton').onclick=()=>{try{recognition.start()}catch{recognition.stop()}}}else{$('micButton').disabled=true;$('micButton').title='Speech recognition is not supported in this browser';$('micButton').setAttribute('aria-label','Microphone unavailable')}
