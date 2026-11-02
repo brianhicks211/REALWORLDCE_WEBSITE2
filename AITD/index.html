@@ -111,13 +111,14 @@ main{flex:1;display:grid;grid-template-columns:225px minmax(360px,1fr) minmax(37
      <div class="liveavatar-setup" id="liveavatarSetup">
        <div class="liveavatar-icon" aria-hidden="true">◉</div>
        <strong>HeyGen LiveAvatar</strong>
-       <p>Your selected avatar is ready to be embedded. Paste the generated HeyGen embed URL below to see real-time human movement.</p>
+       <p>Your selected avatar is ready to be embedded. Connect to your HeyGen avatar securely using the LiveAvatar API. Select Check connection first, then Start Live Avatar.</p>
        <span class="liveavatar-id">Avatar ID: <code>dc6a2ade-fcad-48b4-89ce-8ae807b18c32</code></span>
      </div>
      <video id="liveavatarStream" class="hidden" autoplay playsinline style="width:100%;height:100%;object-fit:cover;background:#081a2e"></video>
    </div>
    <div class="liveavatar-form" style="display:grid;gap:12px">
      <div class="liveavatar-actions">
+       <button type="button" id="liveavatarCheckBtn" class="liveavatar-secondary">Check HeyGen connection</button>
        <button type="button" id="liveavatarStartBtn" class="voice-main-btn" style="padding:13px 18px;border-radius:10px">Start Live Avatar (up to 2 min)</button>
        <button type="button" id="liveavatarStopBtn" class="liveavatar-secondary" disabled>End video session</button>
      </div>
@@ -201,51 +202,60 @@ const $=id=>document.getElementById(id);
 
 // Secure LiveAvatar session broker; no HeyGen key is sent to the browser.
 const LIVEAVATAR_API='https://wvdvylixnmhmuahgtybh.supabase.co/functions/v1/td-liveavatar-session';
-let liveRoom=null,liveActive=false;
+let liveRoom=null, liveActive=false, liveTimer=null, liveCheckDone=false, liveAudioElements=[];
 async function liveRequest(action){
-  if(!token||expiresAt<Date.now())throw Error('Start a TD learner session first.');
-  const r=await fetch(LIVEAVATAR_API,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({action})});
-  const data=await r.json().catch(()=>({}));
-  if(!r.ok)throw Error(data.error||'LiveAvatar request failed');
-  return data;
+ if(!token||expiresAt<Date.now())throw Error('Start a TD learner session first.');
+ const controller=new AbortController(), t=setTimeout(()=>controller.abort(),32000);
+ try{const r=await fetch(LIVEAVATAR_API,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({action}),signal:controller.signal});
+ const data=await r.json().catch(()=>({})); if(!r.ok)throw Error(data.error||'LiveAvatar request failed (HTTP '+r.status+')');return data;
+ }finally{clearTimeout(t)}
 }
-function liveStatus(s){$('liveavatarStatus').textContent=s}
-async function endLiveAvatar(){
-  const room=liveRoom;liveRoom=null;liveActive=false;
-  try{room?.disconnect()}catch{}
-  const v=$('liveavatarStream');v.pause();v.srcObject=null;v.classList.add('hidden');
-  $('liveavatarSetup').classList.remove('hidden');
-  $('liveavatarStartBtn').disabled=false;$('liveavatarStopBtn').disabled=true;
-  liveStatus('Avatar video stopped.');
-  if(token)try{await liveRequest('stop')}catch(e){console.warn('LiveAvatar stop:',e.message)}
+function liveStatus(message){$('liveavatarStatus').textContent=message}
+async function closeAvatar(sendStop=true){
+ if(liveTimer){clearTimeout(liveTimer);liveTimer=null}
+ const room=liveRoom;liveRoom=null;liveActive=false;
+ try{await room?.disconnect()}catch{}
+ for(const el of liveAudioElements){try{el.pause();el.remove()}catch{}}liveAudioElements=[];
+ const video=$('liveavatarStream');video.pause();video.srcObject=null;video.classList.add('hidden');
+ $('liveavatarSetup').classList.remove('hidden');$('liveavatarStartBtn').disabled=false;$('liveavatarStopBtn').disabled=true;
+ if(sendStop&&token)try{await liveRequest('stop')}catch(e){console.warn('LiveAvatar stop failed:',e.message)}
 }
-$('liveavatarStopBtn').onclick=endLiveAvatar;
+$('liveavatarStopBtn').onclick=async()=>{liveStatus('Ending avatar video session...');await closeAvatar();liveStatus('Session ended. You can start again (up to 3 attempts per learner session).')};
+$('liveavatarCheckBtn').onclick=async()=>{
+ const btn=$('liveavatarCheckBtn');btn.disabled=true;liveStatus('Checking HeyGen API key and selected avatar...');
+ try{const result=await liveRequest('check');liveCheckDone=true;liveStatus('HeyGen connection verified. Avatar status: '+(result.avatar_status||'available')+'. Click Start Live Avatar.')}catch(e){liveStatus('HeyGen check failed: '+e.message);toast(e.message)}finally{btn.disabled=false}
+};
 $('liveavatarStartBtn').onclick=async()=>{
- const btn=$('liveavatarStartBtn');btn.disabled=true;
- liveStatus('Preparing secure HeyGen video session...');
+ const btn=$('liveavatarStartBtn');btn.disabled=true;$('liveavatarStopBtn').disabled=false;
+ liveStatus('Requesting HeyGen session...');
  try{
+   if(liveRoom)await closeAvatar();
+   const kit=await import('https://cdn.jsdelivr.net/npm/livekit-client@2.15.7/+esm');
    const details=await liveRequest('start');
-   liveStatus('Connecting live avatar video...');
-   // LiveKit client handles the secure WebRTC room connection.
-   const kit=await import('https://esm.sh/livekit-client@2.15.7?bundle');
-   const room=new kit.Room({adaptiveStream:true,dynacast:true});
-   liveRoom=room;
-   room.on(kit.RoomEvent.TrackSubscribed,(track)=>{
-     if(track.kind==='video'){
-       const v=$('liveavatarStream');track.attach(v);
-       v.classList.remove('hidden');$('liveavatarSetup').classList.add('hidden');
-       liveStatus('Realistic HeyGen video connected · LiveAvatar Lite mode');
-     } else if(track.kind==='audio'){
-       const el=track.attach();el.autoplay=true;el.style.display='none';
-       document.body.appendChild(el);
+   liveStatus('Session created. Joining secure live video room...');
+   const room=new kit.Room({adaptiveStream:true,dynacast:true});liveRoom=room;
+   const subscribe=(track)=>{
+     if(track.kind===kit.Track.Kind.Video||track.kind==='video'){
+       const v=$('liveavatarStream');track.attach(v);v.classList.remove('hidden');$('liveavatarSetup').classList.add('hidden');
+       v.play().catch(()=>{liveStatus('Video connected. Tap video to start playback.');v.controls=true});
+       liveStatus('HeyGen LiveAvatar video connected.');
+     }else if(track.kind===kit.Track.Kind.Audio||track.kind==='audio'){
+       const el=track.attach();el.autoplay=true;el.style.display='none';document.body.appendChild(el);liveAudioElements.push(el);
+       el.play().catch(()=>liveStatus('Avatar connected. Browser blocked audio; click the video to enable sound.'));
      }
-   });
-   room.on(kit.RoomEvent.Disconnected,()=>{if(liveRoom===room)endLiveAvatar()});
+   };
+   room.on(kit.RoomEvent.TrackSubscribed,subscribe);
+   room.on(kit.RoomEvent.Disconnected,()=>{if(liveRoom===room){closeAvatar(false).then(()=>liveStatus('Video connection ended. You can try again.'))}});
    await room.connect(details.livekit_url,details.livekit_client_token);
-   liveActive=true;$('liveavatarStopBtn').disabled=false;
-   liveStatus('Connected. Avatar video starts when HeyGen publishes the stream.');
-   setTimeout(()=>{if(liveRoom===room)endLiveAvatar()},115000);
- }catch(e){liveStatus('Could not start LiveAvatar: '+e.message);btn.disabled=false;toast(e.message)}
+   liveActive=true;btn.disabled=true;$('liveavatarStopBtn').disabled=false;
+   for(const participant of room.remoteParticipants.values()){
+     for(const publication of participant.trackPublications.values())if(publication.track)subscribe(publication.track);
+   }
+   if($('liveavatarStream').classList.contains('hidden')){
+     liveStatus('Connected to HeyGen, waiting for the avatar video track. If it stays blank, end session and retry.');
+   }
+   liveTimer=setTimeout(()=>{if(liveRoom===room)closeAvatar().then(()=>liveStatus('Two-minute test completed.'))},115000);
+ }catch(e){const message=e?.message||'Unknown connection error';await closeAvatar();liveStatus('Unable to display HeyGen video: '+message);toast(message)}
 };
 let token=sessionStorage.getItem('rwce_td_session')||'';
 let expiresAt=Number(sessionStorage.getItem('rwce_td_expires')||0);
