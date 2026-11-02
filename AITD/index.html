@@ -349,7 +349,7 @@ async function speak(text,{force=false,isDemo=false}={}){
     audioPlayer.onerror=()=>{if(id===voiceGeneration){finishSpeaking();toast('Audio playback failed.');}};
     await audioPlayer.play();
     $('testCaption').textContent=isDemo?'Natural AI voice introduction playing.':'Reading your answer with AI-generated speech.';
-  }catch(e){if(id===voiceGeneration){finishSpeaking();$('testCaption').textContent=e.message||'Voice generation unavailable';toast(e.message||'Voice generation unavailable');}}
+  }catch(e){if(id===voiceGeneration){finishSpeaking();const msg=e.message||'Voice generation unavailable';$('testCaption').textContent=msg+' Using browser voice instead.';toast(msg+' — using browser voice.');speakBrowser(text,isDemo);}}
   finally{if(id===voiceGeneration){voiceBusy=false;$('testSpeakBtn').disabled=false;}}
 }
 function showChat(){document.querySelectorAll('.nav-btn').forEach(x=>x.classList.toggle('active',x.dataset.view==='chat'));$('panelTitle').textContent='Ask anything about TD';$('panelDesc').textContent='Ask a question, or use your voice to start a conversation.';$('welcome').classList.toggle('hidden',Boolean($('messages').children.length));$('messages').classList.remove('hidden');$('refs').classList.add('hidden');$('chatControls').classList.remove('hidden')}
