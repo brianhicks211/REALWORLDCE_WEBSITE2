@@ -87,6 +87,16 @@ main{flex:1;display:grid;grid-template-columns:225px minmax(360px,1fr) minmax(37
 .liveavatar-privacy{margin:11px 3px 0;font-size:11px;line-height:1.55;color:#95b8ce;text-align:left}
 .separate-chat-alert{background:#092d47;border:1px solid #28607b;border-radius:10px;color:#a9ccdb;padding:10px 12px;font-size:11px;line-height:1.5;margin:0 0 14px}
 @media(max-width:650px){.liveavatar-panel{width:100%}.liveavatar-form{padding:12px}.liveavatar-entry{flex-direction:column}.liveavatar-entry button{min-height:42px}.liveavatar-setup{padding:12px}.liveavatar-setup p{font-size:11px}.liveavatar-setup strong{font-size:15px}}
+
+/* Learner consent next to the avatar, so first-time visitors can start video. */
+.liveavatar-learner-step{display:flex;flex-wrap:wrap;align-items:center;gap:12px;border:1px solid rgba(0,229,255,.45);background:#0c3148;border-radius:13px;padding:14px;margin-bottom:4px;text-align:left}
+.liveavatar-step-number{display:flex;align-items:center;justify-content:center;border-radius:50%;width:30px;height:30px;background:#00b4d8;color:#061c2f;font-size:14px;font-weight:900;flex:0 0 auto}
+.liveavatar-step-text{display:flex;flex-direction:column;gap:3px;flex:1;min-width:195px;color:#eefaff;font-size:13px}
+.liveavatar-step-text span{font-size:11px;color:#a5cde2;line-height:1.45}
+.liveavatar-learner-step button{flex-shrink:0;min-height:42px}
+.liveavatar-learner-step.is-active{background:#0d383c;border-color:#4fe3bd}
+.liveavatar-learner-step.is-active .liveavatar-step-number{background:#4fe3bd}
+@media(max-width:650px){.liveavatar-learner-step button{width:100%}}
 </style>
 </head>
 <body>
@@ -111,19 +121,24 @@ main{flex:1;display:grid;grid-template-columns:225px minmax(360px,1fr) minmax(37
      <div class="liveavatar-setup" id="liveavatarSetup">
        <div class="liveavatar-icon" aria-hidden="true">◉</div>
        <strong>HeyGen LiveAvatar</strong>
-       <p>Your selected avatar is ready to be embedded. Connect to your HeyGen avatar securely using the LiveAvatar API. Select Check connection first, then Start Live Avatar.</p>
+       <p>Your Real World CE video guide connects securely through LiveAvatar. Begin a learner session below; no embed URL is needed.</p>
        <span class="liveavatar-id">Avatar ID: <code>dc6a2ade-fcad-48b4-89ce-8ae807b18c32</code></span>
      </div>
      <video id="liveavatarStream" class="hidden" autoplay playsinline style="width:100%;height:100%;object-fit:cover;background:#081a2e"></video>
    </div>
    <div class="liveavatar-form" style="display:grid;gap:12px">
-     <div class="liveavatar-actions">
+     <div class="liveavatar-learner-step" id="liveavatarLearnerStep" aria-live="polite">
+  <span class="liveavatar-step-number">1</span>
+  <div class="liveavatar-step-text"><strong id="liveavatarLearnerStatus">Start your learner session</strong><span>Required once before connecting to HeyGen video. No credits are used at this step.</span></div>
+  <button class="liveavatar-secondary" id="liveavatarConsentBtn" type="button">Start learner session</button>
+</div>
+<div class="liveavatar-actions">
        <button type="button" id="liveavatarCheckBtn" class="liveavatar-secondary">Check HeyGen connection</button>
        <button type="button" id="liveavatarStartBtn" class="voice-main-btn" style="padding:13px 18px;border-radius:10px">Start Live Avatar (up to 2 min)</button>
        <button type="button" id="liveavatarStopBtn" class="liveavatar-secondary" disabled>End video session</button>
      </div>
-     <span id="liveavatarStatus" role="status" aria-live="polite">Start a TD learner session, then click Start Live Avatar.</span>
-     <p style="font-size:11px;line-height:1.5;color:#a9c9db">LiveAvatar Lite streams real HeyGen video. Your TD questions and Gemini audio remain separate in this initial video test. Each video session can consume HeyGen credits.</p>
+     <span id="liveavatarStatus" role="status" aria-live="polite">Step 1: Start learner session and accept consent. Step 2: Click Start Live Avatar (up to 2 minutes).</span>
+     <p style="font-size:11px;line-height:1.5;color:#a9c9db">LiveAvatar Lite streams HeyGen video. Gemini questions and Gemini audio are separate in this preview and do not yet drive the avatar’s lips. Starting video can consume HeyGen credits.</p>
    </div>
   </div>
   <div class="legacy-photo hidden" aria-hidden="true">
@@ -222,10 +237,22 @@ async function closeAvatar(sendStop=true){
 }
 $('liveavatarStopBtn').onclick=async()=>{liveStatus('Ending avatar video session...');await closeAvatar();liveStatus('Session ended. You can start again (up to 3 attempts per learner session).')};
 $('liveavatarCheckBtn').onclick=async()=>{
+ if(!token||expiresAt<Date.now()){
+   pendingLiveAction='check';
+   liveStatus('To check the HeyGen connection, start a learner session and accept consent first.');
+   openConsent();
+   return;
+ }
  const btn=$('liveavatarCheckBtn');btn.disabled=true;liveStatus('Checking HeyGen API key and selected avatar...');
  try{const result=await liveRequest('check');liveCheckDone=true;liveStatus('HeyGen connection verified. Avatar status: '+(result.avatar_status||'available')+'. Click Start Live Avatar.')}catch(e){liveStatus('HeyGen check failed: '+e.message);toast(e.message)}finally{btn.disabled=false}
 };
 $('liveavatarStartBtn').onclick=async()=>{
+ if(!token||expiresAt<Date.now()){
+   pendingLiveAction='start';
+   liveStatus('Before the video can start, accept the learner-session consent. The video will start after consent is recorded.');
+   openConsent();
+   return;
+ }
  const btn=$('liveavatarStartBtn');btn.disabled=true;$('liveavatarStopBtn').disabled=false;
  liveStatus('Requesting HeyGen session...');
  try{
@@ -264,7 +291,22 @@ let busy=false, spokenAnswers=true, recognition=null;
 const speechSupported=('speechSynthesis' in window), SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
 function toast(s){$('toast').textContent=s;$('toast').classList.remove('hidden');setTimeout(()=>$('toast').classList.add('hidden'),4800)}
 function setStatus(s){$('connectionStatus').textContent=s}
-function updateSession(){if(token){setStatus('SESSION ACTIVE');$('inputStatus').textContent='Learning session ready.';$('startButton').textContent='Session active';}else{setStatus('NOT STARTED');$('inputStatus').textContent='Start a session before asking.';$('startButton').textContent='Start learner session';}}
+function updateSession(){
+  const active=Boolean(token&&expiresAt>Date.now());
+  if(active){
+    setStatus('SESSION ACTIVE');$('inputStatus').textContent='Learning session ready.';$('startButton').textContent='Session active';
+    $('liveavatarLearnerStep').classList.add('is-active');
+    $('liveavatarLearnerStatus').textContent='Learner session active';
+    $('liveavatarConsentBtn').textContent='Session ready';
+    $('liveavatarConsentBtn').disabled=true;
+  }else{
+    setStatus('NOT STARTED');$('inputStatus').textContent='Start a session before asking.';$('startButton').textContent='Start learner session';
+    $('liveavatarLearnerStep').classList.remove('is-active');
+    $('liveavatarLearnerStatus').textContent='Start your learner session';
+    $('liveavatarConsentBtn').textContent='Start learner session';
+    $('liveavatarConsentBtn').disabled=false;
+  }
+}
 const DEMO_GREETING="Hello, and welcome to Real World CE. I'm your virtual TD education guide. You can ask questions using the microphone or by typing in the chat. I'm happy to help you learn. Let's get started.";
 let activeUtterance=null;
 let latestResponse='';
@@ -464,9 +506,17 @@ function showChat(){document.querySelectorAll('.nav-btn').forEach(x=>x.classList
 function showRefs(){document.querySelectorAll('.nav-btn').forEach(x=>x.classList.toggle('active',x.dataset.view==='refs'));$('panelTitle').textContent='Sources & resources';$('panelDesc').textContent='Clinical education references.';$('welcome').classList.add('hidden');$('messages').classList.add('hidden');$('refs').classList.remove('hidden');$('chatControls').classList.add('hidden')}
 function appendMessage(role,text,isError=false){$('welcome').classList.add('hidden');const row=document.createElement('div');row.className='message '+(role==='user'?'user':'assistant');if(role!=='user'){const icon=document.createElement('div');icon.className='role-avatar';icon.textContent='AI';row.appendChild(icon)}const bubble=document.createElement('div');bubble.className='bubble'+(isError?' error-bubble':'');const label=document.createElement('span');label.className='msg-label';label.textContent=role==='user'?'You':'TD Education Guide';bubble.appendChild(label);bubble.appendChild(document.createTextNode(text));row.appendChild(bubble);$('messages').appendChild(row);$('chatScroll').scrollTop=$('chatScroll').scrollHeight;return row}
 async function call(action,payload,authToken=''){const ctrl=new AbortController();const timeout=setTimeout(()=>ctrl.abort(),25000);try{const resp=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json',...(authToken?{'Authorization':'Bearer '+authToken}:{})},body:JSON.stringify({action,...payload}),signal:ctrl.signal});const data=await resp.json().catch(()=>({}));if(!resp.ok)throw new Error(data.error||'Unable to contact TD service.');return data}finally{clearTimeout(timeout)}}
+let pendingLiveAction=null;
 function openConsent(){$('consentModal').classList.remove('hidden');$('consentCheck').checked=false;$('confirmConsent').disabled=true}
-$('startButton').onclick=()=>token?toast('Your learner session is already active.'):openConsent();$('cancelConsent').onclick=()=>$('consentModal').classList.add('hidden');$('consentCheck').onchange=e=>$('confirmConsent').disabled=!e.target.checked;
-$('confirmConsent').onclick=async()=>{if(!$('consentCheck').checked)return;$('confirmConsent').disabled=true;$('confirmConsent').textContent='Starting...';try{const data=await call('start',{consent:true});token=data.session_token;expiresAt=new Date(data.expires_at).getTime();sessionStorage.setItem('rwce_td_session',token);sessionStorage.setItem('rwce_td_expires',String(expiresAt));$('consentModal').classList.add('hidden');updateSession();toast('Session started. You can try the natural voice or ask a TD question.')}catch(e){toast(e.name==='AbortError'?'Connection timed out.':e.message||'Could not start the session.')}finally{$('confirmConsent').textContent='Agree & start';$('confirmConsent').disabled=!$('consentCheck').checked}};
+$('liveavatarConsentBtn').onclick=()=>{if(token&&expiresAt>Date.now()){liveStatus('Learner session is already active. Click Start Live Avatar.');return;}pendingLiveAction=null;openConsent()};
+$('startButton').onclick=()=>token?toast('Your learner session is already active.'):openConsent();
+$('cancelConsent').onclick=()=>{$('consentModal').classList.add('hidden');pendingLiveAction=null};
+$('consentCheck').onchange=e=>$('confirmConsent').disabled=!e.target.checked;
+$('confirmConsent').onclick=async()=>{if(!$('consentCheck').checked)return;$('confirmConsent').disabled=true;$('confirmConsent').textContent='Starting...';try{const data=await call('start',{consent:true});token=data.session_token;expiresAt=new Date(data.expires_at).getTime();sessionStorage.setItem('rwce_td_session',token);sessionStorage.setItem('rwce_td_expires',String(expiresAt));$('consentModal').classList.add('hidden');updateSession();toast('Learner session started.');
+  const action=pendingLiveAction;pendingLiveAction=null;
+  if(action==='start'){$('liveavatarStartBtn').click()}
+  else if(action==='check'){$('liveavatarCheckBtn').click()}
+  else {liveStatus('Learner session ready. Click Check HeyGen connection or Start Live Avatar.')}}catch(e){toast(e.name==='AbortError'?'Connection timed out.':e.message||'Could not start the session.')}finally{$('confirmConsent').textContent='Agree & start';$('confirmConsent').disabled=!$('consentCheck').checked}};
 async function ask(){const q=$('question').value.trim();if(busy||!q)return;if(q.length<3){toast('Enter at least three characters.');return}if(!token){openConsent();toast('Start your session first.');return}if(expiresAt<Date.now()){token='';updateSession();openConsent();return}showChat();clearVoice();appendMessage('user',q);$('question').value='';busy=true;$('sendButton').disabled=true;$('inputStatus').textContent='Contacting Gemini chat endpoint...';$('avatarHalo').classList.add('thinking');$('avatarBadge').textContent='Thinking...';try{const r=await fetch(GEMINI_CHAT_API,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({question:q})});const data=await r.json().catch(()=>({}));if(!r.ok)throw Error(data.error||'Gemini chat unavailable');appendMessage('assistant',data.answer);latestResponse=data.answer;$('replayAnswerBtn').disabled=false;speak(data.answer)}catch(e){appendMessage('assistant',e.name==='AbortError'?'The response timed out. Please try again.':(e.message||'Could not process the question.'),true);if(/invalid|expired/i.test(e.message||'')){token='';sessionStorage.removeItem('rwce_td_session');updateSession()}}finally{$('avatarHalo').classList.remove('thinking');if(!$('avatarHalo').classList.contains('speaking'))$('avatarBadge').textContent='Ready to guide you';busy=false;$('sendButton').disabled=false;$('inputStatus').textContent=token?'Ready for your next question.':'Start a session before asking.'}}
 $('chatForm').addEventListener('submit',e=>{e.preventDefault();ask()});$('question').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask()}});
 document.querySelectorAll('.suggest').forEach(el=>el.addEventListener('click',()=>{$('question').value=el.dataset.q;showChat();$('question').focus();if(!token)openConsent()}));
