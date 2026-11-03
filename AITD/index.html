@@ -142,22 +142,73 @@ async function connectAvatar(){
  })();
  return avatarPromise;
 }
+// Decode Gemini's streaming audio SSE without exposing the provider API key in the browser.
+async function* voicePcmChunks(response){
+ if(!response.body)throw Error("Streaming audio transport unavailable");
+ const rd=response.body.getReader(),decoder=new TextDecoder();
+ let buffer="",sawAudio=false;
+ const parse=(record)=>{
+  const data=record.split(/\r?\n/).filter(line=>line.startsWith("data:")).map(line=>line.slice(5).trimStart()).join("\n");
+  if(!data||data==="[DONE]")return null;
+  const event=JSON.parse(data);
+  if(event.event_type==="step.delta" && event.delta?.type==="audio" && event.delta?.data){
+   const bin=atob(event.delta.data),bytes=new Uint8Array(bin.length);
+   for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+   return bytes;
+  }
+  if(/error|failed/.test(String(event.event_type||"")))throw Error("The streaming voice service stopped unexpectedly");
+  return null;
+ };
+ try{
+  while(true){
+   const {done,value}=await rd.read();
+   if(done)break;
+   buffer+=decoder.decode(value,{stream:true});
+   const records=buffer.split(/\r?\n\r?\n/);buffer=records.pop()||"";
+   for(const item of records){const chunk=parse(item);if(chunk){sawAudio=true;yield chunk;}}
+  }
+  if(buffer.trim()){const chunk=parse(buffer);if(chunk){sawAudio=true;yield chunk;}}
+  if(!sawAudio)throw Error("The voice stream returned no audio");
+ }finally{try{rd.releaseLock()}catch{}}
+}
 async function spoken(text){
  if(muted)return;
- status("Answer ready — preparing spoken response...");
- const voiceStarted=performance.now();
- const res=await fetch(VOICE,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify({kind:"reply",voice:"Kore",text:text.slice(0,1500)}),signal:AbortSignal.timeout(42000)});
+ const params={kind:"reply",voice:"Kore",text:text.slice(0,1500)};
+ // For a connected avatar, feed each streamed audio chunk immediately instead of
+ // waiting for an entire WAV download. The existing WAV endpoint is the fallback.
+ if(avatarPromise&&!avatarInstance?.connected)await Promise.race([avatarPromise,pause(4500)]);
+ if(useVideo&&avatarInstance?.connected){
+  let partialSpeech=false;
+  try{
+   status("Preparing your educator's voice...");
+   const t=performance.now();
+   const response=await fetch(VOICE,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify({...params,stream:true}),signal:AbortSignal.timeout(45000)});
+   if(!response.ok){const err=await response.json().catch(()=>({}));throw Error(err.error||"Streaming speech unavailable");}
+   if(!(response.headers.get("content-type")||"").includes("text/event-stream"))throw Error("Speech streaming is not supported by this service");
+   const avatar=avatarInstance;
+   if(await avatar.speakPcm24Stream(voicePcmChunks(response))){
+    console.info("[Real World CE TD] Streamed voice finished in",Math.round(performance.now()-t),"ms");
+    return;
+   }
+  }catch(e){
+   console.warn("Streaming speech fallback",e);
+   partialSpeech=!!e?.partialSpeech;
+   if(partialSpeech){status("The spoken response was interrupted. The full written answer is available in chat.");return;}
+  }
+ }
+ status("Preparing spoken response...");
+ const t=performance.now();
+ const res=await fetch(VOICE,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify(params),signal:AbortSignal.timeout(42000)});
  if(!res.ok){const j=await res.json().catch(()=>({}));throw Error(j.error||"Speech HTTP "+res.status)}
  const wav=await res.arrayBuffer();if(wav.byteLength<200)throw Error("The voice service returned empty audio");
- console.info("[Real World CE TD] Speech generation:",Math.round(performance.now()-voiceStarted),"ms");
- if(avatarPromise)await Promise.race([avatarPromise,pause(14000)]);
+ console.info("[Real World CE TD] WAV voice generation:",Math.round(performance.now()-t),"ms");
  if(avatarInstance?.connected&&useVideo){
   try{if(await avatarInstance.speakWav(wav))return}
   catch(e){console.warn("Video lip synchronization",e);status("Video speech unavailable — playing the voice response.")}
  }
- status("Playing the spoken response.");await playWav(wav);
+ status("Playing spoken response.");await playWav(wav);
 }
-async function ask(text){const q=text.trim();if(!q||busy)return;if(q.length<3){status("Please ask a full TD question.");return}busy=true;$("send").disabled=true;try{if(recognizing)recognizer?.stop();await learner();if(useVideo)connectAvatar().catch(e=>console.warn("Video startup",e));add("user",q);$("question").value="";status("Preparing your answer...");const x=await request(CHAT,{question:q},AbortSignal.timeout(50000));add("assistant",x.answer);$("courseNotice").textContent=x.mode==="approved_curriculum"?"Approved TD content mode. Educational information only.":"General TD educational preview. The approved curriculum has not yet been imported.";speaking=true;try{await spoken(x.answer)}catch(e){status("Speech unavailable: "+e.message)}finally{speaking=false;if(!$("rendererStatus").textContent.startsWith("Educator video unavailable"))status("Ready for another TD question")}}catch(e){
+async function ask(text){const q=text.trim();if(!q||busy)return;if(q.length<3){status("Please ask a full TD question.");return}busy=true;$("send").disabled=true;try{if(recognizing)recognizer?.stop();await learner();if(useVideo)connectAvatar().catch(e=>console.warn("Video startup",e));add("user",q);$("question").value="";status("Preparing your answer...");const answerStarted=performance.now();const x=await request(CHAT,{question:q},AbortSignal.timeout(50000));console.info("[Real World CE TD] Text answer ms:",Math.round(performance.now()-answerStarted));add("assistant",x.answer);$("courseNotice").textContent=x.mode==="approved_curriculum"?"Approved TD content mode. Educational information only.":"General TD educational preview. The approved curriculum has not yet been imported.";speaking=true;try{await spoken(x.answer)}catch(e){status("Speech unavailable: "+e.message)}finally{speaking=false;if(!$("rendererStatus").textContent.startsWith("Educator video unavailable"))status("Ready for another TD question")}}catch(e){
  console.warn("TD educator answer temporarily unavailable",e);
  if(!$("question").value.trim())$("question").value=q;
  add("assistant","I couldn't answer that question just yet. Your question is still in the text box — press Send to try again.");

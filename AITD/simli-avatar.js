@@ -6,6 +6,11 @@
 const SDK_URL = "https://cdn.jsdelivr.net/npm/simli-client@3.2.0/+esm";
 let sdkLoader;
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+// Avoid leaving a long-running timeout alive after the avatar's silent event.
+const waitSpeechEnd = (done, ms) => new Promise(resolve => {
+  const timer=setTimeout(resolve,ms);
+  done.then(()=>{clearTimeout(timer);resolve();}).catch(()=>{clearTimeout(timer);resolve();});
+});
 
 export class SimliAvatar {
   constructor({video, audio, mintToken, onReady=()=>{}, onStop=()=>{}, onStatus=()=>{}, onWarning=()=>{}}) {
@@ -151,11 +156,91 @@ export class SimliAvatar {
         // Avoid flooding transport buffers; much faster than the model's full WAV generation.
         if (i+6000 < pcm.length) await sleep(35);
       }
-      await Promise.race([done, sleep(Math.min(90000,Math.max(5000, duration*1000+10000)))]);
+      await waitSpeechEnd(done,Math.min(90000,Math.max(5000,duration*1000+10000)));
       if (seq === this.sequence) { this.finishSpeech = null; this.didSpeak = false; }
       return seq === this.sequence;
     } catch (e) {
       this.interrupt();
+      throw e;
+    }
+  }
+
+  /** Receive 24 kHz mono PCM16 chunks from the approved Gemini voice stream.
+   *  Resample incrementally to Simli's required 16 kHz PCM16.
+   *  Audio is passed directly to Simli: the browser never plays a second voice track.
+   */
+  async speakPcm24Stream(chunks) {
+    if (!this.connected || !this.client) return false;
+    this.interrupt();
+    const seq=this.sequence;
+    this.onStatus("Your educator is speaking...");
+    const startTime=performance.now();
+    let pendingSamples=[];
+    let halfSampleByte=null; // Preserve sample bytes across SSE event boundaries.
+    let queued=new Uint8Array(0);
+    let sentAny=false,sentBytes=0;
+    const done=new Promise(resolve=>{this.finishSpeech=resolve;});
+    const feed=async(bytes)=>{
+      if(!bytes.length)return;
+      const combined=new Uint8Array(queued.length+bytes.length);
+      combined.set(queued);combined.set(bytes,queued.length);
+      queued=combined;
+      while(queued.length>=6000){
+        if(seq!==this.sequence||!this.connected||!this.client)throw Error("Video was interrupted");
+        this.client.sendAudioData(queued.subarray(0,6000));
+        sentAny=true;sentBytes+=6000;
+        queued=queued.slice(6000);
+        await sleep(28);
+      }
+    };
+    try{
+      for await(const chunk of chunks){
+        if(seq!==this.sequence||!this.connected||!this.client)throw Error("Video stopped during speech");
+        if(!(chunk instanceof Uint8Array)||!chunk.byteLength)continue;
+        let input=chunk;
+        if(halfSampleByte!==null){
+          input=new Uint8Array(chunk.byteLength+1);
+          input[0]=halfSampleByte;input.set(chunk,1);halfSampleByte=null;
+        }
+        if(input.byteLength%2){halfSampleByte=input[input.byteLength-1];input=input.subarray(0,input.byteLength-1);}
+        if(!input.byteLength)continue;
+        // Three 24 kHz samples represent two 16 kHz samples, using linear interpolation.
+        // The pending samples carry over across arbitrary SSE chunk boundaries.
+        const view=new DataView(input.buffer,input.byteOffset,input.byteLength);
+        const outputs=[];
+        for(let i=0;i+1<input.byteLength;i+=2){
+          pendingSamples.push(view.getInt16(i,true));
+          if(pendingSamples.length===3){
+            outputs.push(pendingSamples[0],Math.round((pendingSamples[1]+pendingSamples[2])/2));
+            pendingSamples=[];
+          }
+        }
+        if(outputs.length){
+          const pcm=new Uint8Array(outputs.length*2),dv=new DataView(pcm.buffer);
+          for(let i=0;i<outputs.length;i++)dv.setInt16(2*i,outputs[i],true);
+          await feed(pcm);
+        }
+      }
+      if(pendingSamples.length){
+        const pcm=new Uint8Array(2),dv=new DataView(pcm.buffer);
+        dv.setInt16(0,pendingSamples[0],true);
+        await feed(pcm);
+      }
+      if(queued.byteLength){
+        if(seq!==this.sequence||!this.connected||!this.client)throw Error("Video was interrupted");
+        this.client.sendAudioData(queued);
+        sentAny=true;sentBytes+=queued.length;
+      }
+      if(!sentAny)throw Error("Speech stream returned no audio");
+      console.info("[Real World CE TD] First lip-synced voice chunks sent, elapsed ms:",Math.round(performance.now()-startTime));
+      await waitSpeechEnd(done,Math.min(90000,Math.max(7000,sentBytes/32000*1000+9000)));
+      if(seq===this.sequence){this.finishSpeech=null;this.didSpeak=false;}
+      return seq===this.sequence;
+    }catch(e){
+      // An interrupted stream must not leave the avatar playing stale audio.
+      this.interrupt();
+      // Do not replay a complete response over already-spoken partial audio.
+      if(sentAny) e.partialSpeech=true;
       throw e;
     }
   }
