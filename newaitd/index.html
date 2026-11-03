@@ -18,6 +18,7 @@
 .portrait,.portrait.video-on{aspect-ratio:1/1!important;max-height:none!important}
 .portrait video{object-fit:contain!important;object-position:center center!important}
 
+.bubble.thinking{opacity:.78;border:1px solid #447c95;font-style:italic}
 /* Curated reference-video library; the Simli video remains independent. */
 .refbar{display:flex;align-items:center;justify-content:space-between;gap:9px;margin:0 0 11px}
 .refbar button{background:#153c57;color:#c7eafb;border:1px solid #3585a5;border-radius:12px;padding:9px 12px;font-size:12px;font-weight:700}
@@ -55,7 +56,8 @@
 <script>
 "use strict";
 const BASE="https://wvdvylixnmhmuahgtybh.supabase.co/functions/v1/";
-const LEARN=BASE+"td-avatar-chat",CHAT=BASE+"td-gemini-chat",VOICE=BASE+"td-gemini-voice",AVATAR=BASE+"td-simli-session";
+const LEARN=BASE+"td-avatar-chat",CHAT=BASE+"td-gemini-chat",VOICE=BASE+"td-gemini-voice",AVATAR=BASE+"td-simli-session",VOICE_CUE=BASE+"td-gemini-voice-cue";
+const EDUCATOR_VOICE="Kore";
 const $=id=>document.getElementById(id),Rec=window.SpeechRecognition||window.webkitSpeechRecognition;
 let token="",expires=0,sessionTask=null,consentDone=(()=>{try{return localStorage.getItem("rwc_td_consent_own_v1")==="yes"}catch{return false}})(),consentCallback=null;
 let busy=false,micMode="off",recognizer=null,recognizing=false,restart=null,speaking=false,player=null,muted=false,waitingForQuestion=false,recognitionProcessed=false,recognitionHadError=false,modeSwitchPending=false,pendingSpeechMode=null;
@@ -83,7 +85,7 @@ const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function learnerText(t){return String(t??"").replace(/\bhey\s*gen\b/gi,"video service").replace(/\bliveavatar\b/gi,"video service").replace(/\bgemini\b/gi,"voice service");}
 function placeholderStatus(title,detail){$("avatarPlaceholderTitle").textContent=learnerText(title);$("avatarPlaceholderCopy").textContent=learnerText(detail);}
 function status(t){$("status").textContent=learnerText(t)}
-function add(role,text){$("welcome")?.remove();const node=document.createElement("div");node.className="bubble "+role;const lbl=document.createElement("small");lbl.textContent=role==="user"?"You":"TD Educator";node.append(lbl,document.createTextNode(role==="assistant"?learnerText(text):text));$("messages").append(node);$("messages").scrollTop=$("messages").scrollHeight}
+function add(role,text){$("welcome")?.remove();const node=document.createElement("div");node.className="bubble "+role;const lbl=document.createElement("small");lbl.textContent=role==="user"?"You":"TD Educator";node.append(lbl,document.createTextNode(role==="assistant"?learnerText(text):text));$("messages").append(node);$("messages").scrollTop=$("messages").scrollHeight;return node}
 function consent(){if(consentDone)return Promise.resolve(true);$("consent").classList.remove("hidden");$("consentCheck").checked=false;$("accept").disabled=true;return new Promise(resolve=>consentCallback=resolve)}
 $("consentCheck").onchange=()=>$("accept").disabled=!$("consentCheck").checked;
 $("accept").onclick=()=>{consentDone=true;try{localStorage.setItem("rwc_td_consent_own_v1","yes")}catch{};$("consent").classList.add("hidden");const pendingMode=pendingSpeechMode;pendingSpeechMode=null;if(pendingMode)startSpeechMode(pendingMode);consentCallback?.(true);consentCallback=null};
@@ -198,7 +200,7 @@ async function* voicePcmChunks(response){
 }
 async function spoken(text){
  if(muted)return;
- const params={kind:"reply",voice:"Kore",text:text.slice(0,1500)};
+ const params={kind:"reply",voice:EDUCATOR_VOICE,text:text.slice(0,1500)};
  // For a connected avatar, feed each streamed audio chunk immediately instead of
  // waiting for an entire WAV download. The existing WAV endpoint is the fallback.
  if(avatarPromise&&!avatarInstance?.connected)await Promise.race([avatarPromise,pause(4500)]);
@@ -233,13 +235,99 @@ async function spoken(text){
  }
  status("Playing spoken response.");await playWav(wav);
 }
-async function ask(text){const q=text.trim();if(!q||busy)return;if(q.length<3){status("Please ask a full TD question.");return}busy=true;$("send").disabled=true;try{if(recognizing)recognizer?.stop();await learner();if(useVideo)connectAvatar().catch(e=>console.warn("Video startup",e));add("user",q);const suggestedVideos=videoRelevance(q);if(suggestedVideos.length)showReferenceVideos(suggestedVideos,{openFirst:/\b(show|watch|video|clip|see|demonstrat)/i.test(q)});$("question").value="";status("Preparing your answer...");const answerStarted=performance.now();const x=await request(CHAT,{question:q},AbortSignal.timeout(50000));console.info("[Real World CE TD] Text answer ms:",Math.round(performance.now()-answerStarted));add("assistant",x.answer);$("courseNotice").textContent=x.mode==="approved_curriculum"?"Approved TD content mode. Educational information only.":"General TD educational preview. The approved curriculum has not yet been imported.";speaking=true;try{await spoken(x.answer)}catch(e){status("Speech unavailable: "+e.message)}finally{speaking=false;if(!$("rendererStatus").textContent.startsWith("Educator video unavailable"))status("Ready for another TD question")}}catch(e){
- console.warn("TD educator answer temporarily unavailable",e);
- if(!$("question").value.trim())$("question").value=q;
- add("assistant","I couldn't answer that question just yet. Your question is still in the text box — press Send to try again.");
- status("Answer temporarily unavailable. Your question is ready to retry.");
- if(/expired|invalid session/i.test(String(e.message||""))){clearCachedLearnerSession()}
-}finally{busy=false;$("send").disabled=false;resume()}}
+// Warm, brand-consistent waiting cues use the EXACT SAME Gemini voice/model
+// as the regular TD answers. A private Supabase cache makes subsequent plays fast.
+// No API key, temporary cue WAV or model secret is shipped with the website.
+const TD_THINKING_CUES=[
+ {id:"thinking",text:"Let me think about that."},
+ {id:"good_question",text:"That's a good question."},
+ {id:"checking",text:"Let me check that for you."}
+];
+const cueAudioTasks=new Map();
+let cuesWarmTask=null,thinkingTurn=0;
+function getThinkingWav(cue="thinking"){
+ if(cueAudioTasks.has(cue))return cueAudioTasks.get(cue);
+ const task=(async()=>{
+  if(!token)throw Error("The learning session is not ready");
+  const r=await fetch(VOICE_CUE,{
+   method:"POST",
+   headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
+   body:JSON.stringify({cue,voice:EDUCATOR_VOICE}),
+   signal:AbortSignal.timeout(35000)
+  });
+  if(!r.ok){const j=await r.json().catch(()=>({}));throw Error(j.error||"Educator voice cue unavailable");}
+  if(!(r.headers.get("content-type")||"").includes("audio/wav"))throw Error("Invalid educator cue format");
+  const audio=await r.arrayBuffer();if(audio.byteLength<500)throw Error("Empty educator cue");
+  return audio;
+ })().catch(e=>{console.warn("Cached educator phrase",cue,e.message);return null});
+ cueAudioTasks.set(cue,task);
+ return task;
+}
+function prewarmVoiceCues(){
+ if(cuesWarmTask||!token)return;
+ // Warm the first phrase first; then the variants without three parallel TTS calls.
+ // These preloads never block the chat, the avatar or its initial video stream.
+ cuesWarmTask=(async()=>{
+  for(const cue of TD_THINKING_CUES)await getThinkingWav(cue.id);
+ })().catch(e=>console.warn("Educator voice prefetch",e));
+}
+async function speakThinkingWhilePending(isPending,cueId="thinking"){
+ if(!useVideo||muted||!isPending())return;
+ if(!avatarInstance?.connected&&avatarPromise)await Promise.race([avatarPromise,pause(1800)]);
+ if(!isPending()||!avatarInstance?.connected||!useVideo||muted)return;
+ const audio=await getThinkingWav(cueId);
+ if(!audio||!isPending()||!avatarInstance?.connected||!useVideo||muted)return;
+ // Reuse Simli's already-established audio and lip-sync path.
+ await avatarInstance.speakWav(audio);
+}
+async function ask(text){
+ const q=text.trim();if(!q||busy)return;
+ if(q.length<3){status("Please ask a full TD question.");return}
+ busy=true;$("send").disabled=true;
+ let waitingForAnswer=false,thinkingTask=Promise.resolve(),thinkingBubble=null;
+ try{
+  if(recognizing)recognizer?.stop();
+  await learner();
+  prewarmVoiceCues();
+  if(useVideo)connectAvatar().catch(e=>console.warn("Video startup",e));
+  add("user",q);
+  const suggestedVideos=videoRelevance(q);
+  if(suggestedVideos.length)showReferenceVideos(suggestedVideos,{openFirst:/\b(show|watch|video|clip|see|demonstrat)/i.test(q)});
+  $("question").value="";
+  const currentCue=TD_THINKING_CUES[thinkingTurn++%TD_THINKING_CUES.length];
+  status(currentCue.text);
+  thinkingBubble=add("assistant",currentCue.text);
+  thinkingBubble.classList.add("thinking");
+  const answerStarted=performance.now();
+  waitingForAnswer=true;
+  // Start the real answer immediately. Do not await the temporary speech beforehand.
+  const answerTask=request(CHAT,{question:q,video_refs:suggestedVideos.map(v=>v.id)},AbortSignal.timeout(50000));
+  thinkingTask=speakThinkingWhilePending(()=>waitingForAnswer,currentCue.id).catch(e=>console.warn("Interim educator speech",e));
+  const x=await answerTask;
+  waitingForAnswer=false;
+  console.info("[Real World CE TD] Text answer ms:",Math.round(performance.now()-answerStarted));
+  thinkingBubble?.remove();thinkingBubble=null;
+  add("assistant",x.answer);
+  $("courseNotice").textContent=x.mode==="approved_curriculum"?"Approved TD content mode. Educational information only.":"General TD educational preview. The approved curriculum has not yet been imported.";
+  speaking=true;
+  try{
+   // Finish the short acknowledgement first when possible; do not allow it to delay the real answer.
+   await Promise.race([thinkingTask,pause(2100)]);
+   if(avatarInstance?.connected)avatarInstance.interrupt();
+   await spoken(x.answer);
+  }catch(e){status("Speech unavailable: "+e.message)}
+  finally{speaking=false;if(!$("rendererStatus").textContent.startsWith("Educator video unavailable"))status("Ready for another TD question")}
+ }catch(e){
+  waitingForAnswer=false;
+  thinkingBubble?.remove();
+  avatarInstance?.interrupt();
+  console.warn("TD educator answer temporarily unavailable",e);
+  if(!$("question").value.trim())$("question").value=q;
+  add("assistant","I couldn't answer that question just yet. Your question is still in the text box — press Send to try again.");
+  status("Answer temporarily unavailable. Your question is ready to retry.");
+  if(/expired|invalid session/i.test(String(e.message||""))){clearCachedLearnerSession()}
+ }finally{waitingForAnswer=false;busy=false;$("send").disabled=false;resume()}
+}
 
 // Publisher-hosted references: fixed, curated links only. Do not turn arbitrary
 // user input or a model answer into a video URL. External content is not
@@ -418,6 +506,7 @@ if(location.protocol==="file:")status("Upload this index.html to /AITD/ for test
 async function startLiveEducatorOnEntry(){
  try{
   await learner();
+  prewarmVoiceCues();
   if(useVideo)await connectAvatar();
  }catch(e){
   if(String(e?.message||e).includes("Consent is required")){
