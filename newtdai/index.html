@@ -47,7 +47,7 @@
   <div class="avatar-loader" aria-hidden="true"><span></span><span></span><span></span></div>
   <div class="avatar-placeholder-title" id="avatarPlaceholderTitle">Connecting your TD educator</div>
   <div class="avatar-placeholder-copy" id="avatarPlaceholderCopy">Your live TD educator will appear here as soon as the video is ready.</div>
-</div><video id="avatarVideo" playsinline autoplay muted preload="none" aria-label="Live TD educator video"></video><audio id="avatarAudio" autoplay aria-label="Educator spoken audio" style="display:none"></audio></div><div class="stage-bottom"><h2>Real World CE · TD Educator</h2><p>Digital educational assistant · Not a medical professional</p><div class="micbar"><button type="button" class="mic" id="micBtn">🎙 Ask by voice</button><button type="button" class="mute" id="handsFreeBtn" aria-pressed="false">🎧 Hands-free off</button><button type="button" class="mute" id="muteBtn">🔊 Voice on</button><button type="button" class="mute" id="endVideoBtn" disabled>End video</button></div><p class="voice-hint">Click <strong>Ask by voice</strong> and speak normally. For hands-free use, enable listening and say “Hey Doctor.”</p><div class="status" role="status" aria-live="polite"><span class="dot"></span><span id="status">Your TD educator is getting ready.</span></div><div class="render-info" id="rendererStatus">Your educator connects automatically when the learning session begins. Text and voice responses remain available if the video is temporarily unavailable.</div></div></section>
+</div><video id="avatarVideo" playsinline autoplay muted preload="none" aria-label="Live TD educator video"></video><audio id="avatarAudio" autoplay aria-label="Educator spoken audio" style="display:none"></audio></div><div class="stage-bottom"><h2>Real World CE · TD Educator</h2><p>Digital educational assistant · Not a medical professional</p><div class="micbar"><button type="button" class="mic" id="micBtn">🎙 Ask by voice</button><button type="button" class="mute" id="handsFreeBtn" aria-pressed="false">🎧 Hands-free off</button><button type="button" class="mute" id="muteBtn">🔊 Voice on</button><button type="button" class="mute" id="voiceProviderBtn" aria-label="Switch voice service">🎙 ElevenLabs voice</button><button type="button" class="mute" id="endVideoBtn" disabled>End video</button></div><p class="voice-hint">Click <strong>Ask by voice</strong> and speak normally. For hands-free use, enable listening and say “Hey Doctor.”</p><div class="status" role="status" aria-live="polite"><span class="dot"></span><span id="status">Your TD educator is getting ready.</span></div><div class="render-info" id="rendererStatus">Your educator connects automatically when the learning session begins. Text and voice responses remain available if the video is temporarily unavailable.</div></div></section>
 <section class="chat"><div class="chat-head"><div><h2>Ask your TD educator</h2><p>Natural questions, conversational answers</p></div><span class="chip">EDUCATION PREVIEW</span></div><div class="messages" id="messages" aria-live="polite"><div class="welcome" id="welcome">I can explain the basics of tardive dyskinesia, common symptoms, recognition, and questions to discuss with a healthcare professional.</div></div><section class="refpanel" id="refPanel" aria-label="Educational reference videos" hidden>
  <div class="refhead"><div><h3 id="refTitle">Reference videos</h3><p>Examples and demonstrations related to your question</p></div><button type="button" class="refclose" id="refClose" aria-label="Close reference videos">Close</button></div>
  <div id="refList" class="reflist" aria-label="Choose a video"></div>
@@ -58,8 +58,9 @@
 <script>
 "use strict";
 const BASE="https://wvdvylixnmhmuahgtybh.supabase.co/functions/v1/";
-const LEARN=BASE+"td-avatar-chat",CHAT=BASE+"td-gemini-chat",VOICE=BASE+"td-gemini-voice",AVATAR=BASE+"td-simli-session",VOICE_CUE=BASE+"td-gemini-voice-cue";
+const LEARN=BASE+"td-avatar-chat",CHAT=BASE+"td-gemini-chat",VOICE=BASE+"td-gemini-voice",AVATAR=BASE+"td-simli-session",VOICE_CUE=BASE+"td-gemini-voice-cue",ELEVEN=BASE+"td-elevenlabs-voice";
 const EDUCATOR_VOICE="Kore";
+let voiceProvider="elevenlabs"; // Trial is ElevenLabs-first; switch back instantly using the on-screen button.
 const $=id=>document.getElementById(id),Rec=window.SpeechRecognition||window.webkitSpeechRecognition;
 let token="",expires=0,sessionTask=null,consentDone=(()=>{try{return localStorage.getItem("rwc_td_consent_own_v1")==="yes"}catch{return false}})(),consentCallback=null;
 let busy=false,micMode="off",recognizer=null,recognizing=false,restart=null,speaking=false,player=null,muted=false,waitingForQuestion=false,recognitionProcessed=false,recognitionHadError=false,modeSwitchPending=false,pendingSpeechMode=null;
@@ -218,13 +219,13 @@ function offerBrowserVoiceReplay(text){
 async function speakBrowserFallback(text){
  usingBrowserVoiceFallback=true;
  offerBrowserVoiceReplay(text);
- $('rendererStatus').textContent='Gemini speech has reached its provider limit. A temporary browser voice is available; video lip-sync cannot follow browser speech.';
- $('courseNotice').textContent='Gemini voice is temporarily rate-limited. This optional browser voice sounds different and does not drive avatar lip-sync. Written clinical content remains available.';
+ $('rendererStatus').textContent='Cloud speech is temporarily unavailable. A browser voice is available; video lip-sync cannot follow browser speech.';
+ $('courseNotice').textContent='Cloud voices are temporarily unavailable. This optional browser voice sounds different and does not drive avatar lip-sync. Written clinical content remains available.';
  if(muted){status('Voice is muted. Turn Voice on to hear the browser fallback.');return false;}
  if(!('speechSynthesis' in window)||typeof SpeechSynthesisUtterance==='undefined'){
   status('Gemini voice is rate-limited and browser speech is unavailable. The full answer is shown above.');return false;
  }
- status('Gemini speech is rate-limited. Playing the answer with a temporary browser voice.');
+ status('Playing the answer with a temporary browser voice.');
  return await new Promise(resolve=>{
   const utterance=new SpeechSynthesisUtterance(text.slice(0,1500));
   utterance.lang='en-US';utterance.rate=0.96;utterance.pitch=1;utterance.volume=1;
@@ -251,6 +252,34 @@ async function speakBrowserFallback(text){
  });
 }
 async function spoken(text){
+ if(muted)return;
+ if(voiceProvider==='elevenlabs'){
+  try{return await speakElevenLabs(text)}
+  catch(err){
+   console.warn('[Real World CE TD] ElevenLabs unavailable, returning to Gemini voice',err);
+   status('ElevenLabs unavailable. Trying the existing Gemini voice.');
+  }
+ }
+ return await spokenGemini(text);
+}
+async function speakElevenLabs(text){
+ status('Preparing ElevenLabs educator voice...');
+ // Send only the exact saved answer; the server checks this before billing ElevenLabs.
+ const res=await fetch(ELEVEN,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({kind:'reply',text:text.slice(0,1500)}),signal:AbortSignal.timeout(48000)});
+ if(!res.ok){const data=await res.json().catch(()=>({}));throw Error(data.error||'ElevenLabs HTTP '+res.status)}
+ if(!(res.headers.get('content-type')||'').includes('audio/wav'))throw Error('ElevenLabs did not return a WAV');
+ const audio=await res.arrayBuffer();
+ if(audio.byteLength<250)throw Error('Empty ElevenLabs audio response');
+ if(avatarPromise&&!avatarInstance?.connected)await Promise.race([avatarPromise,pause(2500)]);
+ if(avatarInstance?.connected&&useVideo){
+  try{if(await avatarInstance.speakWav(audio)){status('Ready for another TD question');return;}}
+  catch(err){console.warn('Simli could not play ElevenLabs audio',err);}
+ }
+ status('Playing ElevenLabs response.');
+ await playWav(audio);
+ status('Ready for another TD question');
+}
+async function spokenGemini(text){
  usingBrowserVoiceFallback=false;
  if(muted)return;
  const params={kind:"reply",voice:EDUCATOR_VOICE,text:text.slice(0,1500)};
@@ -556,6 +585,11 @@ if(Rec){
 $("micBtn").onclick=()=>startSpeechMode("direct");
 $("handsFreeBtn").onclick=()=>startSpeechMode("wake");
 $("endVideoBtn").onclick=async()=>{await stopAvatar(true);status("Video ended. Text and voice responses remain available. Refresh to start another video session.")};
+$("voiceProviderBtn").onclick=()=>{
+ voiceProvider=voiceProvider==='elevenlabs'?'gemini':'elevenlabs';
+ $("voiceProviderBtn").textContent=voiceProvider==='elevenlabs'?'🎙 ElevenLabs voice':'🎙 Gemini voice';
+ status(voiceProvider==='elevenlabs'?'ElevenLabs selected for the next answer.':'Gemini selected for the next answer.');
+};
 $("muteBtn").onclick=()=>{muted=!muted;$("muteBtn").textContent=muted?"🔇 Voice off":"🔊 Voice on";avatarInstance?.setMuted(muted);if(muted){avatarInstance?.interrupt();if(player)player.pause();window.speechSynthesis?.cancel()}};
 $("askForm").onsubmit=e=>{e.preventDefault();ask($("question").value)};
 $("question").onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();ask($("question").value)}};
