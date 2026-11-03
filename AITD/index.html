@@ -17,6 +17,27 @@
 /* Simli Trinity-2 sends a square 768×768 frame. Never crop or distort it. */
 .portrait,.portrait.video-on{aspect-ratio:1/1!important;max-height:none!important}
 .portrait video{object-fit:contain!important;object-position:center center!important}
+
+.bubble.thinking{opacity:.78;border:1px solid #447c95;font-style:italic}
+/* Curated reference-video library; the Simli video remains independent. */
+.refbar{display:flex;align-items:center;justify-content:space-between;gap:9px;margin:0 0 11px}
+.refbar button{background:#153c57;color:#c7eafb;border:1px solid #3585a5;border-radius:12px;padding:9px 12px;font-size:12px;font-weight:700}
+.refpanel{margin:0 20px 16px;background:#0d2b43;border:1px solid #3a7088;border-radius:17px;overflow:hidden}
+.refpanel[hidden]{display:none!important}
+.refhead{display:flex;gap:14px;justify-content:space-between;align-items:flex-start;padding:14px 15px;border-bottom:1px solid #2b5062}
+.refhead h3{font-size:16px;line-height:1.3;margin:0;color:#eefdff}
+.refhead p{font-size:11px;color:#a6c6d8;margin:5px 0 0;line-height:1.45}
+.refclose{border:1px solid #557f92;color:white;background:transparent;border-radius:9px;padding:7px 10px;font-size:12px}
+.reflist{display:flex;flex-wrap:wrap;gap:7px;padding:12px 14px 4px}
+.refitem{border:1px solid #3a85a3;border-radius:12px;background:#173b57;color:#d9f4fb;padding:10px 12px;font-size:12px;text-align:left}
+.refitem[aria-current=true]{background:#075c75;border-color:#00c9ea}
+.refbody{padding:12px 14px 15px}
+.refcaption{font-size:12px;color:#d7f2fa;line-height:1.5;margin:0 0 9px}
+.refsource{font-size:11px;color:#a5c9d9;line-height:1.5;margin:7px 0}
+.refvideo{aspect-ratio:16/9;max-height:360px;display:block;width:100%;border:1px solid #34647e;border-radius:10px;background:#061627}
+.refopen{display:inline-block;padding:9px 12px;border-radius:9px;border:1px solid #4a9dba;background:#113b54;color:#bdefff;font-size:12px;margin-top:6px;text-decoration:none;font-weight:700}
+.refnotice{font-size:11px;line-height:1.5;color:#adcfe1;margin:12px 0 0}
+@media(max-width:670px){.refpanel{margin:0 9px 11px}.refitem{flex:1 1 100%}.refhead{padding:12px}}
 </style></head><body>
 <header><div class="brand">REAL WORLD <span>CE</span><small>LEARNING, REIMAGINED.</small></div><span class="preview">AI TD EDUCATOR · LIVE</span></header>
 <div class="frame"><div class="headline"><div class="kicker">INTERACTIVE CLINICAL EDUCATION</div><h1>Meet your TD educator.</h1></div>
@@ -25,12 +46,18 @@
   <div class="avatar-placeholder-title" id="avatarPlaceholderTitle">Connecting your TD educator</div>
   <div class="avatar-placeholder-copy" id="avatarPlaceholderCopy">Your live TD educator will appear here as soon as the video is ready.</div>
 </div><video id="avatarVideo" playsinline autoplay muted preload="none" aria-label="Live TD educator video"></video><audio id="avatarAudio" autoplay aria-label="Educator spoken audio" style="display:none"></audio></div><div class="stage-bottom"><h2>Real World CE · TD Educator</h2><p>Digital educational assistant · Not a medical professional</p><div class="micbar"><button type="button" class="mic" id="micBtn">🎙 Ask by voice</button><button type="button" class="mute" id="handsFreeBtn" aria-pressed="false">🎧 Hands-free off</button><button type="button" class="mute" id="muteBtn">🔊 Voice on</button><button type="button" class="mute" id="endVideoBtn" disabled>End video</button></div><p class="voice-hint">Click <strong>Ask by voice</strong> and speak normally. For hands-free use, enable listening and say “Hey Doctor.”</p><div class="status" role="status" aria-live="polite"><span class="dot"></span><span id="status">Your TD educator is getting ready.</span></div><div class="render-info" id="rendererStatus">Your educator connects automatically when the learning session begins. Text and voice responses remain available if the video is temporarily unavailable.</div></div></section>
-<section class="chat"><div class="chat-head"><div><h2>Ask your TD educator</h2><p>Natural questions, conversational answers</p></div><span class="chip">EDUCATION PREVIEW</span></div><div class="messages" id="messages" aria-live="polite"><div class="welcome" id="welcome">I can explain the basics of tardive dyskinesia, common symptoms, recognition, and questions to discuss with a healthcare professional.</div></div><div class="inputbox"><div class="suggests"><button type="button" data-q="What is tardive dyskinesia?">What is TD?</button><button type="button" data-q="What are common symptoms of tardive dyskinesia?">Common symptoms</button><button type="button" data-q="How is tardive dyskinesia assessed?">How is TD assessed?</button></div><form id="askForm" class="inputrow"><textarea id="question" placeholder="Ask a question about TD..." rows="2" maxlength="1500" aria-label="Question about tardive dyskinesia"></textarea><button type="submit" id="send">Send</button></form><p class="note" id="courseNotice">General educational preview. Approved TD course content has not yet been connected; these answers are not patient-specific advice.</p></div></section></div><div class="footer">AI-generated virtual educator. Educational use only; not a diagnosis or replacement for medical advice. Microphone listening requires your permission.</div></div>
+<section class="chat"><div class="chat-head"><div><h2>Ask your TD educator</h2><p>Natural questions, conversational answers</p></div><span class="chip">EDUCATION PREVIEW</span></div><div class="messages" id="messages" aria-live="polite"><div class="welcome" id="welcome">I can explain the basics of tardive dyskinesia, common symptoms, recognition, and questions to discuss with a healthcare professional.</div></div><section class="refpanel" id="refPanel" aria-label="Educational reference videos" hidden>
+ <div class="refhead"><div><h3 id="refTitle">Reference videos</h3><p>Examples and demonstrations related to your question</p></div><button type="button" class="refclose" id="refClose" aria-label="Close reference videos">Close</button></div>
+ <div id="refList" class="reflist" aria-label="Choose a video"></div>
+ <div id="refBody" class="refbody" aria-live="polite"></div>
+</section>
+<div class="inputbox"><div class="refbar"><button type="button" id="showVideos" aria-expanded="false" aria-controls="refPanel">▶ Reference videos</button></div><div class="suggests"><button type="button" data-q="What is tardive dyskinesia?">What is TD?</button><button type="button" data-q="What are common symptoms of tardive dyskinesia?">Common symptoms</button><button type="button" data-q="How is tardive dyskinesia assessed?">How is TD assessed?</button></div><form id="askForm" class="inputrow"><textarea id="question" placeholder="Ask a question about TD..." rows="2" maxlength="1500" aria-label="Question about tardive dyskinesia"></textarea><button type="submit" id="send">Send</button></form><p class="note" id="courseNotice">General TD educational preview. AI-generated explanations are not clinically reviewed or personalized medical advice.</p></div></section></div><div class="footer">AI-generated virtual educator. Educational use only; not a diagnosis or replacement for medical advice. Microphone listening requires your permission.</div></div>
 <div class="modal hidden" id="consent"><div><h2>Start your TD learning session</h2><p>This preview provides general TD information, not medical advice. Your questions are sent to our AI service. If you enable speech recognition, the browser's speech recognition provider may process microphone audio. Live video will connect automatically when you continue and uses streaming credits while active. Select End video when finished.</p><label><input type="checkbox" id="consentCheck">I understand and agree to the educational preview.</label><button id="accept" type="button" disabled>Continue</button> <button id="cancel" style="background:transparent;color:#d7e9f4;border:1px solid #6689a1" type="button">Cancel</button></div></div>
 <script>
 "use strict";
 const BASE="https://wvdvylixnmhmuahgtybh.supabase.co/functions/v1/";
-const LEARN=BASE+"td-avatar-chat",CHAT=BASE+"td-gemini-chat",VOICE=BASE+"td-gemini-voice",AVATAR=BASE+"td-simli-session";
+const LEARN=BASE+"td-avatar-chat",CHAT=BASE+"td-gemini-chat",VOICE=BASE+"td-gemini-voice",AVATAR=BASE+"td-simli-session",VOICE_CUE=BASE+"td-gemini-voice-cue";
+const EDUCATOR_VOICE="Kore";
 const $=id=>document.getElementById(id),Rec=window.SpeechRecognition||window.webkitSpeechRecognition;
 let token="",expires=0,sessionTask=null,consentDone=(()=>{try{return localStorage.getItem("rwc_td_consent_own_v1")==="yes"}catch{return false}})(),consentCallback=null;
 let busy=false,micMode="off",recognizer=null,recognizing=false,restart=null,speaking=false,player=null,muted=false,waitingForQuestion=false,recognitionProcessed=false,recognitionHadError=false,modeSwitchPending=false,pendingSpeechMode=null;
@@ -58,7 +85,7 @@ const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function learnerText(t){return String(t??"").replace(/\bhey\s*gen\b/gi,"video service").replace(/\bliveavatar\b/gi,"video service").replace(/\bgemini\b/gi,"voice service");}
 function placeholderStatus(title,detail){$("avatarPlaceholderTitle").textContent=learnerText(title);$("avatarPlaceholderCopy").textContent=learnerText(detail);}
 function status(t){$("status").textContent=learnerText(t)}
-function add(role,text){$("welcome")?.remove();const node=document.createElement("div");node.className="bubble "+role;const lbl=document.createElement("small");lbl.textContent=role==="user"?"You":"TD Educator";node.append(lbl,document.createTextNode(role==="assistant"?learnerText(text):text));$("messages").append(node);$("messages").scrollTop=$("messages").scrollHeight}
+function add(role,text){$("welcome")?.remove();const node=document.createElement("div");node.className="bubble "+role;const lbl=document.createElement("small");lbl.textContent=role==="user"?"You":"TD Educator";node.append(lbl,document.createTextNode(role==="assistant"?learnerText(text):text));$("messages").append(node);$("messages").scrollTop=$("messages").scrollHeight;return node}
 function consent(){if(consentDone)return Promise.resolve(true);$("consent").classList.remove("hidden");$("consentCheck").checked=false;$("accept").disabled=true;return new Promise(resolve=>consentCallback=resolve)}
 $("consentCheck").onchange=()=>$("accept").disabled=!$("consentCheck").checked;
 $("accept").onclick=()=>{consentDone=true;try{localStorage.setItem("rwc_td_consent_own_v1","yes")}catch{};$("consent").classList.add("hidden");const pendingMode=pendingSpeechMode;pendingSpeechMode=null;if(pendingMode)startSpeechMode(pendingMode);consentCallback?.(true);consentCallback=null};
@@ -173,7 +200,7 @@ async function* voicePcmChunks(response){
 }
 async function spoken(text){
  if(muted)return;
- const params={kind:"reply",voice:"Kore",text:text.slice(0,1500)};
+ const params={kind:"reply",voice:EDUCATOR_VOICE,text:text.slice(0,1500)};
  // For a connected avatar, feed each streamed audio chunk immediately instead of
  // waiting for an entire WAV download. The existing WAV endpoint is the fallback.
  if(avatarPromise&&!avatarInstance?.connected)await Promise.race([avatarPromise,pause(4500)]);
@@ -208,13 +235,164 @@ async function spoken(text){
  }
  status("Playing spoken response.");await playWav(wav);
 }
-async function ask(text){const q=text.trim();if(!q||busy)return;if(q.length<3){status("Please ask a full TD question.");return}busy=true;$("send").disabled=true;try{if(recognizing)recognizer?.stop();await learner();if(useVideo)connectAvatar().catch(e=>console.warn("Video startup",e));add("user",q);$("question").value="";status("Preparing your answer...");const answerStarted=performance.now();const x=await request(CHAT,{question:q},AbortSignal.timeout(50000));console.info("[Real World CE TD] Text answer ms:",Math.round(performance.now()-answerStarted));add("assistant",x.answer);$("courseNotice").textContent=x.mode==="approved_curriculum"?"Approved TD content mode. Educational information only.":"General TD educational preview. The approved curriculum has not yet been imported.";speaking=true;try{await spoken(x.answer)}catch(e){status("Speech unavailable: "+e.message)}finally{speaking=false;if(!$("rendererStatus").textContent.startsWith("Educator video unavailable"))status("Ready for another TD question")}}catch(e){
- console.warn("TD educator answer temporarily unavailable",e);
- if(!$("question").value.trim())$("question").value=q;
- add("assistant","I couldn't answer that question just yet. Your question is still in the text box — press Send to try again.");
- status("Answer temporarily unavailable. Your question is ready to retry.");
- if(/expired|invalid session/i.test(String(e.message||""))){clearCachedLearnerSession()}
-}finally{busy=false;$("send").disabled=false;resume()}}
+// Warm, brand-consistent waiting cues use the EXACT SAME Gemini voice/model
+// as the regular TD answers. A private Supabase cache makes subsequent plays fast.
+// No API key, temporary cue WAV or model secret is shipped with the website.
+const TD_THINKING_CUES=[
+ {id:"thinking",text:"Let me think about that."},
+ {id:"good_question",text:"That's a good question."},
+ {id:"checking",text:"Let me check that for you."}
+];
+const cueAudioTasks=new Map();
+let cuesWarmTask=null,thinkingTurn=0;
+function getThinkingWav(cue="thinking"){
+ if(cueAudioTasks.has(cue))return cueAudioTasks.get(cue);
+ const task=(async()=>{
+  if(!token)throw Error("The learning session is not ready");
+  const r=await fetch(VOICE_CUE,{
+   method:"POST",
+   headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
+   body:JSON.stringify({cue,voice:EDUCATOR_VOICE}),
+   signal:AbortSignal.timeout(35000)
+  });
+  if(!r.ok){const j=await r.json().catch(()=>({}));throw Error(j.error||"Educator voice cue unavailable");}
+  if(!(r.headers.get("content-type")||"").includes("audio/wav"))throw Error("Invalid educator cue format");
+  const audio=await r.arrayBuffer();if(audio.byteLength<500)throw Error("Empty educator cue");
+  return audio;
+ })().catch(e=>{console.warn("Cached educator phrase",cue,e.message);return null});
+ cueAudioTasks.set(cue,task);
+ return task;
+}
+function prewarmVoiceCues(){
+ if(cuesWarmTask||!token)return;
+ // Warm the first phrase first; then the variants without three parallel TTS calls.
+ // These preloads never block the chat, the avatar or its initial video stream.
+ cuesWarmTask=(async()=>{
+  for(const cue of TD_THINKING_CUES)await getThinkingWav(cue.id);
+ })().catch(e=>console.warn("Educator voice prefetch",e));
+}
+async function speakThinkingWhilePending(isPending,cueId="thinking"){
+ if(!useVideo||muted||!isPending())return;
+ if(!avatarInstance?.connected&&avatarPromise)await Promise.race([avatarPromise,pause(1800)]);
+ if(!isPending()||!avatarInstance?.connected||!useVideo||muted)return;
+ const audio=await getThinkingWav(cueId);
+ if(!audio||!isPending()||!avatarInstance?.connected||!useVideo||muted)return;
+ // Reuse Simli's already-established audio and lip-sync path.
+ await avatarInstance.speakWav(audio);
+}
+async function ask(text){
+ const q=text.trim();if(!q||busy)return;
+ if(q.length<3){status("Please ask a full TD question.");return}
+ busy=true;$("send").disabled=true;
+ let waitingForAnswer=false,thinkingTask=Promise.resolve(),thinkingBubble=null;
+ try{
+  if(recognizing)recognizer?.stop();
+  await learner();
+  prewarmVoiceCues();
+  if(useVideo)connectAvatar().catch(e=>console.warn("Video startup",e));
+  add("user",q);
+  const suggestedVideos=videoRelevance(q);
+  if(suggestedVideos.length)showReferenceVideos(suggestedVideos,{openFirst:/\b(show|watch|video|clip|see|demonstrat)/i.test(q)});
+  $("question").value="";
+  const currentCue=TD_THINKING_CUES[thinkingTurn++%TD_THINKING_CUES.length];
+  status(currentCue.text);
+  thinkingBubble=add("assistant",currentCue.text);
+  thinkingBubble.classList.add("thinking");
+  const answerStarted=performance.now();
+  waitingForAnswer=true;
+  // Start the real answer immediately. Do not await the temporary speech beforehand.
+  const answerTask=request(CHAT,{question:q,video_refs:suggestedVideos.map(v=>v.id)},AbortSignal.timeout(50000));
+  thinkingTask=speakThinkingWhilePending(()=>waitingForAnswer,currentCue.id).catch(e=>console.warn("Interim educator speech",e));
+  const x=await answerTask;
+  waitingForAnswer=false;
+  console.info("[Real World CE TD] Text answer ms:",Math.round(performance.now()-answerStarted));
+  thinkingBubble?.remove();thinkingBubble=null;
+  add("assistant",x.answer);
+  $("courseNotice").textContent="General TD educational preview. AI-generated explanations are not clinically reviewed or personalized medical advice.";
+  speaking=true;
+  try{
+   // Finish the short acknowledgement first when possible; do not allow it to delay the real answer.
+   await Promise.race([thinkingTask,pause(2100)]);
+   if(avatarInstance?.connected)avatarInstance.interrupt();
+   await spoken(x.answer);
+  }catch(e){status("Speech unavailable: "+e.message)}
+  finally{speaking=false;if(!$("rendererStatus").textContent.startsWith("Educator video unavailable"))status("Ready for another TD question")}
+ }catch(e){
+  waitingForAnswer=false;
+  thinkingBubble?.remove();
+  avatarInstance?.interrupt();
+  console.warn("TD educator answer temporarily unavailable",e);
+  if(!$("question").value.trim())$("question").value=q;
+  add("assistant","I couldn't answer that question just yet. Your question is still in the text box — press Send to try again.");
+  status("Answer temporarily unavailable. Your question is ready to retry.");
+  if(/expired|invalid session/i.test(String(e.message||""))){clearCachedLearnerSession()}
+ }finally{waitingForAnswer=false;busy=false;$("send").disabled=false;resume()}
+}
+
+// Publisher-hosted references: fixed, curated links only. Do not turn arbitrary
+// user input or a model answer into a video URL. External content is not
+// part of the approved Real World CE course curriculum.
+const TD_REFERENCE_VIDEOS = [
+ {id:"td-signs",label:"See TD signs",title:"Know the Signs of Tardive Dyskinesia",publisher:"The Journal of Clinical Psychiatry / Physicians Postgraduate Press",category:"symptoms",topics:["movement","movements","what does td look like","what do td look like","example","video","watch","show","signs","symptoms","lip","mouth","tongue","jaw","fingers","involuntary","facial","blinking"],description:"Patients and family members discuss the early abnormal movements they noticed. This is an educational discussion, not a diagnostic test.",embed:"https://www.youtube-nocookie.com/embed/EM_7kUFzZjY",source:"https://www.psychiatrist.com/pcc/patients/"},
+ {id:"td-case-movements",label:"Clinical movement examples",title:"Video-based Clinical Review of Tardive Dyskinesia",publisher:"CNS Spectrums / Cambridge University Press",category:"symptoms",topics:["movement","movements","examples","example","video","watch","show","lips","mouth","tongue","jaw","fingers","hands","toes","trunk","feet","neck","dystonia","chorea","choreoathetosis","differential"],description:"Peer-reviewed supplementary patient videos demonstrate oral, facial, hand, foot and trunk movements. View the clinical footage on the publisher's website.",embed:null,source:"https://www.cambridge.org/core/journals/cns-spectrums/article/differentiating-tardive-dyskinesia-a-videobased-review-of-antipsychoticinduced-movement-disorders-in-clinical-practice/423D14A2AF68A5E7DF8A2FA54DE79E9F"},
+ {id:"td-overview",label:"What is TD?",title:"What Is Tardive Dyskinesia?",publisher:"The Journal of Clinical Psychiatry / Physicians Postgraduate Press",category:"overview",topics:["what is td","what is tardive","td mean","define","definition","basics","overview","cause","causes","risk","explain td"],description:"Clinician-led introduction covering tardive dyskinesia and how abnormal movements may begin.",embed:"https://www.youtube-nocookie.com/embed/wrTtwSlPCAw",source:"https://www.psychiatrist.com/pcc/patients/"},
+ {id:"td-aims",label:"AIMS assessment",title:"AIMS Severity Assessment Video Library",publisher:"TD360 / HMP Global",category:"assessment",topics:["aims","scale","assess","assessment","screen","screening","severity","score","diagnos","examination","exam","evaluation"],description:"Publisher-hosted training videos showing examples used in AIMS severity assessment. Assessment requires an appropriately trained clinician.",embed:null,source:"https://www.td-360.com/node/174"},
+ {id:"td-differentiate",label:"TD versus other movements",title:"Differentiate TD From Other Movement Disorders",publisher:"CNS Spectrums / Cambridge University Press",category:"differential",topics:["parkinson","tremor","akathisia","dystonia","different","distinguish","compare","differential","other movement"],description:"Clinical video review contrasts TD with other medication-related movement disorders. Watch the examples in the research article.",embed:null,source:"https://www.cambridge.org/core/journals/cns-spectrums/article/differentiating-tardive-dyskinesia-a-videobased-review-of-antipsychoticinduced-movement-disorders-in-clinical-practice/423D14A2AF68A5E7DF8A2FA54DE79E9F"},
+ {id:"td-lived",label:"Living with TD",title:"Living With Tardive Dyskinesia",publisher:"The Journal of Clinical Psychiatry / Physicians Postgraduate Press",category:"experience",topics:["living","life","impact","quality of life","everyday","patient stories","experience","stigma","social","personal"],description:"People affected by TD describe how their movements affect daily life. Individual experiences vary.",embed:"https://www.youtube-nocookie.com/embed/j71K2sPiuwY",source:"https://www.psychiatrist.com/pcc/patients/"},
+ {id:"td-caregivers",label:"Families and caregivers",title:"Information for Families",publisher:"The Journal of Clinical Psychiatry / Physicians Postgraduate Press",category:"caregiver",topics:["family","families","caregiver","caregivers","spouse","partner","friends","support","help my loved","relative"],description:"Families discuss recognizing signs and supporting loved ones affected by TD.",embed:"https://www.youtube-nocookie.com/embed/HV8dxn81EU0",source:"https://www.psychiatrist.com/pcc/patients/"},
+ {id:"td-treat",label:"Treatment discussion",title:"Treatment Experiences in Tardive Dyskinesia",publisher:"The Journal of Clinical Psychiatry / Physicians Postgraduate Press",category:"treatment",topics:["treatment","treat","medicine","medication","management","therapy","vmat2","inhibitor","options"],description:"Historical educational discussion of treatment experiences. Recorded material may not reflect current guidance, drug approvals or safety information.",embed:"https://www.youtube-nocookie.com/embed/lTsEWdaN_0w",source:"https://www.psychiatrist.com/pcc/patients/"}
+];
+const TD_TOPIC_RE = /(?:\b(?:td|tardive dyskinesia)\b|abnormal involuntary movement|\baims\b|\bvmat2\b|drug.induced movement)/i;
+let selectedVideo=null;
+function videoRelevance(q){
+ const input=String(q||"").toLowerCase().replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ");
+ const explicit=/(?:\bvideo\b|\bshow\b|\bwatch\b|\bclip\b|\bsee\b|\bdemonstrat)/.test(input);
+ const related=TD_TOPIC_RE.test(q)||/(?:parkinson|tremor|akathisia|dystonia|chorea|involuntary|movement|tongue|jaw|\baims\b)/i.test(q);
+ if(!related)return [];
+ const ranked=TD_REFERENCE_VIDEOS.map(v=>{
+  const score=v.topics.reduce((n,t)=>n+(input.includes(t)?(t.includes(" ")?4:2):0),0);
+  return {v,score};
+ }).filter(({score})=>score>0).sort((a,b)=>b.score-a.score);
+ if(!ranked.length)return explicit&&TD_TOPIC_RE.test(q)?[TD_REFERENCE_VIDEOS[0],TD_REFERENCE_VIDEOS[1]]:[];
+ return ranked.slice(0,3).map(x=>x.v);
+}
+function showReferenceVideos(videos,{openFirst=false}={}){
+ const panel=$("refPanel"),list=$("refList"),body=$("refBody");
+ if(!videos.length){panel.hidden=true;return;}
+ panel.hidden=false;$("showVideos").setAttribute("aria-expanded","true");
+ list.replaceChildren();body.replaceChildren();
+ videos.forEach(v=>{
+  const b=document.createElement("button");b.type="button";b.className="refitem";
+  b.textContent=v.label;b.addEventListener("click",()=>activateVideo(v));b.dataset.id=v.id;list.append(b);
+ });
+ activateVideo(videos[0],{openFrame:openFirst});
+}
+function activateVideo(video,{openFrame=true}={}){
+ selectedVideo=video;
+ const body=$("refBody");body.replaceChildren();
+ $("refTitle").textContent="Reference: "+video.title;
+ document.querySelectorAll("#refList .refitem").forEach(b=>b.setAttribute("aria-current",String(b.dataset.id===video.id)));
+ const desc=document.createElement("p");desc.className="refcaption";desc.textContent=video.description;body.append(desc);
+ if(video.embed&&openFrame){
+  const iframe=document.createElement("iframe");iframe.className="refvideo";iframe.src=video.embed;
+  iframe.title=video.title;iframe.loading="lazy";iframe.allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";iframe.allowFullscreen=true;iframe.referrerPolicy="strict-origin-when-cross-origin";body.append(iframe);
+ }else if(video.embed){
+  const play=document.createElement("button");play.type="button";play.className="refitem";play.textContent="▶ Load video player";play.addEventListener("click",()=>activateVideo(video));body.append(play);
+ }
+ const source=document.createElement("a");source.className="refopen";source.href=video.source;source.target="_blank";source.rel="noopener noreferrer";source.textContent=video.embed?"Open publisher's video page ↗":"View clinical video at publisher ↗";body.append(source);
+ const p=document.createElement("p");p.className="refnotice";p.textContent="External educational reference; not part of the approved Real World CE course. Video content is provided by its publisher. Clinical movement examples do not establish a diagnosis.";body.append(p);
+}
+function closeReferenceVideos(){
+ $("refPanel").hidden=true;$("showVideos").setAttribute("aria-expanded","false");
+ // Removing the iframe stops playback; its audio does not continue off-screen.
+ $("refBody").replaceChildren();selectedVideo=null;
+}
+$("refClose").addEventListener("click",closeReferenceVideos);
+$("showVideos").addEventListener("click",()=>{
+ if(!$("refPanel").hidden){closeReferenceVideos();return;}
+ showReferenceVideos(TD_REFERENCE_VIDEOS.slice(0,8),{openFirst:false});
+});
+
 function clean(s){return s.toLowerCase().replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim()}
 function wake(s){const t=clean(s);const m=t.match(/\b(?:hey|hi|hello|okay|ok)\s+doctor\b/);return m?t.slice(m.index+m[0].length).trim():null}
 function updateMicUI(){
@@ -328,6 +506,7 @@ if(location.protocol==="file:")status("Upload this index.html to /AITD/ for test
 async function startLiveEducatorOnEntry(){
  try{
   await learner();
+  prewarmVoiceCues();
   if(useVideo)await connectAvatar();
  }catch(e){
   if(String(e?.message||e).includes("Consent is required")){
