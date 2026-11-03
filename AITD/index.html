@@ -4,7 +4,7 @@
 <style>
 :root{--navy:#08172c;--navy2:#102942;--cyan:#00b4d8;--aqua:#37d9f4;--ink:#eefdff;--muted:#a6c6d8;--line:#2b5062;--surface:#11283f;color-scheme:dark;font-family:Inter,Arial,sans-serif}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 30% 0%,#173554,#071629 60%);color:var(--ink)}button,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.52;cursor:not-allowed}button:focus-visible,textarea:focus-visible{outline:3px solid #70eaff;outline-offset:2px}header{height:86px;display:flex;align-items:center;justify-content:space-between;padding:14px clamp(16px,4vw,56px);border-bottom:1px solid var(--line)}.brand{font-size:clamp(19px,2.3vw,27px);font-weight:900;letter-spacing:-.7px}.brand span{color:var(--aqua)}.brand small{display:block;font-size:10px;color:var(--muted);letter-spacing:1.9px;padding-top:3px}.preview{font-size:12px;color:#c5ddeb;border:1px solid #627b8688;padding:7px 12px;border-radius:99px}.frame{max-width:1510px;margin:auto;padding:24px clamp(14px,3vw,42px) 38px}.headline{text-align:center;margin:3px auto 19px}.headline .kicker{font-size:11px;letter-spacing:2.7px;color:var(--aqua);font-weight:850}.headline h1{font-size:clamp(29px,3.5vw,45px);margin:10px 0}.headline p{font-size:14px;color:var(--muted);line-height:1.55}.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.93fr);gap:20px}.stage,.chat{border:1px solid #285575;background:#0b2037;border-radius:22px;overflow:hidden}.portrait{position:relative;aspect-ratio:1.42/1;background:#07192b;overflow:hidden}.portrait video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 32%;display:none}.portrait.video-on video{display:block}.portrait.video-on .avatar-placeholder{display:none}.portrait .pill{position:absolute;top:15px;left:15px;z-index:2;border-radius:99px;background:#061626cf;border:1px solid #4f8da6;padding:8px 12px;font-size:11px;font-weight:750}.stage-bottom{padding:17px 20px 18px}.stage-bottom h2{margin:0 0 6px;font-size:20px}.stage-bottom p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}.micbar{display:flex;align-items:center;gap:8px;padding-top:17px;flex-wrap:wrap}.micbar .mute{white-space:nowrap}.micbar .mic{min-width:190px}.portrait.video-on .pill{background:#075b63c9;border-color:#3bd7cb}.mic{border:none;background:linear-gradient(135deg,#00cce2,#0a82b5);border-radius:15px;color:#021524;font-weight:850;padding:15px 19px;min-height:51px;flex:1}.mic.on{background:linear-gradient(135deg,#53e6cc,#00b4d8)}.mute{border:1px solid #426987;background:#173650;border-radius:15px;color:white;padding:15px 14px;min-height:51px}.status{margin-top:15px;background:#12324d;border:1px solid #315b7a;border-radius:12px;padding:12px;color:#bddbea;font-size:12px;line-height:1.5;min-height:43px}.status .dot{display:inline-block;background:#57d9b7;width:7px;height:7px;border-radius:50%;margin-right:7px}.render-info{margin-top:10px;font-size:11px;color:#85b4d1}.chat{display:flex;flex-direction:column;min-height:580px}.chat-head{border-bottom:1px solid var(--line);padding:23px;display:flex;justify-content:space-between;align-items:center;gap:8px}.chat-head h2{font-size:23px;margin:0}.chat-head p{margin:6px 0 0;color:var(--muted);font-size:12px}.chip{font-size:10px;color:#ffdda3;border:1px solid #9c814e;border-radius:50px;padding:8px 10px;white-space:nowrap}.messages{flex:1;max-height:460px;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:13px}.welcome{margin-top:15px;line-height:1.55;color:var(--muted);font-size:14px}.bubble{padding:13px 16px;border-radius:15px;background:#1d3955;max-width:90%;font-size:14px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}.bubble.user{align-self:flex-end;background:#08607c}.bubble.assistant{align-self:flex-start}.bubble small{display:block;color:#7ddcef;font-weight:800;font-size:11px;margin-bottom:4px}.inputbox{padding:17px 20px;border-top:1px solid var(--line)}.suggests{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}.suggests button{color:#bdefff;background:#0f3450;border:1px solid #3585a5;border-radius:25px;padding:9px 12px;font-size:12px}.inputrow{display:flex;gap:9px;background:#132d47;border:1px solid #42738d;padding:8px;border-radius:14px}.inputrow textarea{flex:1;background:transparent;border:0;outline:0;color:white;min-width:0;resize:vertical;padding:10px;min-height:43px}.inputrow button{background:#00b4d8;border:0;color:#002039;font-weight:850;border-radius:10px;padding:8px 16px}.note{margin:11px 1px 0;font-size:11px;line-height:1.55;color:#a8c9d9}.footer{margin-top:18px;text-align:center;color:#a0bfd0;font-size:11px;line-height:1.5}.modal{position:fixed;inset:0;background:#030d19d9;display:flex;align-items:center;justify-content:center;padding:16px;z-index:12}.modal>div{width:min(100%,520px);background:#112b45;border:1px solid #3d7892;border-radius:18px;padding:25px}.modal h2{margin:0 0 12px}.modal p{color:#c7deeb;line-height:1.6;font-size:14px}.modal label{display:flex;gap:10px;align-items:flex-start;margin:17px 0;font-size:13px}.modal input{width:18px;height:18px;accent-color:#03b4d8}.modal button{background:#03b4d8;border:none;color:#092238;padding:12px 19px;border-radius:10px;font-weight:800}.hidden{display:none!important}body{max-width:100vw;overflow-x:hidden}.frame{width:100%;max-width:1510px}.layout{width:100%;min-width:0}.layout>*{min-width:0}.headline h1,.headline p,.stage-bottom h2,.chat-head h2{overflow-wrap:anywhere}.chat-head{flex-wrap:wrap}.inputbox,.stage-bottom{min-width:0}@media(max-width:1120px){.layout{grid-template-columns:1fr}.portrait{aspect-ratio:1.7/1;max-height:590px}.chat{min-height:480px}.messages{max-height:320px;min-height:220px}.headline h1{font-size:clamp(27px,4.5vw,42px)}}@media(max-width:820px){header{height:auto}.preview{display:none}.layout{grid-template-columns:1fr}.portrait{aspect-ratio:1.48/1}.chat{min-height:480px}.messages{min-height:260px}.headline{margin-bottom:15px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important}}
 
-/* LiveAvatar-only stage: no static educator portrait */
+/* Live video stage: no static educator portrait */
 .avatar-placeholder{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;text-align:center;padding:24px;background:radial-gradient(circle at 50% 32%,#1d5269 0%,#0b283f 54%,#07192b 100%)}
 .avatar-placeholder-title{font-size:clamp(19px,2vw,26px);font-weight:800;color:#eefdff}
 .avatar-placeholder-copy{max-width:340px;color:#a6c6d8;font-size:13px;line-height:1.55}
@@ -14,15 +14,15 @@
 @keyframes avatarPulse{0%,70%,100%{transform:translateY(0);opacity:.48}35%{transform:translateY(-13px);opacity:1}}
 @media(prefers-reduced-motion:reduce){.avatar-loader span{animation:none}}
 </style></head><body>
-<header><div class="brand">REAL WORLD <span>CE</span><small>LEARNING, REIMAGINED.</small></div><span class="preview">AI TD EDUCATOR · LIVEAVATAR</span></header>
+<header><div class="brand">REAL WORLD <span>CE</span><small>LEARNING, REIMAGINED.</small></div><span class="preview">AI TD EDUCATOR · LIVE</span></header>
 <div class="frame"><div class="headline"><div class="kicker">INTERACTIVE CLINICAL EDUCATION</div><h1>Meet your TD educator.</h1></div>
-<div class="layout"><section class="stage"><div class="portrait" id="portrait"><span class="pill" id="videoBadge">LiveAvatar · connecting</span><div class="avatar-placeholder" id="avatarPlaceholder" role="status" aria-live="polite">
+<div class="layout"><section class="stage"><div class="portrait" id="portrait"><span class="pill" id="videoBadge">Video · connecting</span><div class="avatar-placeholder" id="avatarPlaceholder" role="status" aria-live="polite">
   <div class="avatar-loader" aria-hidden="true"><span></span><span></span><span></span></div>
-  <div class="avatar-placeholder-title" id="avatarPlaceholderTitle">Connecting to LiveAvatar</div>
+  <div class="avatar-placeholder-title" id="avatarPlaceholderTitle">Connecting your TD educator</div>
   <div class="avatar-placeholder-copy" id="avatarPlaceholderCopy">Your live TD educator will appear here as soon as the video is ready.</div>
-</div><video id="avatarVideo" playsinline autoplay muted preload="none" aria-label="HeyGen LiveAvatar TD educator video"></video></div><div class="stage-bottom"><h2>Real World CE · TD Educator</h2><p>Digital educational assistant · Not a medical professional</p><div class="micbar"><button type="button" class="mic" id="micBtn">🎙 Enable “Hey TD Guide”</button><button type="button" class="mute" id="muteBtn">🔊 Voice on</button><button type="button" class="mute" id="endVideoBtn" disabled>End video</button></div><div class="status" role="status" aria-live="polite"><span class="dot"></span><span id="status">Your LiveAvatar educator is getting ready.</span></div><div class="render-info" id="rendererStatus">The live educator connects automatically when your learning session begins. You can still use Gemini chat if video is temporarily unavailable.</div></div></section>
+</div><video id="avatarVideo" playsinline autoplay muted preload="none" aria-label="Live TD educator video"></video></div><div class="stage-bottom"><h2>Real World CE · TD Educator</h2><p>Digital educational assistant · Not a medical professional</p><div class="micbar"><button type="button" class="mic" id="micBtn">🎙 Enable “Hey TD Guide”</button><button type="button" class="mute" id="muteBtn">🔊 Voice on</button><button type="button" class="mute" id="endVideoBtn" disabled>End video</button></div><div class="status" role="status" aria-live="polite"><span class="dot"></span><span id="status">Your TD educator is getting ready.</span></div><div class="render-info" id="rendererStatus">Your educator connects automatically when the learning session begins. Text and voice responses remain available if the video is temporarily unavailable.</div></div></section>
 <section class="chat"><div class="chat-head"><div><h2>Ask your TD educator</h2><p>Natural questions, conversational answers</p></div><span class="chip">EDUCATION PREVIEW</span></div><div class="messages" id="messages" aria-live="polite"><div class="welcome" id="welcome">I can explain the basics of tardive dyskinesia, common symptoms, recognition, and questions to discuss with a healthcare professional.</div></div><div class="inputbox"><div class="suggests"><button type="button" data-q="What is tardive dyskinesia?">What is TD?</button><button type="button" data-q="What are common symptoms of tardive dyskinesia?">Common symptoms</button><button type="button" data-q="How is tardive dyskinesia assessed?">How is TD assessed?</button></div><form id="askForm" class="inputrow"><textarea id="question" placeholder="Ask a question about TD..." rows="2" maxlength="1500" aria-label="Question about tardive dyskinesia"></textarea><button type="submit" id="send">Send</button></form><p class="note" id="courseNotice">General educational preview. Approved TD course content has not yet been connected; these answers are not patient-specific advice.</p></div></section></div><div class="footer">AI-generated virtual educator. Educational use only; not a diagnosis or replacement for medical advice. Microphone listening requires your permission.</div></div>
-<div class="modal hidden" id="consent"><div><h2>Start your TD learning session</h2><p>This preview provides general TD information, not medical advice. Your questions are sent to our AI service. If you enable speech recognition, the browser's speech recognition provider may process microphone audio. The LiveAvatar video will connect automatically when you continue and will use HeyGen streaming credits while active. Press End video when finished.</p><label><input type="checkbox" id="consentCheck">I understand and agree to the educational preview.</label><button id="accept" type="button" disabled>Continue</button> <button id="cancel" style="background:transparent;color:#d7e9f4;border:1px solid #6689a1" type="button">Cancel</button></div></div>
+<div class="modal hidden" id="consent"><div><h2>Start your TD learning session</h2><p>This preview provides general TD information, not medical advice. Your questions are sent to our AI service. If you enable speech recognition, the browser's speech recognition provider may process microphone audio. Live video will connect automatically when you continue and uses streaming credits while active. Select End video when finished.</p><label><input type="checkbox" id="consentCheck">I understand and agree to the educational preview.</label><button id="accept" type="button" disabled>Continue</button> <button id="cancel" style="background:transparent;color:#d7e9f4;border:1px solid #6689a1" type="button">Cancel</button></div></div>
 <script>
 "use strict";
 const BASE="https://wvdvylixnmhmuahgtybh.supabase.co/functions/v1/";
@@ -33,42 +33,43 @@ let busy=false,armed=false,recognizer=null,recognizing=false,restart=null,speaki
 let liveRoom=null,liveSocket=null,livePromise=null,liveReady=false,videoTimer=null,videoSending=false,speechEndWait=null,livekitLib=null;
 let useVideo=true,connectedAudioEls=[];
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
-function placeholderStatus(title,detail){$("avatarPlaceholderTitle").textContent=title;$("avatarPlaceholderCopy").textContent=detail;}
-function status(t){$("status").textContent=t}
-function add(role,text){$("welcome")?.remove();const node=document.createElement("div");node.className="bubble "+role;const lbl=document.createElement("small");lbl.textContent=role==="user"?"You":"TD Educator";node.append(lbl,document.createTextNode(text));$("messages").append(node);$("messages").scrollTop=$("messages").scrollHeight}
+function learnerText(t){return String(t??"").replace(/\bhey\s*gen\b/gi,"video service").replace(/\bliveavatar\b/gi,"video service").replace(/\bgemini\b/gi,"voice service");}
+function placeholderStatus(title,detail){$("avatarPlaceholderTitle").textContent=learnerText(title);$("avatarPlaceholderCopy").textContent=learnerText(detail);}
+function status(t){$("status").textContent=learnerText(t)}
+function add(role,text){$("welcome")?.remove();const node=document.createElement("div");node.className="bubble "+role;const lbl=document.createElement("small");lbl.textContent=role==="user"?"You":"TD Educator";node.append(lbl,document.createTextNode(role==="assistant"?learnerText(text):text));$("messages").append(node);$("messages").scrollTop=$("messages").scrollHeight}
 function consent(){if(consentDone)return Promise.resolve(true);$("consent").classList.remove("hidden");$("consentCheck").checked=false;$("accept").disabled=true;return new Promise(resolve=>consentCallback=resolve)}
 $("consentCheck").onchange=()=>$("accept").disabled=!$("consentCheck").checked;
 $("accept").onclick=()=>{consentDone=true;try{localStorage.setItem("rwc_td_consent_own_v1","yes")}catch{};$("consent").classList.add("hidden");consentCallback?.(true);consentCallback=null};
 $("cancel").onclick=()=>{$("consent").classList.add("hidden");consentCallback?.(false);consentCallback=null};
 async function request(url,data,signal){const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json",...(token?{"Authorization":"Bearer "+token}:{})},body:JSON.stringify(data),signal});const j=await r.json().catch(()=>({}));if(!r.ok)throw Error(j.error||"Service HTTP "+r.status);return j}
 async function learner(){if(token&&expires>Date.now()+25000)return token;if(sessionTask)return sessionTask;sessionTask=(async()=>{if(!await consent())throw Error("Consent is required before starting.");status("Opening a learner session...");const x=await request(LEARN,{action:"start",consent:true});token=x.session_token;expires=Date.parse(x.expires_at)||Date.now()+600000;return token})();try{return await sessionTask}finally{sessionTask=null}}
-async function playWav(bytes){const blob=new Blob([bytes],{type:"audio/wav"}),url=URL.createObjectURL(blob);try{const a=new Audio(url);player=a;await new Promise((resolve,reject)=>{a.onended=resolve;a.onerror=()=>reject(Error("Browser could not play Gemini audio"));a.play().catch(reject)})}finally{player=null;URL.revokeObjectURL(url)}}
+async function playWav(bytes){const blob=new Blob([bytes],{type:"audio/wav"}),url=URL.createObjectURL(blob);try{const a=new Audio(url);player=a;await new Promise((resolve,reject)=>{a.onended=resolve;a.onerror=()=>reject(Error("Browser could not play the voice response"));a.play().catch(reject)})}finally{player=null;URL.revokeObjectURL(url)}}
 async function stopHeyGen(remote=true){
  clearTimeout(videoTimer);useVideo=remote?false:useVideo;
  const socket=liveSocket;liveSocket=null;liveReady=false;try{socket?.close()}catch{}
  const r=liveRoom;liveRoom=null;try{await r?.disconnect()}catch{}
  for(const x of connectedAudioEls){try{x.pause();x.remove()}catch{}}connectedAudioEls=[];
  const v=$("avatarVideo");v.pause();v.srcObject=null;$("portrait").classList.remove("video-on");placeholderStatus("Live session ended","Refresh the page to open a new live educator session.");
- $("endVideoBtn").disabled=true;$("videoBadge").textContent="HeyGen disconnected — Gemini voice still available";
+ $("endVideoBtn").disabled=true;$("videoBadge").textContent="Video disconnected — voice responses still available";
  if(remote&&token){try{await request(AVATAR,{action:"stop"},AbortSignal.timeout(12000))}catch(e){console.warn("HeyGen stop:",e.message)}}
 }
 function attachHeyGenTrack(track){
  const v=$("avatarVideo");track.attach(v);v.muted=true;
- $("portrait").classList.add("video-on");$("videoBadge").textContent="HeyGen LiveAvatar · video playing";$("rendererStatus").textContent="HeyGen video connected. Gemini controls the educational answers and speech.";
+ $("portrait").classList.add("video-on");$("videoBadge").textContent="Educator · video playing";$("rendererStatus").textContent="Live educator video connected. You can ask your next question.";
  v.play().catch(()=>status("Video connected. Tap the screen once to enable video playback."));
 }
 function attachHeyGenAudio(track){
  const a=track.attach();a.autoplay=true;a.style.display="none";document.body.appendChild(a);connectedAudioEls.push(a);
- a.play().catch(()=>status("HeyGen audio is blocked. Tap the video to enable sound."));
+ a.play().catch(()=>status("Audio playback is blocked. Tap the video to enable sound."));
 }
 function connectHeyGenSocket(url){
  const ws=new WebSocket(url);liveSocket=ws;liveReady=false;
- ws.onopen=()=>status("HeyGen video connected; synchronizing audio channel...");
+ ws.onopen=()=>status("Video connected; preparing voice playback...");
  ws.onmessage=e=>{let m;try{m=JSON.parse(e.data)}catch{return}
-  if(m.type==="session.state_updated"&&m.state==="connected"){liveReady=true;status("HeyGen is ready to speak through Gemini.")}
-  if(m.type==="agent.speak_started")status("Your HeyGen TD educator is talking...");
+  if(m.type==="session.state_updated"&&m.state==="connected"){liveReady=true;status("Your TD educator is ready to respond.")}
+  if(m.type==="agent.speak_started")status("Your TD educator is speaking...");
   if(["agent.speak_ended","agent.speak_interrupted"].includes(m.type)){if(speechEndWait){speechEndWait();speechEndWait=null}status("Ready for your next TD question")}
-  if(m.type==="error"){console.warn("HeyGen audio",m.error||m);status("HeyGen speech warning: "+(m.error?.message||"Audio connection problem"));if(speechEndWait){speechEndWait();speechEndWait=null}}
+  if(m.type==="error"){console.warn("HeyGen audio",m.error||m);status("Speech connection warning: "+(m.error?.message||"Audio connection problem"));if(speechEndWait){speechEndWait();speechEndWait=null}}
  };
  ws.onclose=()=>{if(liveSocket===ws){liveReady=false;liveSocket=null;if(speechEndWait){speechEndWait();speechEndWait=null}}};
  ws.onerror=()=>console.warn("HeyGen audio socket error");
@@ -79,7 +80,7 @@ async function connectHeyGen(){
  if(livePromise)return livePromise;
  livePromise=(async()=>{
   try{
-   status("Connecting your LiveAvatar educator...");placeholderStatus("Connecting to LiveAvatar","Preparing the video stream. Please wait...");$("videoBadge").textContent="LiveAvatar · connecting";
+   status("Connecting your live TD educator...");placeholderStatus("Connecting your TD educator","Preparing your educator video...");$("videoBadge").textContent="Video · connecting";
    const [kit,details]=await Promise.all([
     livekitLib||import("https://cdn.jsdelivr.net/npm/livekit-client@2.15.7/+esm"),
     request(AVATAR,{action:"start"},AbortSignal.timeout(42000))
@@ -95,16 +96,16 @@ async function connectHeyGen(){
    }
    const deadline=Date.now()+10000;
    while(!$("portrait").classList.contains("video-on")&&Date.now()<deadline)await pause(160);
-   if(!$("portrait").classList.contains("video-on"))throw Error("HeyGen connected but sent no video track");
+   if(!$("portrait").classList.contains("video-on"))throw Error("Connected, but no video was received");
    if(details.ws_url)connectHeyGenSocket(details.ws_url);
-   else status("HeyGen video connected, but the speech channel is unavailable; Gemini audio will play directly.");
+   else status("Video connected. Voice responses will play through your device.");
    $("endVideoBtn").disabled=false;
    videoTimer=setTimeout(()=>stopHeyGen(true).catch(()=>{}),115000);
    return true;
   }catch(e){
-   const msg="HeyGen avatar video unavailable: "+(e&&e.message?e.message:String(e));
-   status(msg);$("rendererStatus").textContent=msg+" Open your LiveAvatar dashboard to review API access and credits. Gemini chat and voice remain available.";
-   $("videoBadge").textContent="LiveAvatar · unavailable";placeholderStatus("LiveAvatar temporarily unavailable","Please see the connection message below. Text questions remain available.");
+   const msg="Educator video unavailable: "+(e&&e.message?e.message:String(e));
+   status(msg);$("rendererStatus").textContent=learnerText(msg+" Text and voice responses remain available. Check the video service settings if this continues.");
+   $("videoBadge").textContent="Video · unavailable";placeholderStatus("Video temporarily unavailable","Please see the connection message below. Text questions remain available.");
    console.warn("HeyGen video",e);
    const r=liveRoom;liveRoom=null;try{await r?.disconnect()}catch{}
    try{liveSocket?.close()}catch{}liveSocket=null;liveReady=false;
@@ -132,34 +133,34 @@ async function sendHeyGenSpeech(wav){
  const ws=liveSocket,id=crypto.randomUUID();
  ws.send(JSON.stringify({type:"agent.stop_listening",event_id:crypto.randomUUID()}));
  const endPromise=new Promise(resolve=>{speechEndWait=resolve});
- for(let i=0;i<pcm.length;i+=48000){if(ws.readyState!==WebSocket.OPEN)throw Error("HeyGen audio disconnected");
+ for(let i=0;i<pcm.length;i+=48000){if(ws.readyState!==WebSocket.OPEN)throw Error("Voice connection interrupted");
   ws.send(JSON.stringify({type:"agent.speak",event_id:id,audio:encode64(pcm.subarray(i,Math.min(i+48000,pcm.length)))}));
   while(ws.bufferedAmount>500000)await pause(35);
  }
- ws.send(JSON.stringify({type:"agent.speak_end",event_id:id}));status("HeyGen is speaking Gemini's answer with lip synchronization...");
+ ws.send(JSON.stringify({type:"agent.speak_end",event_id:id}));status("Your educator is speaking...");
  await Promise.race([endPromise,pause(75000)]);
  speechEndWait=null;return true;
 }
 async function spoken(text){
  if(muted)return;
- status("Answer ready — generating speech while HeyGen connects...");
+ status("Answer ready — preparing spoken response...");
  const voiceStarted=performance.now();
  const res=await fetch(VOICE,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify({kind:"reply",voice:"Kore",text:text.slice(0,1500)}),signal:AbortSignal.timeout(42000)});
  if(!res.ok){const j=await res.json().catch(()=>({}));throw Error(j.error||"Speech HTTP "+res.status)}
- const wav=await res.arrayBuffer();if(wav.byteLength<200)throw Error("Gemini returned empty audio");
+ const wav=await res.arrayBuffer();if(wav.byteLength<200)throw Error("The voice service returned empty audio");
  console.info("[Real World CE TD] Speech generation:",Math.round(performance.now()-voiceStarted),"ms");
  if(livePromise)await Promise.race([livePromise,pause(14000)]);
- if(liveRoom&&useVideo){try{if(await sendHeyGenSpeech(wav))return}catch(e){console.warn("HeyGen lip sync",e);status("HeyGen speech connection unavailable — playing Gemini audio.")}}
- status("Playing Gemini voice. HeyGen video is not speaking yet.");await playWav(wav);
+ if(liveRoom&&useVideo){try{if(await sendHeyGenSpeech(wav))return}catch(e){console.warn("HeyGen lip sync",e);status("Video speech is unavailable — playing the voice response.")}}
+ status("Playing the spoken response.");await playWav(wav);
 }
-async function ask(text){const q=text.trim();if(!q||busy)return;if(q.length<3){status("Please ask a full TD question.");return}busy=true;$("send").disabled=true;try{if(recognizing)recognizer?.stop();await learner();if(useVideo)connectHeyGen().catch(e=>console.warn("HeyGen startup",e));add("user",q);$("question").value="";status("Gemini is answering your TD question...");const x=await request(CHAT,{question:q},AbortSignal.timeout(40000));add("assistant",x.answer);$("courseNotice").textContent=x.mode==="approved_curriculum"?"Approved TD content mode. Educational information only.":"General TD educational preview. The approved curriculum has not yet been imported.";speaking=true;try{await spoken(x.answer)}catch(e){status("Speech unavailable: "+e.message)}finally{speaking=false;if(!$("rendererStatus").textContent.startsWith("HeyGen avatar video unavailable"))status("Ready for another TD question")}}catch(e){add("assistant","Sorry, I couldn't answer right now: "+e.message);status("Request failed: "+e.message);if(/expired|invalid session/i.test(e.message)){token="";expires=0}}finally{busy=false;$("send").disabled=false;resume()}}
+async function ask(text){const q=text.trim();if(!q||busy)return;if(q.length<3){status("Please ask a full TD question.");return}busy=true;$("send").disabled=true;try{if(recognizing)recognizer?.stop();await learner();if(useVideo)connectHeyGen().catch(e=>console.warn("HeyGen startup",e));add("user",q);$("question").value="";status("Preparing your answer...");const x=await request(CHAT,{question:q},AbortSignal.timeout(40000));add("assistant",x.answer);$("courseNotice").textContent=x.mode==="approved_curriculum"?"Approved TD content mode. Educational information only.":"General TD educational preview. The approved curriculum has not yet been imported.";speaking=true;try{await spoken(x.answer)}catch(e){status("Speech unavailable: "+e.message)}finally{speaking=false;if(!$("rendererStatus").textContent.startsWith("Educator video unavailable"))status("Ready for another TD question")}}catch(e){add("assistant","Sorry, I couldn't answer right now: "+e.message);status("Request failed: "+e.message);if(/expired|invalid session/i.test(e.message)){token="";expires=0}}finally{busy=false;$("send").disabled=false;resume()}}
 function clean(s){return s.toLowerCase().replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim()}
 function wake(s){const t=clean(s);const m=t.match(/\b(?:hey|hi|hello|okay|ok)\s+(?:td|tee dee|t d)\s+guide\b/);return m?t.slice(m.index+m[0].length).trim():null}
 function resume(){clearTimeout(restart);if(!armed||busy||speaking||recognizing||document.hidden)return;restart=setTimeout(()=>{if(armed&&!busy&&!speaking&&!recognizing)try{recognizer?.start()}catch{}},800)}
 function armedUI(){const b=$("micBtn");b.textContent=armed?"■ Stop wake-word listening":"🎙 Enable 'Hey TD Guide'";b.classList.toggle("on",armed)}
 if(Rec){recognizer=new Rec();recognizer.lang="en-US";recognizer.continuous=false;recognizer.interimResults=false;recognizer.onstart=()=>{recognizing=true;status(waitingForQuestion?"Wake phrase heard. Ask your TD question.":"Listening for 'Hey TD Guide'...")};recognizer.onend=()=>{recognizing=false;resume()};recognizer.onerror=e=>{recognizing=false;if(["not-allowed","service-not-allowed","audio-capture"].includes(e.error)){armed=false;armedUI();status("Mic permission unavailable: "+e.error)}else if(e.error!=="no-speech")status("Speech recognition: "+e.error)};recognizer.onresult=e=>{const s=Array.from(e.results).map(r=>r[0]?.transcript||"").join(" ").trim();const q=wake(s);if(q!==null){if(q.length>=3){waitingForQuestion=false;ask(q)}else{waitingForQuestion=true;status("Hey TD Guide heard! Ask your question.")}}else if(waitingForQuestion){waitingForQuestion=false;ask(s)}}}else{$("micBtn").disabled=true;status("Wake phrase isn't supported by this browser. Use typed questions, or Chrome/Edge.")}
 $("micBtn").onclick=async()=>{if(armed){armed=false;try{recognizer.abort()}catch{}armedUI();status("Microphone listening off");return}try{await learner();armed=true;armedUI();recognizer.start()}catch(e){armed=false;armedUI();status(e.message)}};
-$("endVideoBtn").onclick=async()=>{await stopHeyGen(true);status("HeyGen ended to save credits. Gemini chat and speech remain available. Refresh to try video again.")};
+$("endVideoBtn").onclick=async()=>{await stopHeyGen(true);status("Video ended. Text and voice responses remain available. Refresh to start another video session.")};
 $("muteBtn").onclick=()=>{muted=!muted;$("muteBtn").textContent=muted?"🔇 Voice off":"🔊 Voice on";if(muted&&player)player.pause()};
 $("askForm").onsubmit=e=>{e.preventDefault();ask($("question").value)};
 $("question").onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();ask($("question").value)}};
@@ -167,7 +168,7 @@ document.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>ask(b.dataset.q))
 document.addEventListener("visibilitychange",()=>{if(document.hidden){clearTimeout(restart);if(recognizing)recognizer?.stop()}else resume()});
 window.addEventListener("pagehide",()=>{if(liveRoom)stopHeyGen(true).catch(()=>{})});
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&liveRoom)stopHeyGen(true).catch(()=>{})});
-if(location.protocol==="file:")status("Upload this index.html to /AITD/ for live Gemini and HeyGen testing.");
+if(location.protocol==="file:")status("Upload this index.html to /AITD/ for testing.");
 // The old portrait has been removed; video is the only educator visual.
 
 // Automatically connect the educator video on entry, after the existing consent process.
@@ -180,11 +181,11 @@ async function startLiveEducatorOnEntry(){
   if(String(e?.message||e).includes("Consent is required")){
    status("Learning session not started. Ask a question or enable voice when ready.");
    placeholderStatus("Ready when you are","The educator will connect when you accept the learning-session notice.");
-   $("videoBadge").textContent="LiveAvatar · ready";
+   $("videoBadge").textContent="Educator · ready";
    return;
   }
-  status("LiveAvatar startup: "+(e?.message||String(e)));
-  placeholderStatus("LiveAvatar not yet connected","You can ask questions in the chat while checking the connection.");
+  status("Video startup: "+(e?.message||String(e)));
+  placeholderStatus("Video not yet connected","You can ask questions in the chat while checking the connection.");
  }
 }
 window.addEventListener("load",()=>{startLiveEducatorOnEntry().catch(console.warn)});
