@@ -210,7 +210,11 @@ async function spoken(text){
    status("Preparing your educator's voice...");
    const t=performance.now();
    const response=await fetch(VOICE,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify({...params,stream:true}),signal:AbortSignal.timeout(45000)});
-   if(!response.ok){const err=await response.json().catch(()=>({}));throw Error(err.error||"Streaming speech unavailable");}
+   if(!response.ok){
+    const err=await response.json().catch(()=>({}));
+    if(response.status===429)throw Object.assign(new Error("Speech has reached its current usage limit."),{voiceQuota:true});
+    throw Error(err.error||"Streaming speech unavailable");
+   }
    if(!(response.headers.get("content-type")||"").includes("text/event-stream"))throw Error("Speech streaming is not supported by this service");
    const avatar=avatarInstance;
    if(await avatar.speakPcm24Stream(voicePcmChunks(response))){
@@ -219,6 +223,8 @@ async function spoken(text){
    }
   }catch(e){
    console.warn("Streaming speech fallback",e);
+   // Do NOT send a second TTS request after a provider quota refusal.
+   if(e?.voiceQuota)throw e;
    partialSpeech=!!e?.partialSpeech;
    if(partialSpeech){status("The spoken response was interrupted. The full written answer is available in chat.");return;}
   }
@@ -226,7 +232,11 @@ async function spoken(text){
  status("Preparing spoken response...");
  const t=performance.now();
  const res=await fetch(VOICE,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify(params),signal:AbortSignal.timeout(42000)});
- if(!res.ok){const j=await res.json().catch(()=>({}));throw Error(j.error||"Speech HTTP "+res.status)}
+ if(!res.ok){
+  const j=await res.json().catch(()=>({}));
+  if(res.status===429)throw Object.assign(new Error("Speech has reached its current usage limit."),{voiceQuota:true});
+  throw Error(j.error||"Speech HTTP "+res.status);
+ }
  const wav=await res.arrayBuffer();if(wav.byteLength<200)throw Error("The voice service returned empty audio");
  console.info("[Real World CE TD] WAV voice generation:",Math.round(performance.now()-t),"ms");
  if(avatarInstance?.connected&&useVideo){
@@ -310,13 +320,21 @@ async function ask(text){
   add("assistant",x.answer);
   $("courseNotice").textContent="General TD educational preview. AI-generated explanations are not clinically reviewed or personalized medical advice.";
   speaking=true;
+  let speechError=null;
   try{
    // Finish the short acknowledgement first when possible; do not allow it to delay the real answer.
    await Promise.race([thinkingTask,pause(2100)]);
    if(avatarInstance?.connected)avatarInstance.interrupt();
    await spoken(x.answer);
-  }catch(e){status("Speech unavailable: "+e.message)}
-  finally{speaking=false;if(!$("rendererStatus").textContent.startsWith("Educator video unavailable"))status("Ready for another TD question")}
+  }catch(e){
+   speechError=e;
+   status(e?.voiceQuota
+      ? "The answer is ready in chat, but spoken responses have reached their current usage limit. Please try later."
+      : "Spoken response unavailable: "+e.message);
+  }finally{
+   speaking=false;
+   if(!speechError&&!$("rendererStatus").textContent.startsWith("Educator video unavailable"))status("Ready for another TD question");
+  }
  }catch(e){
   waitingForAnswer=false;
   thinkingBubble?.remove();
